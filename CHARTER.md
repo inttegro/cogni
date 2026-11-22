@@ -197,10 +197,12 @@ tests and measured parity, the host implementation remains authoritative.
 
 Cogni is intended to be developed in public and distributed first through npm as
 the independently installable `@inttegro/cogni-client`,
-`@inttegro/cogni-server`, `@inttegro/cogni-react`, and
-`@inttegro/cogni-next` packages, subject to registry availability and release
-review. The repository should support additional packages or adapters only when
-their boundaries are real and independently useful.
+`@inttegro/cogni-server`, `@inttegro/cogni-react`, `@inttegro/cogni-next`, and
+`@inttegro/cogni-astro` packages, plus the router-specific
+`@inttegro/cogni-react-router` and `@inttegro/cogni-tanstack-router` adapters,
+subject to registry availability and release review. The repository should
+support additional packages or adapters only when their boundaries are real
+and independently useful.
 
 Published packages must provide:
 

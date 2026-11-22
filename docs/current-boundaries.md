@@ -3,13 +3,13 @@ title: Current scope
 description: Separate the current implementation from the adapters, production evidence, and release work that still belong to adopters.
 ---
 
-The repository contains a TypeScript client, React and Next.js adapters, a Node.js server, protocol
-version 1, conformance fixtures, and deterministic tests. This is a development surface, not yet a
-public release or production rollout.
+The repository contains a TypeScript client, React, React Router, TanStack Router, Next.js, and
+Astro adapters, a Node.js server, protocol version 1, conformance fixtures, and deterministic
+tests. This is a development surface, not yet a public release or production rollout.
 
 ## Distribution
 
-All four `@inttegro/cogni-*` workspace packages remain unpublished at version `0.0.0`. Their APIs
+All seven `@inttegro/cogni-*` workspace packages remain unpublished at version `0.0.0`. Their APIs
 may change before the first release.
 
 Use workspace dependencies or explicit local links for development.
@@ -28,11 +28,11 @@ The client includes:
 - an optional Chrome Prompt API allowlist ranker.
 
 The unpublished React adapter owns provider lifecycle, browser admission, foreground activity, and
-component-scoped scheduling. The unpublished Next.js adapter adds route prediction and
-intent-aware links through the public App Router contract. Hosts still connect their loaders,
-caches, telemetry, invalidation, and any version-specific full-route prefetch behavior.
-
-There is no published router or TanStack Query adapter.
+component-scoped scheduling. React Router and TanStack Router adapters add intent-aware links over
+their public route-preload contracts. The unpublished Next.js adapter adds route prediction through
+the public App Router contract. The unpublished Astro adapter adds a delegated document runtime,
+`.astro` components, public `astro:prefetch` loading, and ClientRouter reuse attribution. Hosts
+still own policy, calibration, caches, telemetry, and invalidation.
 
 The coordinator's quality history is bounded and memory-only. It is useful for runtime snapshots,
 not a durable analytics store or a statistical calibration service.
@@ -100,5 +100,9 @@ belong to the host application and are not part of Cogni's public contract.
 
 - [Why Cogni](/why-cogni) defines the correctness and quality target.
 - [Client API reference](/client-api) and [server API reference](/server-api) list current exports.
-- [React and Next.js](/react-and-next) documents the framework adapters.
+- [React](/react) documents provider and hook lifecycles.
+- [React Router](/react-router) documents the Framework, Data, and Declarative Mode adapter.
+- [TanStack Router](/tanstack-router) documents the preloadRoute adapter.
+- [Next.js](/next) documents App Router prediction and intent-aware links.
+- [Astro](/astro) documents delegated route prediction and ClientRouter reuse.
 - [Backend contract](/backend-contract) defines protocol version 1.

@@ -8,6 +8,12 @@
     "light": "#14B8A6",
     "dark": "#0F766E"
   },
+  "redirects": [
+    {
+      "source": "/react-and-next",
+      "destination": "/react"
+    }
+  ],
   "navigation": {
     "groups": [
       {
@@ -24,11 +30,14 @@
         "group": "Client",
         "pages": [
           "client-quickstart",
-          "react-and-next",
           "candidates-and-reuse",
           "scheduling-and-intent",
           "browser-and-navigation"
         ]
+      },
+      {
+        "group": "Frameworks",
+        "pages": ["react", "react-router", "tanstack-router", "next", "astro"]
       },
       {
         "group": "Node server",
