@@ -1,0 +1,75 @@
+---
+title: Predict the next read
+sidebarTitle: Cogni
+description: Turn likely next actions into bounded, measurable reads that the foreground path can actually reuse.
+mode: wide
+---
+
+Applications already see clues about what may happen next: the current route, visible controls,
+pointer movement, focus, and recent navigation. Cogni turns those clues into a small set of bounded
+reads that can begin before the user commits.
+
+Start too much and the application wastes network, server, and cache capacity. Start too little and
+nothing feels faster. Cogni measures the deciding fact: whether the committed action reused the
+result. A request that finished early but was never read was not a correct prediction.
+
+<Note>
+  `@inttegro/cogni-client` and `@inttegro/cogni-server` are under active extraction and
+  have not been published to npm. The documented APIs describe the current repository
+  and may change before the first release.
+</Note>
+
+Begin with the idea behind the system, then follow the path that matches the part you are building.
+
+<Columns cols={2}>
+  <Card
+    title="Understand the correctness target"
+    icon="gauge-high"
+    href="/why-cogni"
+    cta="Read why Cogni"
+    arrow="true"
+  >
+    See why a completed prefetch can still be a failed prediction, and how reuse turns
+    anticipation into evidence.
+  </Card>
+  <Card
+    title="Integrate the client"
+    icon="browser"
+    href="/client-quickstart"
+    cta="Start with the client"
+    arrow="true"
+  >
+    Turn one likely navigation into bounded work, store its result in the foreground
+    cache, and prove that it was reused.
+  </Card>
+  <Card
+    title="Integrate the Node server"
+    icon="server"
+    href="/server-quickstart"
+    cta="Start with the server"
+    arrow="true"
+  >
+    Give predictive work a small, authenticated vocabulary of read-only resources and
+    stream useful results as they become ready.
+  </Card>
+  <Card
+    title="Implement another backend"
+    icon="code"
+    href="/backend-contract"
+    cta="Read the protocol"
+    arrow="true"
+  >
+    Learn the three operations that let any backend language participate without
+    importing the Node implementation.
+  </Card>
+  <Card
+    title="See how Cogni works"
+    icon="diagram-project"
+    href="/how-cogni-works"
+    cta="Follow the method"
+    arrow="true"
+  >
+    Follow the loop from intent and confidence to bounded execution, cache reuse, and
+    policy evidence.
+  </Card>
+</Columns>

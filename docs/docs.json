@@ -1,0 +1,89 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "luma",
+  "name": "Cogni",
+  "description": "Bounded predictive loading for applications.",
+  "colors": {
+    "primary": "#0F766E",
+    "light": "#14B8A6",
+    "dark": "#0F766E"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Start here",
+        "pages": [
+          "index",
+          "why-cogni",
+          "how-cogni-works",
+          "architecture",
+          "current-boundaries"
+        ]
+      },
+      {
+        "group": "Client",
+        "pages": [
+          "client-quickstart",
+          "react-and-next",
+          "candidates-and-reuse",
+          "scheduling-and-intent",
+          "browser-and-navigation"
+        ]
+      },
+      {
+        "group": "Node server",
+        "pages": ["server-quickstart", "registered-resources", "bounded-execution"]
+      },
+      {
+        "group": "Backend protocol",
+        "pages": ["backend-contract"]
+      },
+      {
+        "group": "Reference",
+        "pages": ["client-api", "server-api"]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "website": "https://inttegro.com",
+      "github": "https://github.com/inttegro/cogni"
+    },
+    "links": [
+      {
+        "header": "Cogni",
+        "items": [
+          {
+            "label": "Why Cogni",
+            "href": "/why-cogni"
+          },
+          {
+            "label": "Client quickstart",
+            "href": "/client-quickstart"
+          },
+          {
+            "label": "Node server quickstart",
+            "href": "/server-quickstart"
+          },
+          {
+            "label": "Source code",
+            "href": "https://github.com/inttegro/cogni"
+          }
+        ]
+      },
+      {
+        "header": "Inttegro",
+        "items": [
+          {
+            "label": "Commerce platform",
+            "href": "https://inttegro.com"
+          },
+          {
+            "label": "Developer Studio",
+            "href": "https://studio.inttegro.dev"
+          }
+        ]
+      }
+    ]
+  }
+}
