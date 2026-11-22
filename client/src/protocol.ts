@@ -32,4 +32,4 @@ export type {
   ProtocolVersion,
   ResolvedResource,
   ResourceRequest,
-} from "./protocol/types";
+} from "../../protocol/types";

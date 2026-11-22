@@ -130,13 +130,66 @@ export interface PredictionQualitySnapshot {
   byteReuseRate: number | null;
 }
 
+export interface PredictionScheduledTask {
+  cancel(): void;
+}
+
+export interface PredictionRuntime {
+  now(): number;
+  schedule(delayMs: number, task: () => void): PredictionScheduledTask;
+}
+
+export interface PredictionSchedulerRuntime extends PredictionRuntime {
+  /**
+   * Schedules work for an idle opportunity. The timeout is an upper bound for
+   * the idle wait, not permission to bypass activity or environment gates.
+   */
+  scheduleIdle(timeoutMs: number, task: () => void): PredictionScheduledTask;
+}
+
+export interface PredictionScheduleOptions {
+  /** Delay before this candidate may start. */
+  delayMs?: number;
+  /** Prefer an idle callback once all other gates allow the work to start. */
+  idle?: boolean;
+  /** Maximum time to wait for an idle callback. */
+  idleTimeoutMs?: number;
+  /**
+   * Maximum total defer from scheduling before foreground activity is ignored.
+   * Environment gates remain authoritative.
+   */
+  maxDeferMs?: number;
+  /** Allows direct user intent to run while foreground requests are active. */
+  allowDuringForeground?: boolean;
+}
+
+export type ScheduledPredictionStatus = "pending" | "started" | "cancelled";
+
+export interface ScheduledPrediction {
+  readonly candidate: Readonly<PredictionCandidate>;
+  readonly status: ScheduledPredictionStatus;
+  /** Resolves to null when cancelled before the coordinator accepts the work. */
+  readonly started: Promise<PredictionHandle | null>;
+  /** Bypasses delay, idle, and foreground-activity waits, but not environment gates. */
+  startNow(): void;
+  cancel(): void;
+}
+
+export interface PredictionSchedulerOptions {
+  coordinator?: import("./coordinator").PredictionCoordinator;
+  coordinatorOptions?: PredictionCoordinatorOptions;
+  runtime?: PredictionSchedulerRuntime;
+  environmentAllowed?: boolean;
+  foregroundActivity?: number;
+}
+
 export interface PredictionCoordinatorOptions {
   minimumProbability?: number;
   highCostMinimumProbability?: number;
   maxConcurrent?: number;
   maxQueued?: number;
   maxHistory?: number;
-  now?: () => number;
+  runtime?: PredictionRuntime;
   onEvent?: (event: PredictionEvent) => void;
 }
 

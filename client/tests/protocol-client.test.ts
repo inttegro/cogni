@@ -11,7 +11,7 @@ import {
   type PredictionOutcomeBatch,
 } from "../src/protocol";
 
-const fixtureRoot = new URL("../protocol/conformance/", import.meta.url);
+const fixtureRoot = new URL("../../protocol/conformance/", import.meta.url);
 const routes = {
   capabilities: "/internal/predict/capabilities",
   predictions: "/internal/predict/execute",

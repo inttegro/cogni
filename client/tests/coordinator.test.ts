@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { PredictionCoordinator } from "../src";
-import type { PredictionCandidate } from "../src";
+import type {
+  PredictionCandidate,
+  PredictionRuntime,
+  PredictionScheduledTask,
+} from "../src";
 
 function candidate(
   key: string,
@@ -19,6 +23,20 @@ function candidate(
 }
 
 describe("PredictionCoordinator", () => {
+  it("uses an injected runtime for deadlines", async () => {
+    const runtime = new ManualRuntime();
+    const coordinator = new PredictionCoordinator({ runtime });
+    const handle = coordinator.predict(
+      candidate("runtime", { horizonMs: 100 }),
+      async () => undefined,
+    );
+
+    await vi.waitFor(() => expect(handle.status).toBe("waiting_for_reuse"));
+    runtime.advanceBy(100);
+
+    expect((await handle.completion).outcome).toBe("missed");
+  });
+
   it("enforces the default and high-cost confidence gates", async () => {
     const coordinator = new PredictionCoordinator();
     const loader = vi.fn(async () => undefined);
@@ -194,3 +212,40 @@ describe("PredictionCoordinator", () => {
     });
   });
 });
+
+class ManualRuntime implements PredictionRuntime {
+  #now = 0;
+  readonly #tasks: Array<{
+    at: number;
+    cancelled: boolean;
+    task: () => void;
+  }> = [];
+
+  now(): number {
+    return this.#now;
+  }
+
+  schedule(delayMs: number, task: () => void): PredictionScheduledTask {
+    const scheduled = {
+      at: this.#now + delayMs,
+      cancelled: false,
+      task,
+    };
+    this.#tasks.push(scheduled);
+    return {
+      cancel() {
+        scheduled.cancelled = true;
+      },
+    };
+  }
+
+  advanceBy(durationMs: number): void {
+    this.#now += durationMs;
+    for (const scheduled of this.#tasks) {
+      if (!scheduled.cancelled && scheduled.at <= this.#now) {
+        scheduled.cancelled = true;
+        scheduled.task();
+      }
+    }
+  }
+}

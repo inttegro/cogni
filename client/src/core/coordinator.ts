@@ -8,6 +8,8 @@ import type {
   PredictionQualityFilter,
   PredictionQualitySnapshot,
   PredictionRejectionReason,
+  PredictionRuntime,
+  PredictionScheduledTask,
   PredictionStatus,
   PredictionTerminalResult,
   PredictionWorkResult,
@@ -19,6 +21,13 @@ const DEFAULT_HIGH_COST_MINIMUM_PROBABILITY = 0.9;
 const DEFAULT_MAX_CONCURRENT = 2;
 const DEFAULT_MAX_QUEUED = 16;
 const DEFAULT_MAX_HISTORY = 1_000;
+const SYSTEM_RUNTIME: PredictionRuntime = {
+  now: () => Date.now(),
+  schedule(delayMs, task) {
+    const timer = setTimeout(task, delayMs);
+    return { cancel: () => clearTimeout(timer) };
+  },
+};
 
 interface PredictionRecord {
   candidate: Readonly<RequiredPredictionCandidate>;
@@ -33,7 +42,7 @@ interface PredictionRecord {
   startedAt?: number;
   loadedAt?: number;
   reusedAt?: number;
-  expiryTimer: ReturnType<typeof setTimeout> | null;
+  expiryTask: PredictionScheduledTask | null;
   completion: Promise<PredictionTerminalResult>;
   resolveCompletion: (result: PredictionTerminalResult) => void;
 }
@@ -46,7 +55,7 @@ export class PredictionCoordinator {
   readonly #maxConcurrent: number;
   readonly #maxQueued: number;
   readonly #maxHistory: number;
-  readonly #now: () => number;
+  readonly #runtime: PredictionRuntime;
   readonly #onEvent: ((event: PredictionEvent) => void) | undefined;
   readonly #active = new Map<string, PredictionRecord>();
   readonly #queue: PredictionRecord[] = [];
@@ -86,7 +95,7 @@ export class PredictionCoordinator {
       DEFAULT_MAX_HISTORY,
       "maxHistory",
     );
-    this.#now = options.now ?? Date.now;
+    this.#runtime = options.runtime ?? SYSTEM_RUNTIME;
     this.#onEvent = options.onEvent;
   }
 
@@ -99,7 +108,7 @@ export class PredictionCoordinator {
     if (existing) {
       this.#emit({
         type: "deduplicated",
-        at: this.#now(),
+        at: this.#runtime.now(),
         candidate: existing.candidate,
       });
       return this.#handle(existing, true, true);
@@ -121,7 +130,7 @@ export class PredictionCoordinator {
       return this.#rejectedHandle(candidate, "queue_full");
     }
 
-    const acceptedAt = this.#now();
+    const acceptedAt = this.#runtime.now();
     let resolveCompletion!: (result: PredictionTerminalResult) => void;
     const completion = new Promise<PredictionTerminalResult>((resolve) => {
       resolveCompletion = resolve;
@@ -136,16 +145,16 @@ export class PredictionCoordinator {
       controller: new AbortController(),
       materialWork: false,
       bytes: candidate.estimatedBytes,
-      expiryTimer: null,
+      expiryTask: null,
       completion,
       resolveCompletion,
     };
 
     this.#active.set(candidate.key, record);
     this.#queue.push(record);
-    record.expiryTimer = setTimeout(
+    record.expiryTask = this.#runtime.schedule(
+      Math.max(0, record.deadlineAt - this.#runtime.now()),
       () => this.#expire(record),
-      Math.max(0, record.deadlineAt - this.#now()),
     );
     this.#emit({ type: "accepted", at: acceptedAt, candidate });
     this.#drain();
@@ -162,7 +171,7 @@ export class PredictionCoordinator {
     }
 
     if (record.reusedAt === undefined) {
-      record.reusedAt = this.#now();
+      record.reusedAt = this.#runtime.now();
       this.#emit({
         type: "reused",
         at: record.reusedAt,
@@ -266,7 +275,7 @@ export class PredictionCoordinator {
     candidate: Readonly<RequiredPredictionCandidate>,
     reason: PredictionRejectionReason,
   ): PredictionHandle {
-    const at = this.#now();
+    const at = this.#runtime.now();
     const result: PredictionTerminalResult = {
       candidate,
       outcome: "rejected",
@@ -301,7 +310,7 @@ export class PredictionCoordinator {
     while (this.#running < this.#maxConcurrent && this.#queue.length > 0) {
       const record = this.#queue.shift();
       if (!record || record.status !== "queued") continue;
-      if (this.#now() >= record.deadlineAt) {
+      if (this.#runtime.now() >= record.deadlineAt) {
         this.#finalize(record, "expired");
         continue;
       }
@@ -311,7 +320,7 @@ export class PredictionCoordinator {
 
   #start(record: PredictionRecord): void {
     record.status = "running";
-    const startedAt = this.#now();
+    const startedAt = this.#runtime.now();
     record.startedAt = startedAt;
     record.materialWork = true;
     this.#running += 1;
@@ -353,7 +362,7 @@ export class PredictionCoordinator {
 
   #loaded(record: PredictionRecord, result: PredictionWorkResult | void): void {
     if (record.status === "terminal") return;
-    record.loadedAt = this.#now();
+    record.loadedAt = this.#runtime.now();
     record.materialWork = result?.materialWork ?? true;
     record.bytes = finiteNonNegative(result?.bytes, record.bytes, "bytes");
     record.status = "waiting_for_reuse";
@@ -394,12 +403,12 @@ export class PredictionCoordinator {
   ): void {
     if (record.status === "terminal") return;
     record.status = "terminal";
-    if (record.expiryTimer !== null) {
-      clearTimeout(record.expiryTimer);
-      record.expiryTimer = null;
+    if (record.expiryTask !== null) {
+      record.expiryTask.cancel();
+      record.expiryTask = null;
     }
     this.#active.delete(record.candidate.key);
-    const completedAt = this.#now();
+    const completedAt = this.#runtime.now();
     const result: PredictionTerminalResult = {
       candidate: record.candidate,
       outcome,
