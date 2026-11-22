@@ -3,8 +3,10 @@ title: How Cogni works
 description: See how Cogni turns intent into bounded speculative reads, reusable data, and evidence for better predictions.
 ---
 
-Cogni adapts the idea behind **CPU branch prediction**. A processor begins the likely next path before
-the branch settles. A correct prediction avoids a stall; a wrong one is discarded.
+Cogni adapts the idea behind
+[**CPU branch prediction**](https://www.intel.com/content/dam/doc/manual/64-ia-32-architectures-optimization-manual.pdf).
+A processor begins the likely next path before the branch settles. A correct prediction avoids a
+stall; a wrong one is discarded.
 
 Applications have similar clues in pointer movement, focus, the current route, and recent navigation.
 Cogni begins a likely read before commitment and preserves its value only when foreground work
@@ -29,6 +31,24 @@ flowchart TB
   Foreground["Foreground activity"] -. "defers" .-> Schedule
   Limits["Queue, concurrency, horizon"] -. "bounds" .-> Admission
 ```
+
+## Why predict
+
+Predictive loading does not make a server faster. It moves an authorized read off the user's critical
+path. If a 400 ms read begins 250 ms before commitment, the foreground path waits about 150 ms instead
+of 400 ms. Cogni has hidden 250 ms, or 62.5 percent of that dependency's latency.
+
+| Read latency | Lead time | Wait after commitment | Wait hidden |
+| -----------: | --------: | --------------------: | ----------: |
+|       200 ms |     80 ms |                120 ms |         40% |
+|       400 ms |    250 ms |                150 ms |       62.5% |
+|       300 ms |    350 ms |                  0 ms |        100% |
+
+These are illustrative upper bounds, not benchmark results. A useful estimate across many opportunities
+is `reuse probability × min(lead time, read latency)`. With 80 percent reuse and 250 ms of useful lead,
+the average wait avoided is 200 ms per opportunity. The remaining predictions spend resources without
+helping the user, which is why Cogni measures reuse, bytes, and timing instead of celebrating completed
+requests.
 
 ## Predict
 
