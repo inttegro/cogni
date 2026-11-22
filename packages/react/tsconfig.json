@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+    "baseUrl": ".",
+    "paths": {
+      "@inttegro/cogni-client": ["../client/src/index.ts"],
+      "@inttegro/cogni-client/browser": ["../client/src/browser.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

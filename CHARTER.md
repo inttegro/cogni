@@ -159,9 +159,9 @@ adapters must preserve its message and lifecycle semantics. Conformance tests
 verify ordering, error behavior, streaming, authorization boundaries, and
 outcomes across implementations.
 
-The core must not import Merx, Commerce domain packages, Next.js, React, or a
-specific query library. Framework and cache integrations belong in optional
-adapters built on public core contracts.
+The core must not import host-application code, product-specific domain
+packages, Next.js, React, or a specific query library. Framework and cache
+integrations belong in optional adapters built on public core contracts.
 
 Cogni should be usable where the frontend core is valuable even when React is
 not. Applications must be able to supply their own clock, scheduler, network
@@ -172,32 +172,33 @@ Adapters may provide first-class support for technologies proven by reference
 integrations, including Next.js and TanStack Query. Those adapters must remain
 replaceable rather than becoming hidden dependencies of the core.
 
-## Relationship to Merx
+## Relationship to host applications
 
-Merx is the source of the first proven predictive-loading behavior and will be
-Cogni's first reference integration. It is not Cogni's architecture.
+Reference integrations can prove Cogni's behavior, but no host application
+defines Cogni's architecture.
 
-The extraction will proceed incrementally:
+Adoption proceeds incrementally:
 
-1. document the observable Merx behavior and its reuse guarantees;
+1. document the host's observable loading behavior and reuse guarantees;
 2. identify a portable seam with parity tests on both sides;
-3. move that seam into Cogni without changing Merx behavior;
-4. adopt the published Cogni API in Merx; and
-5. remove the superseded Merx implementation only after verification.
+3. move that seam into Cogni without changing host behavior;
+4. adopt the published Cogni API in the host application; and
+5. remove the superseded host implementation only after verification.
 
-Merx-specific route registries, account policies, authenticated data functions,
-query keys, server components, and Commerce models remain in Merx. Examples may
-show how Merx integrates Cogni, but the package must not expose private Inttegro
-types, URLs, credentials, or assumptions as public API.
+Product-specific route registries, policies, authenticated data functions,
+query keys, server components, and domain models remain in the host application.
+Public examples use generic types and must not expose private product types,
+URLs, credentials, or assumptions.
 
-There will be no big-bang rewrite. Until a capability has crossed this boundary
-with tests and measured parity, the Merx implementation remains authoritative.
+There is no big-bang rewrite. Until a capability has crossed this boundary with
+tests and measured parity, the host implementation remains authoritative.
 
 ## Open-source and distribution intent
 
 Cogni is intended to be developed in public and distributed first through npm as
-the independently installable `@inttegro/cogni-client` and
-`@inttegro/cogni-server` packages, subject to registry availability and release
+the independently installable `@inttegro/cogni-client`,
+`@inttegro/cogni-server`, `@inttegro/cogni-react`, and
+`@inttegro/cogni-next` packages, subject to registry availability and release
 review. The repository should support additional packages or adapters only when
 their boundaries are real and independently useful.
 
@@ -256,4 +257,5 @@ bounded and ordinary navigation fully correct.
 
 The strongest proof is not how much Cogni preloads. It is how often committed
 actions reuse that work, how much latency users avoid, how little work is wasted,
-and how easily another application can adopt the system without inheriting Merx.
+and how easily another application can adopt the system without inheriting a
+different host's internals.

@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createCogniBackendClient } from "../client/src/protocol";
+import { createCogniBackendClient } from "../packages/client/src/protocol";
 import {
   PredictionResourceRegistry,
   createCogniResourceServer,
   type BackendCapabilities,
   type PredictionBatchRequest,
   type PredictionOutcomeBatch,
-} from "../server/src";
+} from "../packages/server/src";
 
 const routes = {
   capabilities: "/internal/predict/capabilities",
@@ -126,7 +126,7 @@ function request(): PredictionBatchRequest {
           cache_key: "products:first-page",
           parameters: { page: 1 },
         },
-        policy: "merx.catalog",
+        policy: "host.catalog",
         trigger: "idle",
         probability: 0.9,
         horizon_ms: 10_000,

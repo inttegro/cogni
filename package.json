@@ -6,11 +6,10 @@
   "type": "module",
   "packageManager": "npm@11.14.0",
   "workspaces": [
-    "client",
-    "server"
+    "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w @inttegro/cogni-client && npm run build -w @inttegro/cogni-react && npm run build -w @inttegro/cogni-next && npm run build -w @inttegro/cogni-server",
     "check": "npm run format:check && npm run typecheck && npm test && npm run build && npm run verify:package",
     "format": "prettier --write . --ignore-path .gitignore",
     "format:check": "prettier --check . --ignore-path .gitignore",
@@ -28,8 +27,15 @@
     "url": "https://github.com/inttegro/cogni.git"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^24.10.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "jsdom": "^26.1.0",
+    "next": "16.4.5",
     "prettier": "^3.9.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.12"
