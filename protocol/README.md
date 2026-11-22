@@ -32,6 +32,11 @@ createCogniBackendClient({
 });
 ```
 
+The TypeScript binding is exported by `@inttegro/cogni-client/protocol`. The
+Node.js implementation is exported independently by
+`@inttegro/cogni-server`. Other backend languages implement this document and
+the conformance fixtures directly.
+
 ## Common fields
 
 - `protocol_version` is the string `"1"` in every protocol message.

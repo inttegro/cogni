@@ -196,9 +196,10 @@ with tests and measured parity, the Merx implementation remains authoritative.
 ## Open-source and distribution intent
 
 Cogni is intended to be developed in public and distributed first through npm as
-`@inttegro/cogni`, subject to registry availability and release review. The
-repository should support additional packages or adapters only when their
-boundaries are real and independently useful.
+the independently installable `@inttegro/cogni-client` and
+`@inttegro/cogni-server` packages, subject to registry availability and release
+review. The repository should support additional packages or adapters only when
+their boundaries are real and independently useful.
 
 Published packages must provide:
 

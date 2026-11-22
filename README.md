@@ -1,86 +1,41 @@
 # Cogni
 
-Cogni coordinates bounded predictive loading between a frontend and its
-application backend. It starts only read-only work that clears an explicit
-confidence gate, gives direct intent priority over background guesses, and
-measures whether the eventual user action reused the result.
+Cogni is an open-source predictive loading system for applications that should
+feel immediate without doing unbounded speculative work.
 
-The frontend package is TypeScript. Backends implement the language-neutral
-Cogni protocol in Go, Rust, Ruby, Node.js, or any other language. A backend
-implementation remains inside the host application's authentication, resource,
-and cache boundaries.
+This repository is organized as an npm workspace with two independently
+publishable runtimes:
 
-## Status
+- [`client/`](./client/) contains the frontend coordinator, browser admission
+  policy, and backend protocol client. Its npm package is
+  `@inttegro/cogni-client`.
+- [`server/`](./server/) contains the Node.js implementation of the Cogni
+  backend transport. Its npm package is `@inttegro/cogni-server`.
 
-Cogni is under active extraction and is not published yet. The current API is
-expected to change before the first release.
+The language-neutral backend contract remains in [`protocol/`](./protocol/).
+Other backend languages implement that contract without importing either npm
+package.
 
-## Core coordinator
+Merx is the reference migration. Its behavior-to-package map and adapter
+boundary are documented in
+[`docs/merx-parity.md`](./docs/merx-parity.md).
 
-```ts
-import { PredictionCoordinator } from "@inttegro/cogni";
+## Package naming
 
-const predictions = new PredictionCoordinator({
-  maxConcurrent: 2,
-  onEvent: (event) => telemetry.record(event),
-});
+npm package names have the form `@scope/name`; they cannot contain a second
+package-name slash. Consequently, `@inttegro/cogni/client` and
+`@inttegro/cogni/server` could only be subpath exports of one published package,
+not independently publishable packages. Cogni uses the independent package
+names `@inttegro/cogni-client` and `@inttegro/cogni-server` so applications can
+install and ship only the runtime they use.
 
-const handle = predictions.predict(
-  {
-    key: "account:app_123:products",
-    policy: "account-navigation",
-    trigger: "pointer",
-    destination: "/products",
-    probability: 0.92,
-    horizonMs: 5_000,
-    cost: "standard",
-  },
-  async ({ signal }) => {
-    const response = await fetch("/api/products", { signal });
-    await productsCache.store(await response.json());
-    return {
-      materialWork: true,
-      bytes: Number(response.headers.get("content-length")) || 0,
-    };
-  },
-);
+## Development
 
-// Call this when the committed action consumes the same cached resource.
-handle.markReused();
+```sh
+npm install
+npm run check
 ```
 
-Cogni does not retain the response. The host cache remains the source consumed by
-the application.
-
-## Backend protocol
-
-The language-neutral backend contract is documented in
-[`protocol/README.md`](./protocol/README.md) and exercised by the shared
-conformance fixtures. It defines three authenticated operations:
-
-- capability negotiation;
-- bounded execution of server-registered, read-only resources; and
-- reuse outcome reporting for calibration.
-
-Prediction results can be returned as one JSON envelope or streamed as NDJSON.
-The TypeScript package provides one client binding. Other backend languages
-implement the same messages and lifecycle rules without importing this package.
-The host chooses all operation URLs when it creates the client; Cogni does not
-reserve a URL prefix.
-
-Resource names are opaque backend registrations, never client-provided URLs or
-authorization grants. Every implementation resolves the host's normal request
-identity and authorizes each resource exactly as it would authorize the
-foreground request.
-
-The contract document specifies the message fields, lifecycle ordering,
-authentication requirements, fixtures, and implementation rules.
-
-## Quality accounting
-
-The default gates require an 80 percent probability for ordinary work and 90
-percent for high-cost work. `quality()` reports reuse by prediction count and by
-transferred bytes. Work that fails, expires, or is cancelled after it begins
-lowers the measured reuse rate.
-
-See [CHARTER.md](./CHARTER.md) for the operating boundaries and release standard.
+The repository is under active extraction and neither package has been
+published. See [CHARTER.md](./CHARTER.md) for the project boundaries and release
+standard.
