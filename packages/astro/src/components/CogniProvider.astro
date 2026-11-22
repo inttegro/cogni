@@ -1,0 +1,11 @@
+---
+/** Installs one document-level Cogni runtime that survives ClientRouter swaps. */
+---
+
+<slot />
+
+<script>
+  import { installAstroPredictionRuntime } from "@inttegro/cogni-astro/client";
+
+  installAstroPredictionRuntime();
+</script>

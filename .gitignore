@@ -1,5 +1,6 @@
 dist/
 node_modules/
 coverage/
+.astro/
 *.tsbuildinfo
 .DS_Store

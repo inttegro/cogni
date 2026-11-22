@@ -27,9 +27,18 @@ import {
   CogniProvider,
   useCogniScheduler,
   useIntentPrefetch,
+  useRouteIntent,
   useScheduledPrediction,
   type CogniProviderProps,
 } from "@inttegro/cogni-react";
+import {
+  PredictiveLink as ReactRouterPredictiveLink,
+  type PredictiveLinkProps as ReactRouterPredictiveLinkProps,
+} from "@inttegro/cogni-react-router";
+import {
+  PredictiveLink as TanStackPredictiveLink,
+  type PredictiveLinkProps as TanStackPredictiveLinkProps,
+} from "@inttegro/cogni-tanstack-router";
 import {
   NextCogniProvider,
   PredictiveLink,
@@ -39,6 +48,13 @@ import {
   useNextRoutePrediction,
   type PredictiveLinkProps,
 } from "@inttegro/cogni-next";
+import {
+  AstroPredictionRuntime,
+  createAstroLinkAttributes,
+  createAstroPredictionRuntime,
+  createAstroRouteCandidate,
+  type AstroLinkPredictionOptions,
+} from "@inttegro/cogni-astro";
 
 declare const candidate: PredictionCandidate;
 declare const handle: PredictionHandle;
@@ -50,6 +66,9 @@ declare const capabilities: BackendCapabilities;
 declare const resource: PredictionResourceDefinition<undefined>;
 declare const reactProviderProps: CogniProviderProps;
 declare const predictiveLinkProps: PredictiveLinkProps;
+declare const reactRouterPredictiveLinkProps: ReactRouterPredictiveLinkProps;
+declare const tanStackPredictiveLinkProps: TanStackPredictiveLinkProps;
+declare const astroLinkOptions: AstroLinkPredictionOptions;
 
 void [candidate, handle, quality, ranker, runtime, batch];
 void new PredictionCoordinator();
@@ -61,7 +80,10 @@ void observeBrowserPredictionEnvironment;
 void CogniProvider;
 void useCogniScheduler;
 void useIntentPrefetch;
+void useRouteIntent;
 void useScheduledPrediction;
+void ReactRouterPredictiveLink;
+void TanStackPredictiveLink;
 void NextCogniProvider;
 void PredictiveLink;
 void createNextRouteCandidate;
@@ -70,6 +92,12 @@ void useNextRouteIntent;
 void useNextRoutePrediction;
 void reactProviderProps;
 void predictiveLinkProps;
+void reactRouterPredictiveLinkProps;
+void tanStackPredictiveLinkProps;
+void AstroPredictionRuntime;
+void createAstroPredictionRuntime;
+void createAstroRouteCandidate;
+void createAstroLinkAttributes(astroLinkOptions);
 void createCogniBackendClient({
   routes: { capabilities: "/c", predictions: "/p", outcomes: "/o" },
 });

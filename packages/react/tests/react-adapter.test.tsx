@@ -7,6 +7,7 @@ import {
   CogniProvider,
   useCogniScheduler,
   useIntentPrefetch,
+  useRouteIntent,
   useScheduledPrediction,
 } from "../src/index";
 
@@ -179,5 +180,55 @@ describe("React hooks", () => {
     expect(run).toHaveBeenLastCalledWith("click");
     act(() => vi.runAllTimers());
     expect(run).toHaveBeenCalledTimes(2);
+  });
+
+  it("runs router work through the scheduler and records confirmed reuse", async () => {
+    vi.useFakeTimers();
+    const events: string[] = [];
+    const scheduler = new PredictionScheduler({
+      coordinatorOptions: {
+        onEvent: (event) => events.push(event.type),
+      },
+    });
+    const prefetchRoute = vi.fn(async () => ({ bytes: 512 }));
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        {children}
+      </CogniProvider>
+    );
+
+    const hook = renderHook(
+      () =>
+        useRouteIntent({
+          href: "/products",
+          probability: 0.92,
+          horizonMs: 10_000,
+          hoverDelayMs: 80,
+          prefetchRoute,
+        }),
+      { wrapper },
+    );
+
+    act(() => hook.result.current.scheduleHover());
+    act(() => vi.advanceTimersByTime(79));
+    expect(prefetchRoute).not.toHaveBeenCalled();
+    act(() => vi.advanceTimersByTime(1));
+    expect(prefetchRoute).toHaveBeenCalledWith("/products", {
+      signal: expect.any(AbortSignal),
+    });
+
+    await act(async () => {
+      await Promise.resolve();
+      hook.result.current.commit();
+      await Promise.resolve();
+    });
+
+    expect(events).toContain("loaded");
+    expect(events).toContain("reused");
+    expect(scheduler.coordinator.quality()).toMatchObject({
+      materialOutcomes: 1,
+      reused: 1,
+      reuseRate: 1,
+    });
   });
 });

@@ -1,0 +1,45 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import {
+  createAstroLinkAttributes,
+  type AstroLinkPredictionOptions,
+} from "@inttegro/cogni-astro";
+
+type Props = Omit<HTMLAttributes<"a">, "href"> &
+  Omit<AstroLinkPredictionOptions, "key"> & {
+    href: string;
+    predictionKey?: string;
+  };
+
+const {
+  href,
+  probability,
+  horizonMs,
+  predictionKey,
+  policy,
+  destination,
+  cost,
+  priority,
+  estimatedBytes,
+  enabled,
+  hoverDelayMs,
+  maxDeferMs,
+  ...anchorProps
+} = Astro.props;
+
+const predictionAttributes = createAstroLinkAttributes({
+  probability,
+  horizonMs,
+  ...(predictionKey === undefined ? {} : { key: predictionKey }),
+  ...(policy === undefined ? {} : { policy }),
+  ...(destination === undefined ? {} : { destination }),
+  ...(cost === undefined ? {} : { cost }),
+  ...(priority === undefined ? {} : { priority }),
+  ...(estimatedBytes === undefined ? {} : { estimatedBytes }),
+  ...(enabled === undefined ? {} : { enabled }),
+  ...(hoverDelayMs === undefined ? {} : { hoverDelayMs }),
+  ...(maxDeferMs === undefined ? {} : { maxDeferMs }),
+});
+---
+
+<a {...anchorProps} href={href} {...predictionAttributes}><slot /></a>

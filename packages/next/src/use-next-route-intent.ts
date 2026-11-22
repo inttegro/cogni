@@ -137,6 +137,7 @@ export function useNextRouteIntent({
   const commit = useCallback(() => {
     const scheduled = start("click", true);
     if (!scheduled) return;
+    if (scheduledRef.current === scheduled) scheduledRef.current = null;
 
     void scheduled.started.then((handle) => {
       handle?.markReused();

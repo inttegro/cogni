@@ -1,0 +1,61 @@
+{
+  "name": "@inttegro/cogni-react-router",
+  "version": "0.0.0",
+  "description": "React Router adapters for Cogni predictive loading",
+  "type": "module",
+  "packageManager": "npm@11.14.0",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "check": "npm run format:check && npm run typecheck && npm test && npm run build",
+    "format:check": "prettier --check src tests *.json *.md *.ts",
+    "test": "vitest run",
+    "typecheck": "npm run typecheck:source && npm run typecheck:tests",
+    "typecheck:source": "tsc --project tsconfig.json --noEmit",
+    "typecheck:tests": "tsc --project tsconfig.tests.json --noEmit",
+    "prepublishOnly": "npm run check"
+  },
+  "keywords": [
+    "prefetch",
+    "predictive-loading",
+    "react-router",
+    "react"
+  ],
+  "author": "Inttegro Eng <engineering@inttegro.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inttegro/cogni.git",
+    "directory": "packages/react-router"
+  },
+  "bugs": {
+    "url": "https://github.com/inttegro/cogni/issues"
+  },
+  "homepage": "https://github.com/inttegro/cogni#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "dependencies": {
+    "@inttegro/cogni-react": "0.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 <20",
+    "react-router": ">=7.9.0 <9"
+  }
+}
