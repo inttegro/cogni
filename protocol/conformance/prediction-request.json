@@ -1,0 +1,23 @@
+{
+  "protocol_version": "1",
+  "request_id": "request-example-1",
+  "candidates": [
+    {
+      "prediction_id": "prediction-products-1",
+      "resource": {
+        "name": "product-catalog",
+        "cache_key": "products:page:1",
+        "parameters": {
+          "page": 1
+        }
+      },
+      "policy": "account-navigation",
+      "trigger": "pointer",
+      "probability": 0.94,
+      "horizon_ms": 5000,
+      "cost": "standard",
+      "priority": 10,
+      "estimated_bytes": 2048
+    }
+  ]
+}

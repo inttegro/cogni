@@ -1,0 +1,12 @@
+{
+  "protocol_version": "1",
+  "request_id": "request-example-1",
+  "outcomes": [
+    {
+      "prediction_id": "prediction-products-1",
+      "outcome": "reused",
+      "observed_at": "2026-11-22T12:00:01.000Z",
+      "lead_time_ms": 880
+    }
+  ]
+}

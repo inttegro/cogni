@@ -1,0 +1,10 @@
+{
+  "protocol_version": "1",
+  "transports": ["application/json", "application/x-ndjson"],
+  "representations": ["application/json"],
+  "limits": {
+    "max_candidates_per_batch": 16,
+    "max_horizon_ms": 60000
+  },
+  "outcome_reporting": true
+}

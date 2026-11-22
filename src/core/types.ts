@@ -1,0 +1,150 @@
+export type PredictionCost = "low" | "standard" | "high";
+
+export interface PredictionCandidate {
+  /** Stable identity for deduplication and later reuse attribution. */
+  key: string;
+  /** Policy that produced the candidate. */
+  policy: string;
+  /** Signal that produced the candidate, such as idle, hover, or focus. */
+  trigger: string;
+  /** Human-readable destination or resource name for telemetry. */
+  destination: string;
+  /** Calibrated probability of reuse, from 0 through 1. */
+  probability: number;
+  /** Maximum time from acceptance to reuse. */
+  horizonMs: number;
+  /** Relative cost used to select the minimum confidence gate. */
+  cost?: PredictionCost;
+  /** Higher values start first when work is queued. */
+  priority?: number;
+  /** Expected transfer size, used until actual work reports its size. */
+  estimatedBytes?: number;
+}
+
+export interface PredictionWorkResult {
+  /** Actual bytes transferred by predictive work when known. */
+  bytes?: number;
+  /** False when the host cache was already warm and no material work occurred. */
+  materialWork?: boolean;
+}
+
+export interface PredictionExecution {
+  candidate: Readonly<RequiredPredictionCandidate>;
+  signal: AbortSignal;
+  startedAt: number;
+}
+
+export type PredictionLoader = (
+  execution: PredictionExecution,
+) => Promise<PredictionWorkResult | void>;
+
+export type PredictionStatus = "queued" | "running" | "waiting_for_reuse" | "terminal";
+
+export type PredictionOutcome =
+  "reused" | "missed" | "failed" | "cancelled" | "expired" | "rejected";
+
+export type PredictionRejectionReason =
+  "below_quality_gate" | "disposed" | "queue_full";
+
+export type PredictionCancellationReason =
+  "cancelled_by_host" | "coordinator_disposed" | "superseded_by_committed_action";
+
+export interface PredictionTerminalResult {
+  candidate: Readonly<RequiredPredictionCandidate>;
+  outcome: PredictionOutcome;
+  acceptedAt: number;
+  completedAt: number;
+  startedAt?: number;
+  loadedAt?: number;
+  reusedAt?: number;
+  materialWork: boolean;
+  bytes: number;
+  reason?: PredictionRejectionReason | PredictionCancellationReason;
+  error?: unknown;
+}
+
+export interface PredictionHandle {
+  readonly candidate: Readonly<RequiredPredictionCandidate>;
+  readonly accepted: boolean;
+  readonly deduplicated: boolean;
+  readonly status: PredictionStatus;
+  readonly completion: Promise<PredictionTerminalResult>;
+  markReused(): boolean;
+  cancel(): void;
+}
+
+export type PredictionEvent =
+  | PredictionLifecycleEvent<"accepted">
+  | PredictionLifecycleEvent<"started">
+  | PredictionLifecycleEvent<"loaded">
+  | PredictionLifecycleEvent<"reused">
+  | PredictionLifecycleEvent<"missed">
+  | PredictionLifecycleEvent<"failed">
+  | PredictionLifecycleEvent<"cancelled">
+  | PredictionLifecycleEvent<"expired">
+  | PredictionLifecycleEvent<"rejected">
+  | PredictionLifecycleEvent<"deduplicated">;
+
+export interface PredictionLifecycleEvent<
+  Type extends
+    | "accepted"
+    | "started"
+    | "loaded"
+    | "reused"
+    | "missed"
+    | "failed"
+    | "cancelled"
+    | "expired"
+    | "rejected"
+    | "deduplicated",
+> {
+  type: Type;
+  at: number;
+  candidate: Readonly<RequiredPredictionCandidate>;
+  materialWork?: boolean;
+  bytes?: number;
+  reason?: PredictionRejectionReason | PredictionCancellationReason;
+  error?: unknown;
+}
+
+export interface PredictionQualityFilter {
+  policy?: string;
+  trigger?: string;
+  destination?: string;
+  cost?: PredictionCost;
+}
+
+export interface PredictionQualitySnapshot {
+  outcomes: number;
+  materialOutcomes: number;
+  reused: number;
+  missed: number;
+  failed: number;
+  cancelledWithWork: number;
+  cancelledWithoutWork: number;
+  expiredWithoutWork: number;
+  rejected: number;
+  totalBytes: number;
+  reusedBytes: number;
+  reuseRate: number | null;
+  byteReuseRate: number | null;
+}
+
+export interface PredictionCoordinatorOptions {
+  minimumProbability?: number;
+  highCostMinimumProbability?: number;
+  maxConcurrent?: number;
+  maxQueued?: number;
+  maxHistory?: number;
+  now?: () => number;
+  onEvent?: (event: PredictionEvent) => void;
+}
+
+export interface RequiredPredictionCandidate extends Omit<
+  PredictionCandidate,
+  "cost" | "priority" | "estimatedBytes"
+> {
+  cost: PredictionCost;
+  priority: number;
+  estimatedBytes: number;
+}
