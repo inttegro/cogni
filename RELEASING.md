@@ -3,15 +3,27 @@
 Cogni packages share one version and are published together from a signed `v<version>` tag. A merge
 does not publish anything.
 
-## One-time repository setup
+## Repository setup
 
-Before the first public release:
+Before publishing:
 
 1. Make the GitHub repository public and enable private vulnerability reporting.
 2. Protect `master` and require the CI workflow.
 3. Create a protected GitHub environment named `npm`.
-4. Give the GitHub Actions release workflow trusted-publisher access to the `@inttegro` npm scope.
-5. Confirm that every package name in `scripts/release-packages.mjs` is available to the scope.
+4. Confirm that every package name in `scripts/release-packages.mjs` is available to the scope.
+
+npm requires a package to exist before it can receive a trusted-publisher configuration. Bootstrap
+the first release with a granular token that can publish packages and bypass 2FA, store it only as
+the `NPM_TOKEN` secret in the `npm` environment, and give it the shortest practical expiration.
+
+Before the next release, configure `.github/workflows/release.yml` as a GitHub trusted publisher for
+each package. Do this within two days of that release because npm expires a new, unvalidated trusted
+publisher after two days. Once an OIDC publish succeeds, remove `NPM_TOKEN` from the environment and
+revoke the bootstrap token.
+
+Ordinary checks may run on another CI provider, including Cloudflare Workers Builds. Keep the
+release-only GitHub Actions workflow while GitHub is the canonical repository because npm uses that
+identity to issue provenance for the published artifacts.
 
 These are external administrative actions. They are intentionally not automated by repository code.
 
@@ -31,7 +43,7 @@ These are external administrative actions. They are intentionally not automated 
 6. Create and push a signed tag matching the package version:
 
    ```sh
-   git tag -s v0.1.0 -m "Cogni v0.1.0"
+   git tag -s v0.1.0 -m "cogni v0.1.0"
    git push origin master v0.1.0
    ```
 

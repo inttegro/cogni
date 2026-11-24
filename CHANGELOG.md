@@ -3,7 +3,7 @@
 Cogni follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). During the `0.x` series,
 minor releases may contain breaking API changes. Migration notes will call those changes out.
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-24
 
 ### Added
 
