@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/inttegro/cogni.git"
+    "url": "git+https://github.com/inttegro/cogni.git"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "7.60.1",

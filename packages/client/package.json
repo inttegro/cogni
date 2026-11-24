@@ -56,7 +56,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/inttegro/cogni.git",
+    "url": "git+https://github.com/inttegro/cogni.git",
     "directory": "packages/client"
   },
   "bugs": {
