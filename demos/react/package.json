@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@inttegro/cogni-client": "0.1.0",
+    "@inttegro/cogni-devtools": "0.1.0",
     "@inttegro/cogni-react": "0.1.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"

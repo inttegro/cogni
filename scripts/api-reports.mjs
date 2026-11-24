@@ -11,6 +11,8 @@ const configs = [
   "packages/client/api-extractor.protocol.json",
   "packages/server/api-extractor.json",
   "packages/react/api-extractor.json",
+  "packages/devtools/api-extractor.json",
+  "packages/devtools/api-extractor.react.json",
   "packages/react-router/api-extractor.json",
   "packages/tanstack-router/api-extractor.json",
   "packages/next/api-extractor.json",

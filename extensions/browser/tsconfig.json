@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "WebWorker"],
+    "types": ["chrome"],
+    "baseUrl": ".",
+    "paths": {
+      "@inttegro/cogni-client": ["../../packages/client/src/index.ts"],
+      "@inttegro/cogni-devtools": ["../../packages/devtools/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}

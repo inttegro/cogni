@@ -1,0 +1,10 @@
+{
+  "extends": "../../api-extractor.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/react.d.ts",
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.api.json"
+  },
+  "apiReport": {
+    "reportFileName": "cogni-devtools-react.api.md"
+  }
+}

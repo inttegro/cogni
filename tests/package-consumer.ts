@@ -14,6 +14,16 @@ import {
   observeBrowserPredictionEnvironment,
 } from "@inttegro/cogni-client/browser";
 import {
+  CogniDevtoolsRecorder,
+  createCogniDevtools,
+  type CogniDevtoolsSnapshot,
+} from "@inttegro/cogni-devtools";
+import {
+  CogniDevtools,
+  CogniDevtoolsConnector,
+  type CogniDevtoolsProps,
+} from "@inttegro/cogni-devtools/react";
+import {
   createCogniBackendClient,
   type PredictionBatchRequest,
 } from "@inttegro/cogni-client/protocol";
@@ -67,6 +77,8 @@ declare const ranker: CandidateRanker<{ path: string }>;
 declare const runtime: PredictionSchedulerRuntime;
 declare const batch: PredictionBatchRequest;
 declare const capabilities: BackendCapabilities;
+declare const devtoolsProps: CogniDevtoolsProps;
+declare const devtoolsSnapshot: CogniDevtoolsSnapshot;
 declare const resource: PredictionResourceDefinition<undefined>;
 declare const reactProviderProps: CogniProviderProps;
 declare const delegatedRouteIntentActions: DelegatedRouteIntentActions;
@@ -82,6 +94,12 @@ void new NavigationMetrics();
 void new IntentPrefetchController({ run: () => undefined });
 void createBrowserPredictionSchedulerRuntime;
 void observeBrowserPredictionEnvironment;
+void CogniDevtoolsRecorder;
+void createCogniDevtools(new PredictionScheduler());
+void CogniDevtools;
+void CogniDevtoolsConnector;
+void devtoolsProps;
+void devtoolsSnapshot;
 void CogniProvider;
 void resolveAnchorHref;
 void useCogniScheduler;
