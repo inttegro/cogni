@@ -58,6 +58,16 @@ Four conditions shape the start time:
 3. `idle: true` requests an idle opportunity after the other gates pass.
 4. The environment gate can block every start.
 
+```mermaid
+flowchart TB
+  Candidate["Candidate scheduled"] --> Environment["Environment gate"]
+  Environment -->|"blocked"| Pending["Remain pending"]
+  Environment -->|"allowed"| Intent["Intent strength"]
+  Intent -->|"ordinary"| Wait["Wait for delay, quiet, and idle"]
+  Intent -->|"direct"| Admission["Coordinator admission"]
+  Wait --> Admission
+```
+
 The soft delay filters transient intent. Foreground activity protects committed work. Idle waits for
 headroom. The environment gate can veto prediction. `idleTimeoutMs` only limits the idle wait.
 
