@@ -4,6 +4,10 @@ import type {
   PredictionHandle,
   PredictionLoader,
   PredictionScheduleOptions,
+  PredictionSchedulerCancellationReason,
+  PredictionSchedulerEvent,
+  PredictionSchedulerEventListener,
+  PredictionSchedulerStartMode,
   PredictionScheduledTask,
   PredictionSchedulerOptions,
   PredictionSchedulerRuntime,
@@ -59,6 +63,8 @@ export class PredictionScheduler {
   readonly #coordinator: PredictionCoordinator;
   readonly #ownsCoordinator: boolean;
   readonly #runtime: PredictionSchedulerRuntime;
+  readonly #onEvent: PredictionSchedulerEventListener | undefined;
+  readonly #listeners = new Set<PredictionSchedulerEventListener>();
   readonly #pending = new Map<string, ScheduledRecord>();
   #foregroundActivity: number;
   #environmentAllowed: boolean;
@@ -77,6 +83,7 @@ export class PredictionScheduler {
         runtime: this.#runtime,
       });
     this.#ownsCoordinator = options.coordinator === undefined;
+    this.#onEvent = options.onEvent;
     this.#environmentAllowed = options.environmentAllowed ?? true;
     this.#foregroundActivity = nonNegativeInteger(
       options.foregroundActivity ?? 0,
@@ -102,7 +109,14 @@ export class PredictionScheduler {
     scheduleOptions: PredictionScheduleOptions = {},
   ): ScheduledPrediction {
     const existing = this.#pending.get(candidateInput.key);
-    if (existing) return this.#handle(existing);
+    if (existing) {
+      this.#emit({
+        type: "schedule_deduplicated",
+        at: this.#runtime.now(),
+        candidate: existing.candidate,
+      });
+      return this.#handle(existing);
+    }
 
     if (this.#disposed) {
       return cancelledSchedule(candidateInput);
@@ -129,6 +143,14 @@ export class PredictionScheduler {
       prediction: undefined,
     };
     this.#pending.set(record.candidate.key, record);
+    this.#emit({
+      type: "scheduled",
+      at: scheduledAt,
+      candidate: record.candidate,
+      options: record.options,
+      eligibleAt: record.eligibleAt,
+      ...(record.forceAt === undefined ? {} : { forceAt: record.forceAt }),
+    });
     this.#pump();
     return this.#handle(record);
   }
@@ -136,6 +158,11 @@ export class PredictionScheduler {
   setForegroundActivity(count: number): void {
     const previous = this.#foregroundActivity;
     this.#foregroundActivity = nonNegativeInteger(count, "foregroundActivity");
+    this.#emit({
+      type: "foreground_activity_changed",
+      at: this.#runtime.now(),
+      count: this.#foregroundActivity,
+    });
     if (count > 0) this.#cancelIdle();
     if (previous > 0 && count === 0) {
       const now = this.#runtime.now();
@@ -149,6 +176,11 @@ export class PredictionScheduler {
   setEnvironmentAllowed(allowed: boolean): void {
     const becameAllowed = allowed && !this.#environmentAllowed;
     this.#environmentAllowed = allowed;
+    this.#emit({
+      type: "environment_changed",
+      at: this.#runtime.now(),
+      allowed,
+    });
     if (!allowed) this.#cancelIdle();
     if (becameAllowed) {
       const now = this.#runtime.now();
@@ -167,7 +199,7 @@ export class PredictionScheduler {
   cancel(key: string): void {
     const record = this.#pending.get(key);
     if (record) {
-      this.#cancelPending(record);
+      this.#cancelPending(record, "cancelled_by_host");
       return;
     }
     this.#coordinator.cancel(key);
@@ -179,9 +211,14 @@ export class PredictionScheduler {
     this.#cancelWake();
     this.#cancelIdle();
     for (const record of [...this.#pending.values()]) {
-      this.#cancelPending(record);
+      this.#cancelPending(record, "scheduler_disposed");
     }
     if (this.#ownsCoordinator) this.#coordinator.dispose();
+  }
+
+  subscribe(listener: PredictionSchedulerEventListener): () => void {
+    this.#listeners.add(listener);
+    return () => this.#listeners.delete(listener);
   }
 
   #handle(record: ScheduledRecord): ScheduledPrediction {
@@ -194,12 +231,17 @@ export class PredictionScheduler {
       startNow: () => {
         if (record.status !== "pending") return;
         record.urgent = true;
+        this.#emit({
+          type: "schedule_escalated",
+          at: this.#runtime.now(),
+          candidate: record.candidate,
+        });
         this.#cancelIdleFor(record);
         this.#pump();
       },
       cancel: () => {
         if (record.status === "pending") {
-          this.#cancelPending(record);
+          this.#cancelPending(record, "cancelled_by_host");
         } else {
           record.prediction?.cancel();
         }
@@ -241,7 +283,10 @@ export class PredictionScheduler {
         continue;
       }
 
-      this.#start(record);
+      this.#start(
+        record,
+        record.urgent ? "direct" : forced ? "defer_limit" : "eligible",
+      );
     }
 
     if (Number.isFinite(nextWakeAt)) {
@@ -262,27 +307,42 @@ export class PredictionScheduler {
         this.#environmentAllowed &&
         (this.#foregroundActivity === 0 || record.options.allowDuringForeground)
       ) {
-        this.#start(record);
+        this.#start(record, "idle");
       }
       this.#pump();
     });
   }
 
-  #start(record: ScheduledRecord): void {
+  #start(record: ScheduledRecord, mode: PredictionSchedulerStartMode): void {
     if (record.status !== "pending") return;
     this.#cancelIdleFor(record);
     this.#pending.delete(record.candidate.key);
     record.status = "started";
+    this.#emit({
+      type: "schedule_started",
+      at: this.#runtime.now(),
+      candidate: record.candidate,
+      mode,
+    });
     const prediction = this.#coordinator.predict(record.candidate, record.loader);
     record.prediction = prediction;
     record.resolveStarted(prediction);
   }
 
-  #cancelPending(record: ScheduledRecord): void {
+  #cancelPending(
+    record: ScheduledRecord,
+    reason: PredictionSchedulerCancellationReason,
+  ): void {
     if (record.status !== "pending") return;
     this.#cancelIdleFor(record);
     this.#pending.delete(record.candidate.key);
     record.status = "cancelled";
+    this.#emit({
+      type: "schedule_cancelled",
+      at: this.#runtime.now(),
+      candidate: record.candidate,
+      reason,
+    });
     record.resolveStarted(null);
     this.#pump();
   }
@@ -300,6 +360,22 @@ export class PredictionScheduler {
   #cancelWake(): void {
     this.#wakeTask?.cancel();
     this.#wakeTask = null;
+  }
+
+  #emit(event: PredictionSchedulerEvent): void {
+    emitSafely(this.#onEvent, event);
+    for (const listener of this.#listeners) emitSafely(listener, event);
+  }
+}
+
+function emitSafely(
+  listener: PredictionSchedulerEventListener | undefined,
+  event: PredictionSchedulerEvent,
+): void {
+  try {
+    listener?.(event);
+  } catch {
+    // Development tooling and telemetry must never interfere with scheduling.
   }
 }
 

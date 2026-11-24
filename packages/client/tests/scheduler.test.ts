@@ -176,6 +176,39 @@ describe("PredictionScheduler", () => {
       reason: "cancelled_by_host",
     });
   });
+
+  it("reports scheduling, escalation, gate, and cancellation events", () => {
+    const runtime = new ManualSchedulerRuntime();
+    const events: string[] = [];
+    const scheduler = new PredictionScheduler({
+      runtime,
+      environmentAllowed: false,
+      onEvent: (event) => events.push(event.type),
+    });
+    const subscribed: string[] = [];
+    const unsubscribe = scheduler.subscribe((event) => subscribed.push(event.type));
+
+    const scheduled = scheduler.schedule(candidate("observed"), async () => undefined, {
+      delayMs: 100,
+      idle: false,
+    });
+    scheduler.setForegroundActivity(1);
+    scheduler.setEnvironmentAllowed(true);
+    scheduled.startNow();
+    unsubscribe();
+    scheduler.schedule(candidate("cancelled"), async () => undefined).cancel();
+
+    expect(events).toEqual([
+      "scheduled",
+      "foreground_activity_changed",
+      "environment_changed",
+      "schedule_escalated",
+      "schedule_started",
+      "scheduled",
+      "schedule_cancelled",
+    ]);
+    expect(subscribed).toEqual(events.slice(0, 5));
+  });
 });
 
 class ManualSchedulerRuntime implements PredictionSchedulerRuntime {

@@ -4,6 +4,7 @@ import type {
   PredictionCoordinatorOptions as CorePredictionCoordinatorOptions,
   PredictionCost as CorePredictionCost,
   PredictionEvent as CorePredictionEvent,
+  PredictionEventListener as CorePredictionEventListener,
   PredictionExecution as CorePredictionExecution,
   PredictionHandle as CorePredictionHandle,
   PredictionLifecycleEvent as CorePredictionLifecycleEvent,
@@ -14,6 +15,10 @@ import type {
   PredictionRejectionReason as CorePredictionRejectionReason,
   PredictionRuntime as CorePredictionRuntime,
   PredictionScheduleOptions as CorePredictionScheduleOptions,
+  PredictionSchedulerCancellationReason as CorePredictionSchedulerCancellationReason,
+  PredictionSchedulerEvent as CorePredictionSchedulerEvent,
+  PredictionSchedulerEventListener as CorePredictionSchedulerEventListener,
+  PredictionSchedulerStartMode as CorePredictionSchedulerStartMode,
   PredictionScheduledTask as CorePredictionScheduledTask,
   PredictionSchedulerOptions as CorePredictionSchedulerOptions,
   PredictionSchedulerRuntime as CorePredictionSchedulerRuntime,
@@ -21,6 +26,7 @@ import type {
   PredictionTerminalResult as CorePredictionTerminalResult,
   PredictionWorkResult as CorePredictionWorkResult,
   RequiredPredictionCandidate as CoreRequiredPredictionCandidate,
+  NormalizedPredictionScheduleOptions as CoreNormalizedPredictionScheduleOptions,
   ScheduledPrediction as CoreScheduledPrediction,
   ScheduledPredictionStatus as CoreScheduledPredictionStatus,
 } from "./core/types";
@@ -46,6 +52,7 @@ export type PredictionCandidate = CorePredictionCandidate;
 export type PredictionCoordinatorOptions = CorePredictionCoordinatorOptions;
 export type PredictionCost = CorePredictionCost;
 export type PredictionEvent = CorePredictionEvent;
+export type PredictionEventListener = CorePredictionEventListener;
 export type PredictionExecution = CorePredictionExecution;
 export type PredictionHandle = CorePredictionHandle;
 export type PredictionLifecycleEvent<Type extends CorePredictionEvent["type"]> =
@@ -57,6 +64,13 @@ export type PredictionQualitySnapshot = CorePredictionQualitySnapshot;
 export type PredictionRejectionReason = CorePredictionRejectionReason;
 export type PredictionRuntime = CorePredictionRuntime;
 export type PredictionScheduleOptions = CorePredictionScheduleOptions;
+export type NormalizedPredictionScheduleOptions =
+  CoreNormalizedPredictionScheduleOptions;
+export type PredictionSchedulerCancellationReason =
+  CorePredictionSchedulerCancellationReason;
+export type PredictionSchedulerEvent = CorePredictionSchedulerEvent;
+export type PredictionSchedulerEventListener = CorePredictionSchedulerEventListener;
+export type PredictionSchedulerStartMode = CorePredictionSchedulerStartMode;
 export type PredictionScheduledTask = CorePredictionScheduledTask;
 export type PredictionSchedulerOptions = CorePredictionSchedulerOptions;
 export type PredictionSchedulerRuntime = CorePredictionSchedulerRuntime;

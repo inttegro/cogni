@@ -85,6 +85,8 @@ export type PredictionEvent =
   | PredictionLifecycleEvent<"rejected">
   | PredictionLifecycleEvent<"deduplicated">;
 
+export type PredictionEventListener = (event: PredictionEvent) => void;
+
 export interface PredictionLifecycleEvent<
   Type extends
     | "accepted"
@@ -163,6 +165,66 @@ export interface PredictionScheduleOptions {
   allowDuringForeground?: boolean;
 }
 
+export interface NormalizedPredictionScheduleOptions {
+  delayMs: number;
+  idle: boolean;
+  idleTimeoutMs: number;
+  maxDeferMs: number | undefined;
+  allowDuringForeground: boolean;
+}
+
+export type PredictionSchedulerStartMode =
+  "direct" | "eligible" | "idle" | "defer_limit";
+
+export type PredictionSchedulerCancellationReason =
+  "cancelled_by_host" | "scheduler_disposed";
+
+export type PredictionSchedulerEvent =
+  | {
+      type: "scheduled";
+      at: number;
+      candidate: Readonly<PredictionCandidate>;
+      options: Readonly<NormalizedPredictionScheduleOptions>;
+      eligibleAt: number;
+      forceAt?: number;
+    }
+  | {
+      type: "schedule_deduplicated";
+      at: number;
+      candidate: Readonly<PredictionCandidate>;
+    }
+  | {
+      type: "schedule_escalated";
+      at: number;
+      candidate: Readonly<PredictionCandidate>;
+    }
+  | {
+      type: "schedule_started";
+      at: number;
+      candidate: Readonly<PredictionCandidate>;
+      mode: PredictionSchedulerStartMode;
+    }
+  | {
+      type: "schedule_cancelled";
+      at: number;
+      candidate: Readonly<PredictionCandidate>;
+      reason: PredictionSchedulerCancellationReason;
+    }
+  | {
+      type: "environment_changed";
+      at: number;
+      allowed: boolean;
+    }
+  | {
+      type: "foreground_activity_changed";
+      at: number;
+      count: number;
+    };
+
+export type PredictionSchedulerEventListener = (
+  event: PredictionSchedulerEvent,
+) => void;
+
 export type ScheduledPredictionStatus = "pending" | "started" | "cancelled";
 
 export interface ScheduledPrediction {
@@ -181,6 +243,7 @@ export interface PredictionSchedulerOptions {
   runtime?: PredictionSchedulerRuntime;
   environmentAllowed?: boolean;
   foregroundActivity?: number;
+  onEvent?: PredictionSchedulerEventListener;
 }
 
 export interface PredictionCoordinatorOptions {
@@ -190,7 +253,7 @@ export interface PredictionCoordinatorOptions {
   maxQueued?: number;
   maxHistory?: number;
   runtime?: PredictionRuntime;
-  onEvent?: (event: PredictionEvent) => void;
+  onEvent?: PredictionEventListener;
 }
 
 export interface RequiredPredictionCandidate extends Omit<

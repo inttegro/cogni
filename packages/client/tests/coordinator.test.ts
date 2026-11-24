@@ -196,6 +196,31 @@ describe("PredictionCoordinator", () => {
     expect((await handle.completion).outcome).toBe("reused");
   });
 
+  it("fans lifecycle events out to removable subscribers", async () => {
+    const coordinator = new PredictionCoordinator();
+    const events: string[] = [];
+    const unsubscribe = coordinator.subscribe((event) => events.push(event.type));
+    coordinator.subscribe(() => {
+      throw new Error("observer failed");
+    });
+
+    const first = coordinator.predict(candidate("observable"), async () => undefined);
+    await vi.waitFor(() => expect(first.status).toBe("waiting_for_reuse"));
+    first.markReused();
+    await first.completion;
+    unsubscribe();
+    const second = coordinator.predict(
+      candidate("after-unsubscribe"),
+      async () => undefined,
+    );
+    second.cancel();
+
+    expect(events).toContain("accepted");
+    expect(events).toContain("loaded");
+    expect(events).toContain("reused");
+    expect(events.filter((event) => event === "accepted")).toHaveLength(1);
+  });
+
   it("turns synchronous loader failures into measured misses", async () => {
     const coordinator = new PredictionCoordinator();
     const handle = coordinator.predict(candidate("throws"), () => {

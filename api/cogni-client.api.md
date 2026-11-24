@@ -100,6 +100,11 @@ export interface NavigationMetricsOptions {
     readonly ttlMs?: number;
 }
 
+// Warning: (ae-forgotten-export) The symbol "NormalizedPredictionScheduleOptions_2" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type NormalizedPredictionScheduleOptions = NormalizedPredictionScheduleOptions_2;
+
 // Warning: (ae-forgotten-export) The symbol "PredictionCancellationReason_2" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
@@ -130,6 +135,10 @@ export class PredictionCoordinator {
     //
     // (undocumented)
     quality(filter?: PredictionQualityFilter_2): PredictionQualitySnapshot_2;
+    // Warning: (ae-forgotten-export) The symbol "PredictionEventListener_2" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    subscribe(listener: PredictionEventListener_2): () => void;
 }
 
 // @public (undocumented)
@@ -144,6 +153,9 @@ export type PredictionCost = PredictionCost_2;
 //
 // @public (undocumented)
 export type PredictionEvent = PredictionEvent_2;
+
+// @public (undocumented)
+export type PredictionEventListener = PredictionEventListener_2;
 
 // Warning: (ae-forgotten-export) The symbol "PredictionExecution_2" needs to be exported by the entry point index.d.ts
 //
@@ -212,7 +224,24 @@ export class PredictionScheduler {
     setEnvironmentAllowed(allowed: boolean): void;
     // (undocumented)
     setForegroundActivity(count: number): void;
+    // Warning: (ae-forgotten-export) The symbol "PredictionSchedulerEventListener_2" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    subscribe(listener: PredictionSchedulerEventListener_2): () => void;
 }
+
+// Warning: (ae-forgotten-export) The symbol "PredictionSchedulerCancellationReason_2" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type PredictionSchedulerCancellationReason = PredictionSchedulerCancellationReason_2;
+
+// Warning: (ae-forgotten-export) The symbol "PredictionSchedulerEvent_2" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type PredictionSchedulerEvent = PredictionSchedulerEvent_2;
+
+// @public (undocumented)
+export type PredictionSchedulerEventListener = PredictionSchedulerEventListener_2;
 
 // @public (undocumented)
 export type PredictionSchedulerOptions = PredictionSchedulerOptions_2;
@@ -221,6 +250,11 @@ export type PredictionSchedulerOptions = PredictionSchedulerOptions_2;
 //
 // @public (undocumented)
 export type PredictionSchedulerRuntime = PredictionSchedulerRuntime_2;
+
+// Warning: (ae-forgotten-export) The symbol "PredictionSchedulerStartMode_2" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type PredictionSchedulerStartMode = PredictionSchedulerStartMode_2;
 
 // Warning: (ae-forgotten-export) The symbol "PredictionStatus_2" needs to be exported by the entry point index.d.ts
 //

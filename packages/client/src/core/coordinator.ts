@@ -3,6 +3,7 @@ import type {
   PredictionCandidate,
   PredictionCoordinatorOptions,
   PredictionEvent,
+  PredictionEventListener,
   PredictionHandle,
   PredictionLoader,
   PredictionQualityFilter,
@@ -57,6 +58,7 @@ export class PredictionCoordinator {
   readonly #maxHistory: number;
   readonly #runtime: PredictionRuntime;
   readonly #onEvent: ((event: PredictionEvent) => void) | undefined;
+  readonly #listeners = new Set<PredictionEventListener>();
   readonly #active = new Map<string, PredictionRecord>();
   readonly #queue: PredictionRecord[] = [];
   readonly #history: HistoryEntry[] = [];
@@ -243,6 +245,11 @@ export class PredictionCoordinator {
       reuseRate: materialOutcomes === 0 ? null : reused / materialOutcomes,
       byteReuseRate: totalBytes === 0 ? null : reusedBytes / totalBytes,
     };
+  }
+
+  subscribe(listener: PredictionEventListener): () => void {
+    this.#listeners.add(listener);
+    return () => this.#listeners.delete(listener);
   }
 
   dispose(): void {
@@ -448,11 +455,19 @@ export class PredictionCoordinator {
   }
 
   #emit(event: PredictionEvent): void {
-    try {
-      this.#onEvent?.(event);
-    } catch {
-      // Telemetry must not interfere with prediction or committed navigation.
-    }
+    emitSafely(this.#onEvent, event);
+    for (const listener of this.#listeners) emitSafely(listener, event);
+  }
+}
+
+function emitSafely(
+  listener: PredictionEventListener | undefined,
+  event: PredictionEvent,
+) {
+  try {
+    listener?.(event);
+  } catch {
+    // Telemetry must not interfere with prediction or committed navigation.
   }
 }
 
