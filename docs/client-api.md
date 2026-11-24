@@ -38,6 +38,8 @@ Methods:
   rejects a candidate.
 - `quality(filter?: PredictionQualityFilter): PredictionQualitySnapshot` summarizes bounded terminal
   history.
+- `subscribe(listener: PredictionEventListener): () => void` observes lifecycle events without
+  replacing the host's `onEvent` callback.
 
 `PredictionCoordinatorOptions` fields:
 
@@ -69,16 +71,19 @@ Members:
 - `schedule(candidate, loader, options?): ScheduledPrediction` schedules one candidate.
 - `setEnvironmentAllowed(allowed: boolean): void` updates the environment gate.
 - `setForegroundActivity(count: number): void` updates the non-negative active foreground count.
+- `subscribe(listener: PredictionSchedulerEventListener): () => void` observes scheduling and gate
+  changes.
 
 `PredictionSchedulerOptions` fields:
 
-| Field                | Type                           | Default                                      |
-| -------------------- | ------------------------------ | -------------------------------------------- |
-| `coordinator`        | `PredictionCoordinator`        | A new coordinator                            |
-| `coordinatorOptions` | `PredictionCoordinatorOptions` | Coordinator defaults                         |
-| `environmentAllowed` | `boolean`                      | `true`                                       |
-| `foregroundActivity` | `number`                       | `0`                                          |
-| `runtime`            | `PredictionSchedulerRuntime`   | System timers with timer-based idle fallback |
+| Field                | Type                                        | Default                                      |
+| -------------------- | ------------------------------------------- | -------------------------------------------- |
+| `coordinator`        | `PredictionCoordinator`                     | A new coordinator                            |
+| `coordinatorOptions` | `PredictionCoordinatorOptions`              | Coordinator defaults                         |
+| `environmentAllowed` | `boolean`                                   | `true`                                       |
+| `foregroundActivity` | `number`                                    | `0`                                          |
+| `onEvent`            | `(event: PredictionSchedulerEvent) => void` | None                                         |
+| `runtime`            | `PredictionSchedulerRuntime`                | System timers with timer-based idle fallback |
 
 `PredictionScheduleOptions` fields:
 
@@ -147,6 +152,7 @@ All current main-entry type exports are listed below.
 | `PredictionCoordinatorOptions`           | Coordinator gates, bounds, runtime, history, and event callback.                  |
 | `PredictionCost`                         | `low`, `standard`, or `high`.                                                     |
 | `PredictionEvent`                        | Union of coordinator lifecycle events.                                            |
+| `PredictionEventListener`                | Observer for coordinator lifecycle events.                                        |
 | `PredictionExecution`                    | Normalized candidate, abort signal, and start timestamp passed to a loader.       |
 | `PredictionHandle`                       | Candidate, status, completion, reuse, and cancellation controls.                  |
 | `PredictionLifecycleEvent<Type>`         | Typed lifecycle event for one event name.                                         |
@@ -157,6 +163,11 @@ All current main-entry type exports are listed below.
 | `PredictionRejectionReason`              | `below_quality_gate`, `disposed`, or `queue_full`.                                |
 | `PredictionRuntime`                      | Injectable `now()` and delayed `schedule()` contract.                             |
 | `PredictionScheduleOptions`              | Delay, idle, maximum defer, and foreground settings.                              |
+| `NormalizedPredictionScheduleOptions`    | Fully normalized scheduler options recorded in scheduling events.                 |
+| `PredictionSchedulerCancellationReason`  | Why pending scheduling stopped before coordinator execution.                      |
+| `PredictionSchedulerEvent`               | Union of scheduling, escalation, gate, and cancellation events.                   |
+| `PredictionSchedulerEventListener`       | Observer for scheduler events.                                                    |
+| `PredictionSchedulerStartMode`           | Gate that allowed the scheduled prediction to start.                              |
 | `PredictionScheduledTask`                | Cancel function returned by a runtime schedule.                                   |
 | `PredictionSchedulerOptions`             | Coordinator, runtime, and initial gate state.                                     |
 | `PredictionSchedulerRuntime`             | `PredictionRuntime` plus `scheduleIdle()`.                                        |

@@ -33,7 +33,8 @@
           "client-quickstart",
           "candidates-and-reuse",
           "scheduling-and-intent",
-          "browser-and-navigation"
+          "browser-and-navigation",
+          "devtools"
         ]
       },
       {
