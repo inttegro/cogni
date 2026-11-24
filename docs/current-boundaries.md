@@ -27,12 +27,13 @@ The client includes:
 - a version 1 protocol client for JSON and NDJSON; and
 - an optional Chrome Prompt API allowlist ranker.
 
-The unpublished React adapter owns provider lifecycle, browser admission, foreground activity, and
-component-scoped scheduling. React Router and TanStack Router adapters add intent-aware links over
-their public route-preload contracts. The unpublished Next.js adapter adds route prediction through
-the public App Router contract. The unpublished Astro adapter adds a delegated document runtime,
-`.astro` components, public `astro:prefetch` loading, and ClientRouter reuse attribution. Hosts
-still own policy, calibration, caches, telemetry, and invalidation.
+The unpublished React adapter owns provider lifecycle, browser admission, foreground activity,
+component-scoped scheduling, and delegated discovery of rendered links. React Router and TanStack
+Router adapters add intent-aware links over their public route-preload contracts. The unpublished
+Next.js adapter adds route prediction through the public App Router contract. The unpublished Astro
+adapter adds a delegated document runtime, `.astro` components, public `astro:prefetch` loading, and
+ClientRouter reuse attribution. Hosts still own policy, calibration, route authorization, caches,
+telemetry, and invalidation.
 
 The coordinator's quality history is bounded and memory-only. It is useful for runtime snapshots,
 not a durable analytics store or a statistical calibration service.

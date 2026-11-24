@@ -25,11 +25,14 @@ import {
 } from "@inttegro/cogni-server";
 import {
   CogniProvider,
+  resolveAnchorHref,
   useCogniScheduler,
+  useDelegatedRouteIntent,
   useIntentPrefetch,
   useRouteIntent,
   useScheduledPrediction,
   type CogniProviderProps,
+  type DelegatedRouteIntentActions,
 } from "@inttegro/cogni-react";
 import {
   PredictiveLink as ReactRouterPredictiveLink,
@@ -44,6 +47,7 @@ import {
   PredictiveLink,
   createNextRouteCandidate,
   markRoutePredictionReused,
+  useNextDelegatedRouteIntent,
   useNextRouteIntent,
   useNextRoutePrediction,
   type PredictiveLinkProps,
@@ -65,6 +69,7 @@ declare const batch: PredictionBatchRequest;
 declare const capabilities: BackendCapabilities;
 declare const resource: PredictionResourceDefinition<undefined>;
 declare const reactProviderProps: CogniProviderProps;
+declare const delegatedRouteIntentActions: DelegatedRouteIntentActions;
 declare const predictiveLinkProps: PredictiveLinkProps;
 declare const reactRouterPredictiveLinkProps: ReactRouterPredictiveLinkProps;
 declare const tanStackPredictiveLinkProps: TanStackPredictiveLinkProps;
@@ -78,7 +83,9 @@ void new IntentPrefetchController({ run: () => undefined });
 void createBrowserPredictionSchedulerRuntime;
 void observeBrowserPredictionEnvironment;
 void CogniProvider;
+void resolveAnchorHref;
 void useCogniScheduler;
+void useDelegatedRouteIntent;
 void useIntentPrefetch;
 void useRouteIntent;
 void useScheduledPrediction;
@@ -88,9 +95,11 @@ void NextCogniProvider;
 void PredictiveLink;
 void createNextRouteCandidate;
 void markRoutePredictionReused;
+void useNextDelegatedRouteIntent;
 void useNextRouteIntent;
 void useNextRoutePrediction;
 void reactProviderProps;
+void delegatedRouteIntentActions;
 void predictiveLinkProps;
 void reactRouterPredictiveLinkProps;
 void tanStackPredictiveLinkProps;

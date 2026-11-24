@@ -2,6 +2,10 @@
 
 export { CogniProvider, useCogniScheduler } from "./provider";
 export { createRouteCandidate } from "./route";
+export {
+  resolveAnchorHref,
+  useDelegatedRouteIntent,
+} from "./use-delegated-route-intent";
 export { useIntentPrefetch } from "./use-intent-prefetch";
 export { useRouteIntent } from "./use-route-intent";
 export { useScheduledPrediction } from "./use-scheduled-prediction";
@@ -12,6 +16,13 @@ export type {
   RoutePrefetch,
   RoutePrefetchContext,
 } from "./route";
+export type {
+  DelegatedRouteCandidateResolver,
+  DelegatedRouteHrefResolver,
+  DelegatedRouteIntentActions,
+  DelegatedRouteIntentContext,
+  UseDelegatedRouteIntentOptions,
+} from "./use-delegated-route-intent";
 export type {
   IntentPrefetchActions,
   UseIntentPrefetchOptions,

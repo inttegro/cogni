@@ -10,7 +10,12 @@ import {
 } from "@testing-library/react";
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { PredictiveLink, useNextRoutePrediction } from "../src/index";
+import {
+  PredictiveLink,
+  useNextDelegatedRouteIntent,
+  useNextRoutePrediction,
+  type DelegatedRouteIntentActions,
+} from "../src/index";
 
 const nextMocks = vi.hoisted(() => ({
   prefetch: vi.fn(),
@@ -214,5 +219,79 @@ describe("useNextRoutePrediction", () => {
       }),
     );
     expect(nextMocks.prefetch).not.toHaveBeenCalled();
+  });
+});
+
+describe("useNextDelegatedRouteIntent", () => {
+  it("discovers ordinary rendered links through the App Router adapter", async () => {
+    const events: PredictionEvent[] = [];
+    const scheduler = new PredictionScheduler({
+      coordinatorOptions: {
+        onEvent: (event) => events.push(event),
+      },
+    });
+    const actions: { current: DelegatedRouteIntentActions | null } = { current: null };
+
+    function Observer() {
+      actions.current = useNextDelegatedRouteIntent({
+        probability: 0.94,
+        horizonMs: 15_000,
+      });
+      return null;
+    }
+
+    render(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+        <a href="/orders">
+          <span>Orders</span>
+        </a>
+      </CogniProvider>,
+    );
+
+    fireEvent.focusIn(screen.getByText("Orders"));
+    expect(nextMocks.prefetch).toHaveBeenCalledWith(
+      "/orders",
+      expect.objectContaining({ onInvalidate: expect.any(Function) }),
+    );
+    expect(events.some((event) => event.candidate.key === "next-route:/orders")).toBe(
+      true,
+    );
+
+    await act(async () => {
+      expect(await actions.current?.markReused("/orders")).toBe(true);
+      await Promise.resolve();
+    });
+    expect(events.some((event) => event.type === "reused")).toBe(true);
+  });
+
+  it("forwards an injected full-route prefetch for discovered links", () => {
+    const scheduler = new PredictionScheduler();
+    const prefetchRoute = vi.fn(async () => ({ bytes: 1024 }));
+
+    function Observer() {
+      useNextDelegatedRouteIntent({
+        probability: 0.94,
+        horizonMs: 15_000,
+        prefetchRoute,
+      });
+      return null;
+    }
+
+    render(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+        <a href="/customers/cus_123">Customer</a>
+      </CogniProvider>,
+    );
+
+    fireEvent.pointerDown(screen.getByRole("link", { name: "Customer" }));
+    expect(prefetchRoute).toHaveBeenCalledWith(
+      "/customers/cus_123",
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+        onInvalidate: expect.any(Function),
+      }),
+    );
   });
 });

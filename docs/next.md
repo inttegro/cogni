@@ -62,6 +62,27 @@ calling `router.prefetch()`, but it cannot abort Next's internal work afterward.
 `prefetchRoute` only when the host has a tested route loader that populates the same cache consumed
 by committed navigation and can honor the supplied signal.
 
+## Observe an existing link system
+
+Use `useNextDelegatedRouteIntent()` once in a shared shell when converting every existing link to
+`PredictiveLink` is undesirable. It discovers ordinary links, including links added after mount,
+and uses `router.prefetch()` by default.
+
+```tsx
+const routeIntent = useNextDelegatedRouteIntent({
+  selector: "a[href], [data-resource-href]",
+  probability: 0.92,
+  horizonMs: 30_000,
+  resolveHref: authorizeDashboardRoute,
+  prefetchRoute: prefetchFullRoute,
+});
+```
+
+The hook returns `markReused(href)` and `cancel(href?)`. Call `markReused` only after App Router
+navigation commits and consumes the predicted route cache. Discovery removes the per-link wrapper
+requirement; it does not remove the host's responsibility for route authorization, calibration,
+cache identity, or reuse evidence.
+
 ## Policy-selected routes
 
 Use `useNextRoutePrediction()` when application policy selects a likely route without a link event.
@@ -80,9 +101,9 @@ accepted because the hook cannot inspect that control's outcome.
 ## Public API
 
 The package exports `NextCogniProvider`, `PredictiveLink`, `createNextRouteCandidate`,
-`markRoutePredictionReused`, `useNextRoutePrediction`, `useNextRouteIntent`, their public types, and
-the React adapter hooks. The candidate helper defaults `policy` to `next-route`, `destination` to
-`href`, and `key` to `next-route:${href}`.
+`markRoutePredictionReused`, `useNextRoutePrediction`, `useNextRouteIntent`,
+`useNextDelegatedRouteIntent`, their public types, and the React adapter hooks. The candidate helper
+defaults `policy` to `next-route`, `destination` to `href`, and `key` to `next-route:${href}`.
 
 See [React](/react) for provider ownership and
 [Browser runtime and navigation metrics](/browser-and-navigation) for browser admission.

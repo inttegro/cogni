@@ -1,11 +1,20 @@
 import type { PredictionCandidate } from "@inttegro/cogni-client";
 import { PredictionScheduler } from "@inttegro/cogni-client";
-import { act, cleanup, render, renderHook } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  renderHook,
+  screen,
+} from "@testing-library/react";
 import { StrictMode, useEffect, type ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   CogniProvider,
+  type DelegatedRouteIntentActions,
   useCogniScheduler,
+  useDelegatedRouteIntent,
   useIntentPrefetch,
   useRouteIntent,
   useScheduledPrediction,
@@ -230,5 +239,158 @@ describe("React hooks", () => {
       reused: 1,
       reuseRate: 1,
     });
+  });
+});
+
+describe("delegated route intent", () => {
+  it("discovers links added after mount and confirms reuse only after route commit", async () => {
+    vi.useFakeTimers();
+    const events: string[] = [];
+    const scheduler = new PredictionScheduler({
+      coordinatorOptions: {
+        onEvent: (event) => events.push(event.type),
+      },
+    });
+    const prefetchRoute = vi.fn(async () => ({ bytes: 768 }));
+    const navigationIntent = vi.fn();
+    const actions: { current: DelegatedRouteIntentActions | null } = { current: null };
+
+    function Observer() {
+      actions.current = useDelegatedRouteIntent({
+        probability: 0.92,
+        horizonMs: 10_000,
+        hoverDelayMs: 80,
+        prefetchRoute,
+        onNavigationIntent: navigationIntent,
+      });
+      return null;
+    }
+
+    const view = render(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+      </CogniProvider>,
+    );
+    view.rerender(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+        <a href="/orders">
+          <span>Orders</span>
+        </a>
+      </CogniProvider>,
+    );
+
+    const nestedLabel = screen.getByText("Orders");
+    fireEvent.pointerOver(nestedLabel);
+    act(() => vi.advanceTimersByTime(79));
+    expect(prefetchRoute).not.toHaveBeenCalled();
+    act(() => vi.advanceTimersByTime(1));
+    expect(prefetchRoute).toHaveBeenCalledWith("/orders", {
+      signal: expect.any(AbortSignal),
+    });
+
+    fireEvent.click(nestedLabel);
+    expect(navigationIntent).toHaveBeenCalledWith(
+      expect.objectContaining({ href: "/orders", trigger: "click" }),
+    );
+    expect(events).not.toContain("reused");
+
+    await act(async () => {
+      expect(await actions.current?.markReused("/orders")).toBe(true);
+      await Promise.resolve();
+    });
+    expect(events).toContain("reused");
+  });
+
+  it("supports host-defined link-like rows without an explicit destination list", () => {
+    const scheduler = new PredictionScheduler();
+    const prefetchRoute = vi.fn(async () => undefined);
+
+    function Observer() {
+      useDelegatedRouteIntent({
+        selector: "a[href], [data-resource-href]",
+        probability: 0.95,
+        horizonMs: 10_000,
+        prefetchRoute,
+        resolveHref: (source) => source.getAttribute("data-resource-href"),
+      });
+      return null;
+    }
+
+    render(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+        <div data-resource-href="/customers/cus_123" tabIndex={0}>
+          <span>Ada Lovelace</span>
+        </div>
+      </CogniProvider>,
+    );
+
+    fireEvent.focusIn(screen.getByText("Ada Lovelace"));
+    expect(prefetchRoute).toHaveBeenCalledWith("/customers/cus_123", {
+      signal: expect.any(AbortSignal),
+    });
+  });
+
+  it("cancels departed hover and lets host policy reject discovered routes", () => {
+    vi.useFakeTimers();
+    const scheduler = new PredictionScheduler();
+    const prefetchRoute = vi.fn(async () => undefined);
+
+    function Observer() {
+      useDelegatedRouteIntent({
+        probability: 0.95,
+        horizonMs: 10_000,
+        hoverDelayMs: 80,
+        prefetchRoute,
+        resolveCandidate: ({ href }) => (href === "/blocked" ? false : undefined),
+      });
+      return null;
+    }
+
+    render(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+        <a href="/orders">Orders</a>
+        <a href="/blocked">Blocked</a>
+      </CogniProvider>,
+    );
+
+    const orders = screen.getByRole("link", { name: "Orders" });
+    fireEvent.pointerOver(orders);
+    fireEvent.pointerOut(orders);
+    act(() => vi.runAllTimers());
+    fireEvent.focusIn(screen.getByRole("link", { name: "Blocked" }));
+    expect(prefetchRoute).not.toHaveBeenCalled();
+  });
+
+  it("rejects cross-origin and non-route anchors by default", () => {
+    const scheduler = new PredictionScheduler();
+    const prefetchRoute = vi.fn(async () => undefined);
+
+    function Observer() {
+      useDelegatedRouteIntent({
+        probability: 0.95,
+        horizonMs: 10_000,
+        prefetchRoute,
+      });
+      return null;
+    }
+
+    render(
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        <Observer />
+        <a href="https://example.com/orders">External</a>
+        <a href="#details">Details</a>
+        <a href="/report.csv" download>
+          Download
+        </a>
+      </CogniProvider>,
+    );
+
+    fireEvent.focusIn(screen.getByRole("link", { name: "External" }));
+    fireEvent.focusIn(screen.getByRole("link", { name: "Details" }));
+    fireEvent.focusIn(screen.getByRole("link", { name: "Download" }));
+    expect(prefetchRoute).not.toHaveBeenCalled();
   });
 });

@@ -38,4 +38,10 @@ an existing scheduler when an application already centralizes those concerns.
 The hooks do not invent probabilities or policies; the host remains responsible
 for calibrated candidates and reusable reads.
 
+Applications with many ordinary links can use `useDelegatedRouteIntent` once at
+the shell instead of replacing or listing every link. The hook discovers links
+added after mount, delays hover, escalates focus, touch, pointer, and click, and
+keeps candidate policy under host control. Call `markReused(href)` only after the
+router confirms that destination committed.
+
 Cogni is under active extraction and this package has not been published.

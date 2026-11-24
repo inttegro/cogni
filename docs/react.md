@@ -61,6 +61,35 @@ const intent = useRouteIntent({
 This is the same contract used by the official router packages. The prefetch must populate the
 representation that foreground navigation consumes; merely finishing a request is not reuse.
 
+## Discover rendered links
+
+Applications with a shared shell do not need to replace or explicitly list every link.
+`useDelegatedRouteIntent()` observes a document or component subtree and discovers matching links as
+pointer, focus, touch, and click events bubble through it. Links added after mount are eligible
+automatically.
+
+```tsx
+const routeIntent = useDelegatedRouteIntent({
+  selector: "a[href], [data-resource-href]",
+  probability: 0.92,
+  horizonMs: 30_000,
+  prefetchRoute: (href, { signal }) => router.preload(href, { signal }),
+  resolveHref: (source, currentHref) => authorizeRouteSource(source, currentHref),
+  onNavigationIntent: ({ href }) => recordNavigationIntent(href),
+});
+
+// After the router confirms the destination committed:
+await routeIntent.markReused(committedHref);
+```
+
+The default selector discovers same-origin anchors and excludes same-location, hash-only, download,
+and new-window links. A host resolver can add link-like rows, canonicalize destinations, and enforce
+authorization or route boundaries without maintaining a central destination list.
+
+Discovery does not invent predictive policy. The host still supplies probability, horizon, cost,
+and reusable route work. Idle prediction before any user interaction still requires a bounded
+candidate policy; Cogni never crawls the rendered page and prefetches everything.
+
 ## Lower-level work
 
 Use `useScheduledPrediction()` for non-route resources and `useIntentPrefetch()` when you only need

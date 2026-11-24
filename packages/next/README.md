@@ -38,6 +38,12 @@ forking scheduling or measurement:
 </PredictiveLink>
 ```
 
+Applications with an established link system can mount
+`useNextDelegatedRouteIntent` once in their shared shell. It discovers ordinary
+links and links added after mount without requiring `PredictiveLink` at every
+call site. Hosts may extend the selector and resolver for link-like rows, and
+must call `markReused(href)` only after App Router navigation commits.
+
 For non-link policy predictions, use `useNextRoutePrediction`. Probabilities and
 horizons remain required because an adapter cannot calibrate application intent.
 The package also re-exports the React scheduler hooks, so a Next.js application
