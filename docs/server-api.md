@@ -12,7 +12,7 @@ Choose the registry-backed reference server or supply custom execution behind th
 | Resource registration without route handling        | `PredictionResourceRegistry` |
 | Bounded execution without the server factory        | `createPredictionExecutor`   |
 
-The unpublished package requires Node.js 20 or newer.
+The package requires Node.js 20 or newer.
 
 ## Server factories
 

@@ -10,10 +10,10 @@ Cogni protocol in Go, Rust, Ruby, Node.js, or any other language. A backend
 implementation remains inside the host application's authentication, resource,
 and cache boundaries.
 
-## Status
+## Versioning
 
-Cogni is under active extraction and is not published yet. The current API is
-expected to change before the first release.
+Cogni follows semantic versioning. During the `0.x` series, minor releases may
+change public APIs and will include migration notes in the changelog.
 
 ## Core coordinator
 

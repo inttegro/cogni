@@ -7,11 +7,11 @@ description: Add calibrated App Router prediction without bypassing Cogni's shar
 route prediction hooks, and the React adapter under Next-specific exports. The application still
 owns route policy and calibrated probability.
 
-<Warning>
-  The package exists in this workspace at version `0.0.0`, but npm publication has not been
-  verified. Do not assume a public registry install is available. Use a workspace dependency or an
-  explicit local link. Its peer ranges are Next.js `>=15.4.0 <17` and React `>=18.2.0 <20`.
-</Warning>
+<Note>
+  This guide follows the `0.1` API. Its peer ranges are Next.js `>=15.4.0 <17` and React
+  `>=18.2.0 <20`. Confirm the latest published version and migration notes before installing a newer
+  `0.x` release.
+</Note>
 
 The package targets the App Router through public `next/link` and `next/navigation` APIs. It does
 not provide a Pages Router adapter.

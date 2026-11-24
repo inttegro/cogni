@@ -1,0 +1,81 @@
+---
+import { ClientRouter } from "astro:transitions";
+import CogniProvider from "@inttegro/cogni-astro/CogniProvider.astro";
+import PredictiveLink from "@inttegro/cogni-astro/PredictiveLink.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <ClientRouter />
+    <style is:global>
+      :root {
+        color: #17211d;
+        background: #f6f8f7;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      main {
+        width: min(42rem, calc(100% - 2rem));
+        margin: 12vh auto;
+      }
+
+      .eyebrow {
+        color: #087f5b;
+        font-weight: 700;
+      }
+
+      nav {
+        display: flex;
+        gap: 0.75rem;
+        margin: 2rem 0;
+      }
+
+      a {
+        color: inherit;
+        background: white;
+        border: 1px solid #dce5e0;
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+      }
+
+      section {
+        border-top: 1px solid #dce5e0;
+        padding-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <CogniProvider>
+      <main>
+        <p class="eyebrow">Astro</p>
+        <h1>Keep prediction alive across route swaps</h1>
+        <nav aria-label="Demo destinations">
+          <PredictiveLink href="/" probability={0.9} horizonMs={30000}>
+            Home
+          </PredictiveLink>
+          <PredictiveLink href="/orders" probability={0.92} horizonMs={30000}>
+            Orders
+          </PredictiveLink>
+        </nav>
+        <section>
+          <slot />
+        </section>
+      </main>
+    </CogniProvider>
+  </body>
+</html>

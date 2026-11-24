@@ -6,11 +6,10 @@ description: Register one read-only resource, keep authentication with the host,
 The frontend asks for a registered name such as `products.page`; the host decides what that name
 means inside an authenticated context. This keeps storage, tenancy, and authorization on the server.
 
-<Warning>
-  `@inttegro/cogni-server` is not published to npm yet. Run this example from a workspace or local
-  package link that resolves the current Cogni server package. The package requires Node.js 20 or
-  newer.
-</Warning>
+<Note>
+  This guide follows the `0.1` API. The package requires Node.js 20 or newer. Confirm the latest
+  published version and migration notes before installing a newer `0.x` release.
+</Note>
 
 ## Preserve authority
 

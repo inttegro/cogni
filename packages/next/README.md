@@ -49,4 +49,5 @@ horizons remain required because an adapter cannot calibrate application intent.
 The package also re-exports the React scheduler hooks, so a Next.js application
 does not need a second adapter import.
 
-Cogni is under active extraction and this package has not been published.
+Cogni follows semantic versioning. During the `0.x` series, minor releases may
+change public APIs and will include migration notes in the changelog.

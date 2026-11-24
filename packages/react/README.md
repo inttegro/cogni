@@ -44,4 +44,5 @@ added after mount, delays hover, escalates focus, touch, pointer, and click, and
 keeps candidate policy under host control. Call `markReused(href)` only after the
 router confirms that destination committed.
 
-Cogni is under active extraction and this package has not been published.
+Cogni follows semantic versioning. During the `0.x` series, minor releases may
+change public APIs and will include migration notes in the changelog.

@@ -1,0 +1,39 @@
+:root {
+  color: #17211d;
+  background: #f6f8f7;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  width: min(42rem, calc(100% - 2rem));
+  margin: 12vh auto;
+}
+
+.eyebrow {
+  color: #087f5b;
+  font-weight: 700;
+}
+
+nav {
+  display: flex;
+  gap: 0.75rem;
+  margin: 2rem 0;
+}
+
+a {
+  color: inherit;
+  background: white;
+  border: 1px solid #dce5e0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+}
+
+section {
+  border-top: 1px solid #dce5e0;
+  padding-top: 2rem;
+}

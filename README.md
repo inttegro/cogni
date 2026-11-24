@@ -41,6 +41,11 @@ fork Cogni's scheduling, admission, or telemetry behavior.
 [`protocol/`](./protocol/) stays at the repository root because it is a
 language-neutral contract shared by every frontend and backend implementation.
 
+[`demos/`](./demos/) contains standalone applications for React, React Router,
+TanStack Router, Next.js, Astro, and the Node server runtime. They stay outside
+the workspace so release verification can install packed artifacts instead of
+silently resolving workspace symlinks.
+
 ## Package naming
 
 npm package names have the form `@scope/name`; they cannot contain a second
@@ -60,5 +65,10 @@ npm install
 npm run check
 ```
 
-The repository is under active extraction and no package has been published.
+Run `npm run verify:demos` to pack every package and build all standalone demos
+from clean installs. Run `npm run release:check` for the complete release gate.
+
+The package manifests describe the `0.1.0` release line. Registry publication
+and provenance must still be verified independently after the tagged release
+workflow succeeds.
 See [CHARTER.md](./CHARTER.md) for the project boundaries and release standard.

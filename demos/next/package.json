@@ -1,0 +1,23 @@
+{
+  "name": "cogni-demo-next",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "@inttegro/cogni-client": "0.1.0",
+    "@inttegro/cogni-next": "0.1.0",
+    "@inttegro/cogni-react": "0.1.0",
+    "next": "16.4.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5.9.3"
+  }
+}

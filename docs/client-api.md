@@ -14,7 +14,8 @@ Start with the integration question:
 | Should browser conditions veto prediction?         | `@inttegro/cogni-client/browser`  |
 | How does the client call a Cogni backend?          | `@inttegro/cogni-client/protocol` |
 
-The client exposes four unpublished entry points; APIs may change before the first release.
+The client exposes four entry points. During the `0.x` series, minor releases may change public APIs
+and will include migration notes in the changelog.
 
 ## Core
 

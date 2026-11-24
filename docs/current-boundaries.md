@@ -3,16 +3,15 @@ title: Current scope
 description: Separate the current implementation from the adapters, production evidence, and release work that still belong to adopters.
 ---
 
-The repository contains a TypeScript client, React, React Router, TanStack Router, Next.js, and
-Astro adapters, a Node.js server, protocol version 1, conformance fixtures, and deterministic
-tests. This is a development surface, not yet a public release or production rollout.
+The `0.1` line contains a TypeScript client, React, React Router, TanStack Router, Next.js, and Astro
+adapters, a Node.js server, protocol version 1, conformance fixtures, and deterministic tests. A
+package release is implementation evidence, not evidence of a host deployment or production reuse.
 
 ## Distribution
 
-All seven `@inttegro/cogni-*` workspace packages remain unpublished at version `0.0.0`. Their APIs
-may change before the first release.
-
-Use workspace dependencies or explicit local links for development.
+All seven `@inttegro/cogni-*` packages share one version. During the `0.x` series, minor releases may
+change public APIs and include migration notes in the changelog. Confirm registry publication and
+provenance independently; source manifests alone do not prove a version was published.
 
 ## Client
 
@@ -27,10 +26,10 @@ The client includes:
 - a version 1 protocol client for JSON and NDJSON; and
 - an optional Chrome Prompt API allowlist ranker.
 
-The unpublished React adapter owns provider lifecycle, browser admission, foreground activity,
+The React adapter owns provider lifecycle, browser admission, foreground activity,
 component-scoped scheduling, and delegated discovery of rendered links. React Router and TanStack
-Router adapters add intent-aware links over their public route-preload contracts. The unpublished
-Next.js adapter adds route prediction through the public App Router contract. The unpublished Astro
+Router adapters add intent-aware links over their public route-preload contracts. The Next.js
+adapter adds route prediction through the public App Router contract. The Astro
 adapter adds a delegated document runtime, `.astro` components, public `astro:prefetch` loading, and
 ClientRouter reuse attribution. Hosts still own policy, calibration, route authorization, caches,
 telemetry, and invalidation.

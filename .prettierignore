@@ -1,0 +1,8 @@
+dist/
+node_modules/
+coverage/
+.astro/
+*.tsbuildinfo
+temp/
+.DS_Store
+api/*.api.md

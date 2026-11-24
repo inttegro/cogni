@@ -1,0 +1,9 @@
+{
+  "extends": "../../api-extractor.json",
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.api.json"
+  },
+  "apiReport": {
+    "reportFileName": "cogni-tanstack-router.api.md"
+  }
+}

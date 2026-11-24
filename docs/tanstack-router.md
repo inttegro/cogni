@@ -7,10 +7,10 @@ description: Put TanStack route preloading behind Cogni's admission and quality 
 familiar link. Route parameters, search state, active state, and ordinary anchor props stay with the
 router; Cogni owns whether predictive work starts.
 
-<Warning>
-  The package exists at version `0.0.0`, but npm publication has not been verified. Use a workspace
-  dependency or an explicit local link for development. It supports TanStack Router 1.x.
-</Warning>
+<Note>
+  This guide follows the `0.1` API and TanStack Router 1.x. Confirm the latest published version and
+  migration notes before installing a newer `0.x` release.
+</Note>
 
 ## Replace Link
 

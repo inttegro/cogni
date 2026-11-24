@@ -58,8 +58,9 @@ The host-owned loader must populate the same cache consumed by committed Astro
 navigation. It must remain read-only and preserve ordinary authentication,
 authorization, and tenancy.
 
-## Current status
+## Versioning
 
-This package is version `0.0.0` and has not been published. Local tests and
-package checks are implementation evidence, not evidence of npm publication or
-production reuse.
+Cogni follows semantic versioning. During the `0.x` series, minor releases may
+change public APIs and will include migration notes in the changelog. Local
+tests and package checks are implementation evidence, not evidence of npm
+publication or production reuse.

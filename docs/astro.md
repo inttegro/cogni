@@ -7,11 +7,10 @@ description: Add calibrated route prediction to Astro links through Cogni's dele
 reuse accounting. It provides two Astro components and a document-level client runtime that
 survives `ClientRouter` page swaps.
 
-<Warning>
-  The package implementation exists in source at version `0.0.0`, but npm publication has not been
-  verified. Do not assume a public registry install is available. Use the workspace package or an
-  explicit local link. The manifest declares Astro `>=5 <8` as a peer dependency.
-</Warning>
+<Note>
+  This guide follows the `0.1` API. The manifest declares Astro `>=5 <8` as a peer dependency.
+  Confirm the latest published version and migration notes before installing a newer `0.x` release.
+</Note>
 
 The current package name is `@inttegro/cogni-astro`. There is no `@inttegro/cogni` root package or
 `@inttegro/cogni/astro` subpath.

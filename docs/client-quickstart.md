@@ -6,11 +6,10 @@ description: Begin one bounded read, place it where navigation will look, and re
 Start with one route whose reuse you can prove. A likely Products navigation begins one bounded read,
 writes to the foreground cache, and reports whether navigation consumed it.
 
-<Warning>
-  `@inttegro/cogni-client` is not published to npm yet. Run this example from a workspace or local
-  package link that resolves the current Cogni client package. Do not add a registry install step
-  until a release is published.
-</Warning>
+<Note>
+  This guide follows the `0.1` API. Confirm the latest published version and migration notes before
+  installing a newer `0.x` release.
+</Note>
 
 ## Find the cache
 

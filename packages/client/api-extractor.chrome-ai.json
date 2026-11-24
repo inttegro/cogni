@@ -1,0 +1,7 @@
+{
+  "extends": "../../api-extractor.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/chrome-ai.d.ts",
+  "apiReport": {
+    "reportFileName": "cogni-client-chrome-ai.api.md"
+  }
+}

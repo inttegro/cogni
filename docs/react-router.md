@@ -6,10 +6,10 @@ description: Replace React Router Link with a prediction-aware equivalent.
 `@inttegro/cogni-react-router` keeps React Router's `to`-based link API and adds calibrated route
 prediction. The smallest integration is a component replacement.
 
-<Warning>
-  The package exists at version `0.0.0`, but npm publication has not been verified. Use a workspace
-  dependency or an explicit local link for development. It supports React Router 7.9 through 8.x.
-</Warning>
+<Note>
+  This guide follows the `0.1` API. The adapter supports React Router 7.9 through 8.x. Confirm the
+  latest published version and migration notes before installing a newer `0.x` release.
+</Note>
 
 ## Replace Link
 

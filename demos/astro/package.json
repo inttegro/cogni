@@ -1,0 +1,19 @@
+{
+  "name": "cogni-demo-astro",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro check && astro build",
+    "dev": "astro dev"
+  },
+  "dependencies": {
+    "@inttegro/cogni-astro": "0.1.0",
+    "@inttegro/cogni-client": "0.1.0",
+    "astro": "7.4.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "../../api-extractor.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/client.d.ts",
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.api.json"
+  },
+  "apiReport": {
+    "reportFileName": "cogni-astro-client.api.md"
+  }
+}

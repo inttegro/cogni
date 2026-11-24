@@ -1,6 +1,6 @@
 {
   "name": "@inttegro/cogni-workspace",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Workspace for Cogni predictive loading packages",
   "type": "module",
@@ -10,15 +10,21 @@
   ],
   "scripts": {
     "build": "npm run build -w @inttegro/cogni-client && npm run build -w @inttegro/cogni-react && npm run build -w @inttegro/cogni-react-router && npm run build -w @inttegro/cogni-tanstack-router && npm run build -w @inttegro/cogni-next && npm run build -w @inttegro/cogni-astro && npm run build -w @inttegro/cogni-server",
-    "check": "npm run format:check && npm run typecheck && npm test && npm run build && npm run verify:package",
-    "format": "prettier --write . --ignore-path .gitignore",
-    "format:check": "prettier --check . --ignore-path .gitignore",
+    "check": "npm run format:check && npm run typecheck && npm test && npm run build && npm run api:check && npm run verify:package && npm run verify:release",
+    "format": "prettier --write . --ignore-path .prettierignore",
+    "format:check": "prettier --check . --ignore-path .prettierignore",
     "test": "npm run test:workspaces && npm run test:integration",
     "test:integration": "vitest run tests/client-server.test.ts",
     "test:workspaces": "npm test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present && npm run typecheck:integration",
     "typecheck:integration": "tsc --project tsconfig.integration.json --noEmit",
-    "verify:package": "tsc --project tests/tsconfig.package.json --noEmit"
+    "verify:package": "tsc --project tests/tsconfig.package.json --noEmit",
+    "verify:release": "node scripts/verify-release.mjs",
+    "verify:demos": "npm run build && node scripts/verify-demos.mjs",
+    "api:check": "node scripts/api-reports.mjs",
+    "api:update": "npm run build && node scripts/api-reports.mjs --local",
+    "release:check": "npm run check && npm run verify:demos && npm pack --workspaces --dry-run",
+    "release:publish": "node scripts/publish-release.mjs"
   },
   "author": "Inttegro Eng <engineering@inttegro.com>",
   "license": "MIT",
@@ -27,6 +33,7 @@
     "url": "https://github.com/inttegro/cogni.git"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "7.60.1",
     "@astrojs/check": "^0.9.12",
     "@tanstack/react-router": "^1.170.46",
     "@testing-library/react": "^16.3.0",

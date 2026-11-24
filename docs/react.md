@@ -7,10 +7,10 @@ description: Give React applications one shared prediction budget and lifecycle.
 use the adapter for their router: the link remains familiar while Cogni decides whether its preload
 is worth starting.
 
-<Warning>
-  The package exists in this workspace at version `0.0.0`, but npm publication has not been
-  verified. Use a workspace dependency or an explicit local link for development.
-</Warning>
+<Note>
+  This guide follows the `0.1` API. Confirm the latest published version and migration notes before
+  installing a newer `0.x` release.
+</Note>
 
 ## Choose your link
 

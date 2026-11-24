@@ -1,0 +1,6 @@
+{
+  "extends": "../../api-extractor.json",
+  "apiReport": {
+    "reportFileName": "cogni-client.api.md"
+  }
+}
