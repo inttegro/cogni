@@ -48,5 +48,5 @@ identity needs more context. Cogni starts with its conservative probability and 
 horizon, then learns from actual reuse and waste. Override either value when the application has
 stronger evidence.
 
-See [React](/react) for provider ownership and [Scheduling and intent](/scheduling-and-intent) for
+See [React](/cogni/react) for provider ownership and [Scheduling and intent](/cogni/scheduling-and-intent) for
 the admission sequence.

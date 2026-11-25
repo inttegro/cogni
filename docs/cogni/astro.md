@@ -88,5 +88,5 @@ The `@inttegro/cogni-astro/client` entry point exports `installAstroPredictionRu
 `uninstallAstroPredictionRuntime`. The component subpaths default-export `CogniProvider.astro` and
 `PredictiveLink.astro`.
 
-See [Candidates and reuse](/candidates-and-reuse) for accounting semantics and
-[Current scope](/current-boundaries) for distribution boundaries.
+See [Candidates and reuse](/cogni/candidates-and-reuse) for accounting semantics and
+[Current scope](/cogni/current-boundaries) for distribution boundaries.

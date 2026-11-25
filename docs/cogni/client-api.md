@@ -300,7 +300,7 @@ Protocol type exports:
 `PredictionRejectedEvent`, `PredictionRejectionReason`, `PredictionResolvedEvent`, `PredictionWork`,
 `Problem`, `ProtocolVersion`, `ResolvedResource`, and `ResourceRequest`.
 
-These types mirror the [backend contract](/backend-contract); their field names use `snake_case`.
+These types mirror the [backend contract](/cogni/backend-contract); their field names use `snake_case`.
 
 ## Chrome ranking
 

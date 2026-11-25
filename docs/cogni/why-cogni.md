@@ -74,7 +74,7 @@ host connects its cache and records outcomes.
 
 ## Continue
 
-- [How Cogni works](/how-cogni-works) explains the complete prediction and evidence loop.
-- [Architecture](/architecture) maps the client, backend, cache, and host trust boundaries.
-- [Candidates and reuse](/candidates-and-reuse) shows the candidate lifecycle and accounting API.
-- [Current boundaries](/current-boundaries) records the current package and integration limits.
+- [How Cogni works](/cogni/how-cogni-works) explains the complete prediction and evidence loop.
+- [Architecture](/cogni/architecture) maps the client, backend, cache, and host trust boundaries.
+- [Candidates and reuse](/cogni/candidates-and-reuse) shows the candidate lifecycle and accounting API.
+- [Current boundaries](/cogni/current-boundaries) records the current package and integration limits.

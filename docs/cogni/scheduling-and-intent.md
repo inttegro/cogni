@@ -153,6 +153,6 @@ the caller's responsibility.
 
 ## Continue
 
-- [Browser runtime and navigation metrics](/browser-and-navigation) details environment decisions,
+- [Browser runtime and navigation metrics](/cogni/browser-and-navigation) details environment decisions,
   idle fallback, and timing evidence.
-- [Client API reference](/client-api) lists scheduler and intent signatures.
+- [Client API reference](/cogni/client-api) lists scheduler and intent signatures.

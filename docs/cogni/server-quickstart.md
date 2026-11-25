@@ -150,9 +150,9 @@ remain host decisions.
 
 ## Continue
 
-- [Registered resources](/registered-resources) covers validation, authorization, result metadata,
+- [Registered resources](/cogni/registered-resources) covers validation, authorization, result metadata,
   and explicit failures.
-- [Bounded execution and streaming](/bounded-execution) explains batch ordering, deadlines,
+- [Bounded execution and streaming](/cogni/bounded-execution) explains batch ordering, deadlines,
   cancellation, JSON, and NDJSON.
-- [Backend contract](/backend-contract) defines the language-neutral wire behavior.
-- [Server API reference](/server-api) lists the current Node exports.
+- [Backend contract](/cogni/backend-contract) defines the language-neutral wire behavior.
+- [Server API reference](/cogni/server-api) lists the current Node exports.

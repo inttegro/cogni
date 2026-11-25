@@ -125,4 +125,4 @@ not prove reuse.
 
 `@inttegro/cogni-client/chrome-ai` can rerank a bounded host allowlist. It cannot invent destinations,
 assign probabilities, start work, or download a model. It returns `null` when unavailable or invalid.
-See the [client API](/client-api#chrome-ranking).
+See the [client API](/cogni/client-api#chrome-ranking).

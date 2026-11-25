@@ -201,7 +201,7 @@ A conforming backend must:
 
 ## Continue
 
-- [Node server quickstart](/server-quickstart) uses the reference Node implementation.
-- [Bounded execution and streaming](/bounded-execution) explains the Node executor's batch behavior.
-- [Client API reference](/client-api#backend-protocol) documents the TypeScript protocol
+- [Node server quickstart](/cogni/server-quickstart) uses the reference Node implementation.
+- [Bounded execution and streaming](/cogni/bounded-execution) explains the Node executor's batch behavior.
+- [Client API reference](/cogni/client-api#backend-protocol) documents the TypeScript protocol
   binding.

@@ -120,5 +120,5 @@ cannot recover the host capacity that work continues to consume.
 
 ## Continue
 
-- [Bounded execution and streaming](/bounded-execution) follows a batch from admission to completion.
-- [Architecture and trust boundaries](/architecture) shows the full host security and cache flow.
+- [Bounded execution and streaming](/cogni/bounded-execution) follows a batch from admission to completion.
+- [Architecture and trust boundaries](/cogni/architecture) shows the full host security and cache flow.

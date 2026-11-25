@@ -122,6 +122,6 @@ cross-user analysis.
 
 ## Continue
 
-- [Why Cogni](/why-cogni) explains the production quality target.
-- [Scheduling and direct intent](/scheduling-and-intent) controls when admitted work reaches the
+- [Why Cogni](/cogni/why-cogni) explains the production quality target.
+- [Scheduling and direct intent](/cogni/scheduling-and-intent) controls when admitted work reaches the
   coordinator.

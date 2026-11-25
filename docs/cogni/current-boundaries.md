@@ -103,11 +103,11 @@ belong to the host application and are not part of Cogni's public contract.
 
 ## Continue
 
-- [Why Cogni](/why-cogni) defines the correctness and quality target.
-- [Client API reference](/client-api) and [server API reference](/server-api) list current exports.
-- [React](/react) documents provider and hook lifecycles.
-- [React Router](/react-router) documents the Framework, Data, and Declarative Mode adapter.
-- [TanStack Router](/tanstack-router) documents the preloadRoute adapter.
-- [Next.js](/next) documents App Router prediction and intent-aware links.
-- [Astro](/astro) documents delegated route prediction and ClientRouter reuse.
-- [Backend contract](/backend-contract) defines protocol version 1.
+- [Why Cogni](/cogni/why-cogni) defines the correctness and quality target.
+- [Client API reference](/cogni/client-api) and [server API reference](/cogni/server-api) list current exports.
+- [React](/cogni/react) documents provider and hook lifecycles.
+- [React Router](/cogni/react-router) documents the Framework, Data, and Declarative Mode adapter.
+- [TanStack Router](/cogni/tanstack-router) documents the preloadRoute adapter.
+- [Next.js](/cogni/next) documents App Router prediction and intent-aware links.
+- [Astro](/cogni/astro) documents delegated route prediction and ClientRouter reuse.
+- [Backend contract](/cogni/backend-contract) defines protocol version 1.

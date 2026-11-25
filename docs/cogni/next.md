@@ -104,5 +104,5 @@ The package exports `NextCogniProvider`, `PredictiveLink`, `createNextRouteCandi
 defaults `policy` to `next-route`, `destination` to `href`, and `key` to `next-route:${href}`.
 Probability and horizon use Cogni's shared defaults unless overridden.
 
-See [React](/react) for provider ownership and
-[Browser runtime and navigation metrics](/browser-and-navigation) for browser admission.
+See [React](/cogni/react) for provider ownership and
+[Browser runtime and navigation metrics](/cogni/browser-and-navigation) for browser admission.

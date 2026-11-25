@@ -98,5 +98,5 @@ resources arrived, so cache each validated resource independently and retain for
 
 ## Continue
 
-- [Backend contract](/backend-contract) defines the exact wire messages and error behavior.
-- [Registered resources](/registered-resources) defines the validation and authorization boundary.
+- [Backend contract](/cogni/backend-contract) defines the exact wire messages and error behavior.
+- [Registered resources](/cogni/registered-resources) defines the validation and authorization boundary.

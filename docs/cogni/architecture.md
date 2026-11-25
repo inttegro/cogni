@@ -77,11 +77,11 @@ foreground request remains available.
 ## Portability
 
 Portability comes from protocol version 1 and its conformance fixtures. Non-Node backends implement
-the lifecycle defined in the [backend contract](/backend-contract).
+the lifecycle defined in the [backend contract](/cogni/backend-contract).
 
 ## Continue
 
-- [How Cogni works](/how-cogni-works) explains the design behind these boundaries.
-- [Client quickstart](/client-quickstart) creates a first reusable prediction.
-- [Node server quickstart](/server-quickstart) registers and resolves a read-only resource.
-- [Backend contract](/backend-contract) specifies the language-neutral operations.
+- [How Cogni works](/cogni/how-cogni-works) explains the design behind these boundaries.
+- [Client quickstart](/cogni/client-quickstart) creates a first reusable prediction.
+- [Node server quickstart](/cogni/server-quickstart) registers and resolves a read-only resource.
+- [Backend contract](/cogni/backend-contract) specifies the language-neutral operations.

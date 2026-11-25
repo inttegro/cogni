@@ -148,8 +148,8 @@ Disposal rejects new work and aborts active loaders. Pass the loader's `signal` 
 
 ## Continue
 
-- [Candidates and reuse](/candidates-and-reuse) defines candidate fields and accounting semantics.
-- [Scheduling and direct intent](/scheduling-and-intent) adds activity-aware delays and escalation.
-- [Browser runtime and navigation metrics](/browser-and-navigation) connects visibility, connection,
+- [Candidates and reuse](/cogni/candidates-and-reuse) defines candidate fields and accounting semantics.
+- [Scheduling and direct intent](/cogni/scheduling-and-intent) adds activity-aware delays and escalation.
+- [Browser runtime and navigation metrics](/cogni/browser-and-navigation) connects visibility, connection,
   idle scheduling, and lead-time measurement.
-- [Client API reference](/client-api) lists the current package exports.
+- [Client API reference](/cogni/client-api) lists the current package exports.

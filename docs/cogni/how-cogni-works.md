@@ -99,6 +99,6 @@ account for every external resource spent on a wrong guess.
 
 ## Continue
 
-- [Why reuse matters](/why-cogni) defines the correctness and quality targets.
-- [Architecture](/architecture) maps the design onto packages and trust boundaries.
-- [Candidates and reuse](/candidates-and-reuse) documents the runtime lifecycle.
+- [Why reuse matters](/cogni/why-cogni) defines the correctness and quality targets.
+- [Architecture](/cogni/architecture) maps the design onto packages and trust boundaries.
+- [Candidates and reuse](/cogni/candidates-and-reuse) documents the runtime lifecycle.

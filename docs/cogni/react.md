@@ -24,8 +24,8 @@ a central prediction list.
 All three use Cogni's default probability and reuse horizon, while allowing either value to be
 overridden when the host has stronger evidence. They preserve the router's link semantics, start
 route work through Cogni's shared budget, and attribute reuse at the router's navigation boundary.
-See [React Router](/react-router),
-[TanStack Router](/tanstack-router), or [Next.js](/next) for the matching setup.
+See [React Router](/cogni/react-router),
+[TanStack Router](/cogni/tanstack-router), or [Next.js](/cogni/next) for the matching setup.
 
 ## Mount the provider
 
@@ -145,5 +145,5 @@ host-owned candidates, and `useIntentPrefetch()` when you only need intent timin
 The public package also exports `createRouteCandidate`, `useRouteIntent`, and their types so custom
 router adapters do not have to recreate Cogni's scheduling lifecycle.
 
-See [Candidates and reuse](/candidates-and-reuse) for accounting semantics and
-[Scheduling and intent](/scheduling-and-intent) for admission behavior.
+See [Candidates and reuse](/cogni/candidates-and-reuse) for accounting semantics and
+[Scheduling and intent](/cogni/scheduling-and-intent) for admission behavior.

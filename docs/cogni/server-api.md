@@ -184,4 +184,4 @@ The package re-exports these version 1 types:
 `PredictionRejectedEvent`, `PredictionRejectionReason`, `PredictionResolvedEvent`, `PredictionWork`,
 `Problem`, `ProtocolVersion`, `ResolvedResource`, and `ResourceRequest`.
 
-Their wire fields and lifecycle rules are documented in the [backend contract](/backend-contract).
+Their wire fields and lifecycle rules are documented in the [backend contract](/cogni/backend-contract).

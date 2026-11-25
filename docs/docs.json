@@ -8,10 +8,23 @@
     "light": "#14B8A6",
     "dark": "#0F766E"
   },
+  "seo": {
+    "metatags": {
+      "canonical": "https://os.inttegro.dev"
+    }
+  },
   "redirects": [
     {
+      "source": "/",
+      "destination": "/cogni"
+    },
+    {
       "source": "/react-and-next",
-      "destination": "/react"
+      "destination": "/cogni/react"
+    },
+    {
+      "source": "/cogni/react-and-next",
+      "destination": "/cogni/react"
     }
   ],
   "navigation": {
@@ -19,40 +32,50 @@
       {
         "group": "Start here",
         "pages": [
-          "index",
-          "why-cogni",
-          "how-cogni-works",
-          "architecture",
-          "demos",
-          "current-boundaries"
+          "cogni/index",
+          "cogni/why-cogni",
+          "cogni/how-cogni-works",
+          "cogni/architecture",
+          "cogni/demos",
+          "cogni/current-boundaries"
         ]
       },
       {
         "group": "Client",
         "pages": [
-          "client-quickstart",
-          "candidates-and-reuse",
-          "adaptive-calibration",
-          "scheduling-and-intent",
-          "browser-and-navigation",
-          "devtools"
+          "cogni/client-quickstart",
+          "cogni/candidates-and-reuse",
+          "cogni/adaptive-calibration",
+          "cogni/scheduling-and-intent",
+          "cogni/browser-and-navigation",
+          "cogni/devtools"
         ]
       },
       {
         "group": "Frameworks",
-        "pages": ["react", "react-router", "tanstack-router", "next", "astro"]
+        "pages": [
+          "cogni/react",
+          "cogni/react-router",
+          "cogni/tanstack-router",
+          "cogni/next",
+          "cogni/astro"
+        ]
       },
       {
         "group": "Node server",
-        "pages": ["server-quickstart", "registered-resources", "bounded-execution"]
+        "pages": [
+          "cogni/server-quickstart",
+          "cogni/registered-resources",
+          "cogni/bounded-execution"
+        ]
       },
       {
         "group": "Backend protocol",
-        "pages": ["backend-contract"]
+        "pages": ["cogni/backend-contract"]
       },
       {
         "group": "Reference",
-        "pages": ["client-api", "server-api"]
+        "pages": ["cogni/client-api", "cogni/server-api"]
       }
     ]
   },
@@ -67,15 +90,15 @@
         "items": [
           {
             "label": "Why Cogni",
-            "href": "/why-cogni"
+            "href": "/cogni/why-cogni"
           },
           {
             "label": "Client quickstart",
-            "href": "/client-quickstart"
+            "href": "/cogni/client-quickstart"
           },
           {
             "label": "Node server quickstart",
-            "href": "/server-quickstart"
+            "href": "/cogni/server-quickstart"
           },
           {
             "label": "Source code",

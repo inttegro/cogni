@@ -62,5 +62,5 @@ identity is not enough. Cogni starts with its conservative probability and 30 se
 then learns from actual reuse and waste. Override `probability` or `horizonMs` when the application
 has stronger evidence.
 
-See [React](/react) for provider ownership and [Candidates and reuse](/candidates-and-reuse) for
+See [React](/cogni/react) for provider ownership and [Candidates and reuse](/cogni/candidates-and-reuse) for
 quality accounting.
