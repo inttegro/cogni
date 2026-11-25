@@ -290,6 +290,14 @@ function eventDetails(
   if ("error" in event && event.error !== undefined) {
     details.error = errorMessage(event.error);
   }
+  if ("candidate" in event && event.candidate.calibration !== undefined) {
+    details.baseProbability = event.candidate.calibration.baseProbability;
+    details.personalizedProbability =
+      event.candidate.calibration.personalizedProbability;
+    details.calibrationEvidence = event.candidate.calibration.evidence;
+    details.calibrationConfidence = event.candidate.calibration.confidence;
+    details.calibrationAdjustment = event.candidate.calibration.adjustment;
+  }
   return Object.freeze(details);
 }
 

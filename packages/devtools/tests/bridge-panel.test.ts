@@ -67,4 +67,48 @@ describe("Cogni DevTools browser surfaces", () => {
     ).toBe("Overview");
     panel.destroy();
   });
+
+  it("explains learned confidence separately from the host probability", () => {
+    const store = new CogniDevtoolsSnapshotStore({
+      ...emptyCogniDevtoolsSnapshot(),
+      traces: [
+        {
+          id: "orders:1",
+          attempt: 1,
+          candidate: {
+            key: "orders",
+            policy: "navigation",
+            trigger: "idle",
+            destination: "/orders",
+            probability: 0.74,
+            horizonMs: 5_000,
+            calibration: {
+              model: "adaptive-transition-v1",
+              baseProbability: 0.62,
+              personalizedProbability: 0.78,
+              evidence: 8,
+              confidence: 0.75,
+              adjustment: 0.12,
+            },
+          },
+          state: "reused",
+          firstAt: 0,
+          lastAt: 100,
+          materialWork: true,
+          bytes: 1_000,
+        },
+      ],
+    });
+    const root = document.createElement("div");
+    document.body.append(root);
+    const panel = mountCogniDevtoolsPanel(root, { store, mode: "extension" });
+    const predictions = [...(root.shadowRoot?.querySelectorAll("button") ?? [])].find(
+      (button) => button.textContent === "Predictions",
+    );
+    predictions?.click();
+
+    expect(root.shadowRoot?.textContent).toContain("74% final");
+    expect(root.shadowRoot?.textContent).toContain("62% base · 8 observations");
+    panel.destroy();
+  });
 });

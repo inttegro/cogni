@@ -280,7 +280,7 @@ export function mountCogniDevtoolsPanel(
             trace.startMode ?? trace.candidate.policy,
           ),
         ),
-        tableCell(`${Math.round(trace.candidate.probability * 100)}%`),
+        tableCell(confidenceCell(trace.candidate)),
         tableCell(statePill(trace.state)),
         tableCell(
           stackedText(
@@ -403,17 +403,43 @@ function overviewMetric(
 
 function renderRecentTrace(trace: CogniDevtoolsTrace): HTMLElement {
   const row = element("div", "recent-row");
+  const confidence = element(
+    "span",
+    "recent-confidence",
+    `${Math.round(trace.candidate.probability * 100)}%`,
+  );
+  if (trace.candidate.calibration !== undefined) {
+    confidence.title = calibrationDescription(trace.candidate);
+  }
   row.append(
     dot(stateTone(trace.state)),
     element("span", "recent-destination", trace.candidate.destination),
-    element(
-      "span",
-      "recent-confidence",
-      `${Math.round(trace.candidate.probability * 100)}%`,
-    ),
+    confidence,
     statePill(trace.state),
   );
   return row;
+}
+
+function confidenceCell(candidate: CogniDevtoolsTrace["candidate"]): HTMLElement {
+  const calibration = candidate.calibration;
+  if (calibration === undefined) {
+    return element("span", "cell-primary", percent(candidate.probability));
+  }
+  return stackedText(
+    `${percent(candidate.probability)} final`,
+    `${percent(calibration.baseProbability)} base · ${formatEvidence(calibration.evidence)}`,
+  );
+}
+
+function calibrationDescription(candidate: CogniDevtoolsTrace["candidate"]): string {
+  const calibration = candidate.calibration;
+  if (calibration === undefined) return percent(candidate.probability);
+  return `${percent(calibration.baseProbability)} base, ${signedPercent(calibration.adjustment)} learned adjustment, ${formatEvidence(calibration.evidence)}`;
+}
+
+function formatEvidence(value: number): string {
+  const rounded = Number.isInteger(value) ? String(value) : value.toFixed(1);
+  return `${rounded} observation${Math.abs(value - 1) < 0.05 ? "" : "s"}`;
 }
 
 function tableHead(labels: string[]): HTMLTableSectionElement {
