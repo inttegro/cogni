@@ -35,7 +35,7 @@ declare module "@tanstack/react-router" {
 
 function Shell() {
   return (
-    <CogniProvider>
+    <CogniProvider opaqueUserKey="demo-user">
       <main>
         <p className="eyebrow">TanStack Router</p>
         <h1>Let the router own reusable route data</h1>

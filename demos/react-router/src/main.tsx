@@ -25,7 +25,7 @@ const router = createBrowserRouter([
 
 function Shell() {
   return (
-    <CogniProvider>
+    <CogniProvider opaqueUserKey="demo-user">
       <main>
         <p className="eyebrow">React Router</p>
         <h1>Preload the route the router will use</h1>

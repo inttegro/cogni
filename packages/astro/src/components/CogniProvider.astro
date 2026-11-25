@@ -1,11 +1,21 @@
 ---
 /** Installs one document-level Cogni runtime that survives ClientRouter swaps. */
+interface Props {
+  opaqueUserKey: string;
+}
+
+const { opaqueUserKey } = Astro.props;
 ---
 
+<span data-cogni-subject={opaqueUserKey} hidden></span>
 <slot />
 
 <script>
   import { installAstroPredictionRuntime } from "@inttegro/cogni-astro/client";
 
-  installAstroPredictionRuntime();
+  const subject = document.querySelector<HTMLElement>("[data-cogni-subject]");
+  if (!subject?.dataset.cogniSubject) {
+    throw new TypeError("CogniProvider requires opaqueUserKey");
+  }
+  installAstroPredictionRuntime({ opaqueUserKey: subject.dataset.cogniSubject });
 </script>

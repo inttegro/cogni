@@ -25,6 +25,7 @@ export interface CogniProviderProps {
     readonly createScheduler?: () => PredictionScheduler;
     readonly foregroundActivity?: number;
     readonly observeBrowserEnvironment?: boolean;
+    readonly opaqueUserKey?: string;
     readonly scheduler?: PredictionScheduler;
 }
 

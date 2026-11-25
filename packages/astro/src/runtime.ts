@@ -6,6 +6,7 @@ import {
   type ScheduledPrediction,
 } from "@inttegro/cogni-client";
 import {
+  createBrowserPredictionCalibration,
   createBrowserPredictionSchedulerRuntime,
   observeBrowserPredictionEnvironment,
   type ObservableBrowserPredictionEnvironment,
@@ -34,6 +35,8 @@ export type AstroRoutePrefetch = (
 export interface AstroPredictionRuntimeOptions {
   /** The route prefetch implementation whose cache Astro navigation reuses. */
   readonly prefetchRoute: AstroRoutePrefetch;
+  /** Opaque stable key for the authenticated account. Learning is automatic. */
+  readonly opaqueUserKey?: string;
   /** A host-owned scheduler. Cogni never disposes a scheduler supplied here. */
   readonly scheduler?: PredictionSchedulerInstance;
   /** Creates a runtime-owned scheduler with custom coordinator limits or telemetry. */
@@ -79,6 +82,15 @@ export class AstroPredictionRuntime {
     if (options.scheduler && options.createScheduler) {
       throw new TypeError("scheduler and createScheduler are mutually exclusive");
     }
+    if (
+      !options.scheduler &&
+      !options.createScheduler &&
+      !options.opaqueUserKey?.trim()
+    ) {
+      throw new TypeError(
+        "opaqueUserKey is required when AstroPredictionRuntime creates the scheduler",
+      );
+    }
 
     const document = options.document ?? globalThis.document;
     const window = options.window ?? document?.defaultView ?? globalThis.window;
@@ -95,6 +107,10 @@ export class AstroPredictionRuntime {
       options.scheduler ??
       options.createScheduler?.() ??
       new PredictionScheduler({
+        calibration: createBrowserPredictionCalibration({
+          opaqueUserKey: options.opaqueUserKey as string,
+          location: this.#window.location,
+        }),
         runtime: createBrowserPredictionSchedulerRuntime(),
         environmentAllowed: !this.#observeBrowserEnvironment,
       });

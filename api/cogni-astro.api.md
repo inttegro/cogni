@@ -72,6 +72,7 @@ export interface AstroPredictionRuntimeOptions {
     readonly observeBrowserEnvironment?: boolean;
     // (undocumented)
     readonly onError?: (error: unknown) => void;
+    readonly opaqueUserKey?: string;
     readonly prefetchRoute: AstroRoutePrefetch;
     readonly scheduler?: PredictionScheduler;
     // (undocumented)

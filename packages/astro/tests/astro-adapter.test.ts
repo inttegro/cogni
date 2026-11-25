@@ -40,9 +40,10 @@ function dispatchBeforePreparation(to: string): void {
 }
 
 describe("AstroPredictionRuntime", () => {
-  it("waits for sustained delegated hover intent", () => {
+  it("waits for sustained delegated hover intent", async () => {
     const prefetchRoute = vi.fn();
     const runtime = createAstroPredictionRuntime({
+      opaqueUserKey: "test-user",
       prefetchRoute,
       observeBrowserEnvironment: false,
     }).start();
@@ -53,12 +54,14 @@ describe("AstroPredictionRuntime", () => {
     expect(prefetchRoute).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1);
 
-    expect(prefetchRoute).toHaveBeenCalledWith(
-      "http://localhost:3000/orders",
-      expect.objectContaining({
-        signal: expect.any(AbortSignal),
-        source: link,
-      }),
+    await vi.waitFor(() =>
+      expect(prefetchRoute).toHaveBeenCalledWith(
+        "http://localhost:3000/orders",
+        expect.objectContaining({
+          signal: expect.any(AbortSignal),
+          source: link,
+        }),
+      ),
     );
     runtime.dispose();
   });
@@ -66,6 +69,7 @@ describe("AstroPredictionRuntime", () => {
   it("cancels hover work when intent leaves", () => {
     const prefetchRoute = vi.fn();
     const runtime = createAstroPredictionRuntime({
+      opaqueUserKey: "test-user",
       prefetchRoute,
       observeBrowserEnvironment: false,
     }).start();
@@ -135,6 +139,7 @@ describe("AstroPredictionRuntime", () => {
     const onError = vi.fn();
     const prefetchRoute = vi.fn();
     const runtime = createAstroPredictionRuntime({
+      opaqueUserKey: "test-user",
       prefetchRoute,
       observeBrowserEnvironment: false,
       onError,

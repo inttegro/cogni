@@ -35,6 +35,12 @@ afterEach(() => {
 });
 
 describe("CogniProvider", () => {
+  it("requires identity when it creates the default learning scheduler", () => {
+    expect(() => render(<CogniProvider observeBrowserEnvironment={false} />)).toThrow(
+      "opaqueUserKey is required",
+    );
+  });
+
   it("exposes a supplied scheduler and mirrors foreground activity", () => {
     const scheduler = new PredictionScheduler({ environmentAllowed: false });
     let observed: PredictionScheduler | null = null;
@@ -96,7 +102,7 @@ describe("CogniProvider", () => {
     }
 
     const view = render(
-      <CogniProvider observeBrowserEnvironment={false}>
+      <CogniProvider opaqueUserKey="test-user" observeBrowserEnvironment={false}>
         <Probe />
       </CogniProvider>,
     );
@@ -123,7 +129,7 @@ describe("CogniProvider", () => {
 
     render(
       <StrictMode>
-        <CogniProvider observeBrowserEnvironment={false}>
+        <CogniProvider opaqueUserKey="test-user" observeBrowserEnvironment={false}>
           <Probe />
         </CogniProvider>
       </StrictMode>,
@@ -135,8 +141,8 @@ describe("CogniProvider", () => {
     const scheduled = observed.current?.schedule(candidate, async () => undefined, {
       idle: false,
     });
-    expect(scheduled?.status).toBe("started");
     expect((await scheduled?.started)?.accepted).toBe(true);
+    expect(scheduled?.status).toBe("started");
   });
 });
 

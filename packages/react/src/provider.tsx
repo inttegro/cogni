@@ -5,6 +5,7 @@ import {
   type PredictionScheduler as PredictionSchedulerInstance,
 } from "@inttegro/cogni-client";
 import {
+  createBrowserPredictionCalibration,
   createBrowserPredictionSchedulerRuntime,
   observeBrowserPredictionEnvironment,
 } from "@inttegro/cogni-client/browser";
@@ -12,6 +13,8 @@ import { createContext, useContext, useEffect, useRef, type ReactNode } from "re
 
 export interface CogniProviderProps {
   readonly children?: ReactNode;
+  /** Opaque stable key for the authenticated account. Learning is automatic. */
+  readonly opaqueUserKey?: string;
   /** A host-owned scheduler. Cogni never disposes a scheduler supplied here. */
   readonly scheduler?: PredictionSchedulerInstance;
   /** Creates a provider-owned scheduler when the default browser runtime is unsuitable. */
@@ -26,6 +29,7 @@ interface ProviderState {
   readonly scheduler: PredictionSchedulerInstance;
   readonly suppliedScheduler: PredictionSchedulerInstance | undefined;
   readonly ownsScheduler: boolean;
+  readonly opaqueUserKey: string | undefined;
   mounts: number;
   disposalGeneration: number;
 }
@@ -34,6 +38,7 @@ const CogniSchedulerContext = createContext<PredictionSchedulerInstance | null>(
 
 export function CogniProvider({
   children,
+  opaqueUserKey,
   scheduler,
   createScheduler,
   foregroundActivity,
@@ -45,17 +50,26 @@ export function CogniProvider({
     if (scheduler && createScheduler) {
       throw new TypeError("scheduler and createScheduler are mutually exclusive");
     }
+    if (!scheduler && !createScheduler && !opaqueUserKey?.trim()) {
+      throw new TypeError(
+        "opaqueUserKey is required when CogniProvider creates the scheduler",
+      );
+    }
 
     stateRef.current = {
       scheduler:
         scheduler ??
         createScheduler?.() ??
         new PredictionScheduler({
+          calibration: createBrowserPredictionCalibration({
+            opaqueUserKey: opaqueUserKey as string,
+          }),
           runtime: createBrowserPredictionSchedulerRuntime(),
           environmentAllowed: !observeBrowserEnvironment,
         }),
       suppliedScheduler: scheduler,
       ownsScheduler: scheduler === undefined,
+      opaqueUserKey,
       mounts: 0,
       disposalGeneration: 0,
     };
@@ -64,6 +78,9 @@ export function CogniProvider({
   const state = stateRef.current;
   if (state.suppliedScheduler !== scheduler) {
     throw new TypeError("CogniProvider scheduler cannot change after mounting");
+  }
+  if (state.opaqueUserKey !== opaqueUserKey) {
+    throw new TypeError("CogniProvider opaqueUserKey cannot change after mounting");
   }
 
   useEffect(() => {
