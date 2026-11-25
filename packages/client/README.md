@@ -55,6 +55,65 @@ the application.
 The coordinator accepts an optional runtime with `now()` and `schedule()` so
 applications and tests can control deadlines without relying on global timers.
 
+## Adaptive calibration
+
+Browser-owned framework runtimes enable learning by default once the host supplies an opaque
+authenticated account key. The scheduler calibrates before admission and records material outcomes
+after completion without a feature flag. IndexedDB loss starts a fresh model and never blocks
+prediction.
+
+Low-level integrations can use the learning entry point directly to adjust a host probability from
+the time-decayed reuse history of an opaque user-device subject:
+
+```ts
+import { AdaptivePredictionCalibrator } from "@inttegro/cogni-client/learning";
+import {
+  composeUserDeviceSubjectKey,
+  getOrCreateCogniDeviceKey,
+  IndexedDbAdaptiveCalibrationStore,
+} from "@inttegro/cogni-client/learning/browser";
+
+const calibrator = new AdaptivePredictionCalibrator({
+  namespace: "dashboard",
+  store: new IndexedDbAdaptiveCalibrationStore(),
+});
+const subjectKey = composeUserDeviceSubjectKey(
+  session.opaqueUserKey,
+  getOrCreateCogniDeviceKey(),
+);
+
+const contextKey = location.pathname;
+const { candidate: calibrated } = await calibrator.calibrate({
+  subjectKey,
+  contextKey,
+  candidate,
+});
+const handle = predictions.predict(calibrated, loader);
+
+// On committed navigation, learn from the complete host-approved choice set.
+await calibrator.observeChoice({
+  subjectKey,
+  contextKey,
+  chosenDestination: nextPath,
+  consideredDestinations: approvedCandidates.map(({ destination }) => destination),
+});
+```
+
+`observeChoice()` learns from committed navigation even when a candidate stayed
+below the prediction gate. `observe()` is available when material `reused` and
+`missed` outcomes are the intended training signal; operational failures,
+rejections, cancellations, and already-cached reads are ignored. Do not feed the
+same decision into both methods in one namespace.
+
+The default model requires five effective observations, decays evidence with a
+14-day half-life, and caps its adjustment at 0.2. It stores aggregate weights
+rather than raw route history.
+
+The host still chooses safe candidates, creates an opaque authenticated user
+key, and owns retention and consent. The calibrator cannot invent destinations
+or bypass coordinator gates. Call `clearSubject()` when an account is deleted
+or the user resets personalization.
+
 ## Activity-aware scheduling
 
 `PredictionScheduler` adds the timing and admission behavior needed by an

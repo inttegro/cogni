@@ -31,13 +31,19 @@ router's navigation boundary. See [React Router](/react-router),
 import { CogniProvider } from "@inttegro/cogni-react";
 
 export function App() {
-  return <CogniProvider>{/* router and application */}</CogniProvider>;
+  return (
+    <CogniProvider opaqueUserKey={session.opaqueUserKey}>
+      {/* router and application */}
+    </CogniProvider>
+  );
 }
 ```
 
-`CogniProvider` creates and disposes a browser scheduler by default. It also observes visibility,
-data-saving, and constrained-network signals. Pass `foregroundActivity` when the host has active
-foreground requests so speculation yields to work the user is already waiting for.
+`CogniProvider` creates a learning browser scheduler and disposes it by default. The opaque account
+key is combined with a random local browser key, so cleared storage starts a fresh model. It also
+observes visibility, data-saving, and constrained-network signals. Pass `foregroundActivity` when
+the host has active foreground requests so speculation yields to work the user is already waiting
+for.
 
 Use `scheduler` to supply a host-owned scheduler, or `createScheduler` for a provider-owned custom
 instance. The two props are mutually exclusive. A supplied scheduler must stay stable and is never

@@ -97,6 +97,15 @@ window, Cogni must reduce its budget, wait for stronger intent, or disable that
 policy until it recovers. When there is not enough evidence, quality is unknown,
 not assumed.
 
+Browser runtimes apply adaptive calibration for an opaque user-device subject
+by default. Learning must remain explainable, time-decayed, bounded, and anchored
+to the host's base probability until enough evidence exists. Reference storage
+keeps aggregate reuse weights rather than raw navigation history. Subject
+identity, retention, consent, account deletion, and any cross-device
+synchronization remain host responsibilities. Learned calibration may weight an
+already-authorized candidate; it may never invent a destination, weaken an
+authorization decision, or turn a read into a mutation.
+
 ## Architectural boundary
 
 The Cogni frontend owns:

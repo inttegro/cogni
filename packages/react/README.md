@@ -7,7 +7,7 @@ import { CogniProvider, useScheduledPrediction } from "@inttegro/cogni-react";
 
 function App() {
   return (
-    <CogniProvider>
+    <CogniProvider opaqueUserKey={session.opaqueUserKey}>
       <LikelyNextView />
     </CogniProvider>
   );
@@ -33,10 +33,10 @@ function LikelyNextView() {
 }
 ```
 
-`CogniProvider` owns browser environment admission and scheduler disposal. Supply
-an existing scheduler when an application already centralizes those concerns.
-The hooks do not invent probabilities or policies; the host remains responsible
-for calibrated candidates and reusable reads.
+`CogniProvider` owns browser environment admission, adaptive learning, and scheduler disposal.
+`opaqueUserKey` identifies the authenticated account without exposing a direct identifier; Cogni
+combines it with a random local browser key. Supply an existing scheduler when an application already
+centralizes those concerns. The hooks do not invent candidates or reusable reads.
 
 Applications with many ordinary links can use `useDelegatedRouteIntent` once at
 the shell instead of replacing or listing every link. The hook discovers links

@@ -12,6 +12,7 @@ Start with the integration question:
 | Has indirect interest become direct intent?        | `IntentPrefetchController`        |
 | Did predictive work start and settle early enough? | `NavigationMetrics`               |
 | Should browser conditions veto prediction?         | `@inttegro/cogni-client/browser`  |
+| Should recent reuse adjust this subject's score?   | `@inttegro/cogni-client/learning` |
 | How does the client call a Cogni backend?          | `@inttegro/cogni-client/protocol` |
 
 The client exposes four entry points. During the `0.x` series, minor releases may change public APIs
@@ -148,8 +149,10 @@ All current main-entry type exports are listed below.
 | `NavigationMetric`                       | Completed navigation and optional prefetch timing fields.                         |
 | `NavigationMetricsOptions`               | Clock, capacity, TTL, and completion callback.                                    |
 | `PredictionCancellationReason`           | `cancelled_by_host`, `coordinator_disposed`, or `superseded_by_committed_action`. |
+| `PredictionCalibration`                  | Inspectable base, posterior, evidence, confidence, and learned adjustment.        |
 | `PredictionCandidate`                    | Host candidate identity, quality, cost, priority, and horizon.                    |
 | `PredictionCoordinatorOptions`           | Coordinator gates, bounds, runtime, history, and event callback.                  |
+| `PredictionCalibrationController`        | Automatic candidate calibration and terminal-outcome learning boundary.           |
 | `PredictionCost`                         | `low`, `standard`, or `high`.                                                     |
 | `PredictionEvent`                        | Union of coordinator lifecycle events.                                            |
 | `PredictionEventListener`                | Observer for coordinator lifecycle events.                                        |
@@ -185,6 +188,7 @@ Import from `@inttegro/cogni-client/browser` to apply visibility, connection, an
 Functions:
 
 - `browserAllowsPrediction(environment?): boolean`
+- `createBrowserPredictionCalibration(options): PredictionCalibrationController`
 - `createBrowserPredictionSchedulerRuntime(host?): PredictionSchedulerRuntime`
 - `evaluateBrowserPredictionEnvironment(environment?): BrowserPredictionDecision`
 - `observeBrowserPredictionEnvironment(listener, environment?): () => void`
@@ -194,12 +198,53 @@ Type exports:
 | Export                                   | Purpose                                                                      |
 | ---------------------------------------- | ---------------------------------------------------------------------------- |
 | `BrowserConnection`                      | Optional `effectiveType` and `saveData` connection fields.                   |
+| `BrowserPredictionCalibrationOptions`    | Opaque account identity and optional browser-host dependencies.              |
 | `BrowserPredictionBlockReason`           | `browser_unavailable`, `document_hidden`, `save_data`, or `slow_connection`. |
 | `BrowserPredictionDecision`              | Allowed result or blocked result with reason.                                |
 | `BrowserPredictionEnvironment`           | Optional document and navigator inputs for evaluation.                       |
 | `BrowserSchedulerHost`                   | Timer and optional idle-callback host.                                       |
 | `ObservableBrowserConnection`            | Connection fields plus optional change listeners.                            |
 | `ObservableBrowserPredictionEnvironment` | Document and navigator inputs with visibility listeners.                     |
+
+## Adaptive calibration
+
+Import the storage-agnostic model from `@inttegro/cogni-client/learning`.
+
+### `AdaptivePredictionCalibrator`
+
+```typescript
+new AdaptivePredictionCalibrator(options: AdaptiveCalibratorOptions)
+```
+
+Methods:
+
+- `calibrate(input): Promise<AdaptiveCalibrationResult>` returns a cloned candidate with its final
+  probability and inspectable calibration metadata.
+- `observeChoice(observation): Promise<number>` learns a committed destination against a bounded,
+  host-approved candidate set, including candidates that did not run.
+- `observe(observation): Promise<boolean>` records material `reused` or `missed` outcomes and returns
+  whether the model learned from the outcome.
+- `clearSubject(subjectKey): Promise<void>` removes this namespace's aggregate evidence for one
+  opaque subject.
+
+`AdaptiveCalibratorOptions` requires an `AdaptiveCalibrationStore`. Defaults are namespace `default`,
+a 14-day half-life, prior strength `8`, minimum evidence `5`, confidence scale `12`, maximum
+adjustment `0.2`, and at most 32 choice destinations.
+
+`InMemoryAdaptiveCalibrationStore` supports tests and process-local use. Implement
+`AdaptiveCalibrationStore` to use another atomic persistence layer.
+
+Import browser persistence and identity helpers from `@inttegro/cogni-client/learning/browser`:
+
+- `createBrowserPredictionCalibration(options)` creates the default fail-open learning controller.
+- `IndexedDbAdaptiveCalibrationStore` stores aggregate weights in IndexedDB.
+- `getOrCreateCogniDeviceKey()` creates a random browser-profile key in local storage.
+- `composeUserDeviceSubjectKey(opaqueUserKey, deviceKey)` creates the local subject partition. The
+  user key must already be opaque and must not contain direct identifiers.
+
+Framework-owned browser runtimes create this controller automatically. They require only the opaque
+authenticated account key; there is no learning feature flag. Missing, cleared, blocked, or replaced
+browser storage starts a fresh model and never blocks prediction or navigation.
 
 ## Backend protocol
 

@@ -6,8 +6,8 @@ feel immediate without doing unbounded speculative work.
 This repository is organized as an npm workspace with eight independently
 publishable runtimes:
 
-- [`packages/client/`](./packages/client/) contains the frontend coordinator, browser admission
-  policy, and backend protocol client. Its npm package is
+- [`packages/client/`](./packages/client/) contains the frontend coordinator, adaptive calibration,
+  browser admission policy, and backend protocol client. Its npm package is
   `@inttegro/cogni-client`.
 - [`packages/server/`](./packages/server/) contains the Node.js implementation of the Cogni
   backend transport. Its npm package is `@inttegro/cogni-server`.

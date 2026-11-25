@@ -25,7 +25,7 @@ import CogniProvider from "@inttegro/cogni-astro/CogniProvider.astro";
 import PredictiveLink from "@inttegro/cogni-astro/PredictiveLink.astro";
 ---
 
-<CogniProvider>
+<CogniProvider opaqueUserKey={session.opaqueUserKey}>
   <nav>
     <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
       Orders
@@ -61,7 +61,7 @@ document navigation cannot preserve the in-memory accounting runtime.
 
 The built-in loader calls `prefetch(href)` without Cogni's abort signal. Cogni can cancel delayed
 intent before that call, but it cannot abort Astro's internal work after it begins. Use
-`createAstroPredictionRuntime({ prefetchRoute })` when the host has a tested loader that populates
+`createAstroPredictionRuntime({ opaqueUserKey, prefetchRoute })` when the host has a tested loader that populates
 the exact route cache consumed by committed navigation and can honor cancellation.
 
 ## Runtime lifecycle

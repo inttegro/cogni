@@ -32,6 +32,7 @@
         "pages": [
           "client-quickstart",
           "candidates-and-reuse",
+          "adaptive-calibration",
           "scheduling-and-intent",
           "browser-and-navigation",
           "devtools"

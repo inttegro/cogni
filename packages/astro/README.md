@@ -20,7 +20,7 @@ import CogniProvider from "@inttegro/cogni-astro/CogniProvider.astro";
 import PredictiveLink from "@inttegro/cogni-astro/PredictiveLink.astro";
 ---
 
-<CogniProvider>
+<CogniProvider opaqueUserKey={session.opaqueUserKey}>
   <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
     Orders
   </PredictiveLink>
@@ -46,6 +46,7 @@ The DOM runtime is public when an application needs a route loader other than
 import { createAstroPredictionRuntime } from "@inttegro/cogni-astro";
 
 const runtime = createAstroPredictionRuntime({
+  opaqueUserKey: session.opaqueUserKey,
   prefetchRoute: async (href, { signal }) => {
     await routeCache.prefetch(href, { signal });
   },

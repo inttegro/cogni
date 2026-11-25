@@ -20,7 +20,7 @@ import { PredictiveLink } from "@inttegro/cogni-tanstack-router";
 
 export function Navigation() {
   return (
-    <CogniProvider>
+    <CogniProvider opaqueUserKey={session.opaqueUserKey}>
       <PredictiveLink to="/orders" probability={0.92} horizonMs={30_000}>
         Orders
       </PredictiveLink>

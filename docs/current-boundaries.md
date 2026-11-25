@@ -22,6 +22,8 @@ The client includes:
 - an activity-aware scheduler with soft delay, idle wait, maximum defer, environment admission, and
   direct-intent escalation;
 - framework-neutral intent and navigation metric primitives;
+- default browser calibration with decayed aggregate evidence, an in-memory fallback, and an atomic
+  IndexedDB store;
 - optional browser environment and idle-runtime helpers;
 - a version 1 protocol client for JSON and NDJSON; and
 - an optional Chrome Prompt API allowlist ranker.
@@ -31,11 +33,13 @@ component-scoped scheduling, and delegated discovery of rendered links. React Ro
 Router adapters add intent-aware links over their public route-preload contracts. The Next.js
 adapter adds route prediction through the public App Router contract. The Astro
 adapter adds a delegated document runtime, `.astro` components, public `astro:prefetch` loading, and
-ClientRouter reuse attribution. Hosts still own policy, calibration, route authorization, caches,
-telemetry, and invalidation.
+ClientRouter reuse attribution. Hosts still own the safe candidate set, the opaque authenticated
+account key, route authorization, caches, telemetry, and invalidation.
 
-The coordinator's quality history is bounded and memory-only. It is useful for runtime snapshots,
-not a durable analytics store or a statistical calibration service.
+The coordinator's quality history remains bounded and memory-only. Browser-owned runtimes create the
+adaptive calibrator automatically from the host's opaque authenticated account key. Its reference
+store persists aggregate reuse weights locally, falls back to a fresh model when browser storage is
+unavailable or cleared, and does not synchronize devices or provide a server-side profile service.
 
 ## Browser
 

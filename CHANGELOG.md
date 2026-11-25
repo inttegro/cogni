@@ -3,6 +3,14 @@
 Cogni follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). During the `0.x` series,
 minor releases may contain breaking API changes. Migration notes will call those changes out.
 
+## Unreleased
+
+### Added
+
+- Default adaptive calibration for opaque user-device subjects in browser-owned runtimes, with time
+  decay, conservative confidence, bounded adjustments, resilient IndexedDB storage, automatic
+  lifecycle learning, DevTools explanations, and no raw navigation history.
+
 ## [0.1.0] - 2026-11-24
 
 ### Added

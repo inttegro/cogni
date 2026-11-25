@@ -28,7 +28,7 @@ import { CogniProvider } from "@inttegro/cogni-react";
 
 export function Root() {
   return (
-    <CogniProvider>
+    <CogniProvider opaqueUserKey={session.opaqueUserKey}>
       <App />
       {import.meta.env.DEV ? <CogniDevtools /> : null}
     </CogniProvider>
