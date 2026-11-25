@@ -86,8 +86,8 @@ export const PredictiveLink = forwardRef<HTMLAnchorElement, PredictiveLinkProps>
     const intent = useRouteIntent({
       href,
       prefetchRoute: frameworkPrefetch.prefetchRoute,
-      probability,
-      horizonMs,
+      ...(probability === undefined ? {} : { probability }),
+      ...(horizonMs === undefined ? {} : { horizonMs }),
       enabled: (enabled ?? true) && sameOrigin && !reloadDocument,
       retainOnUnmount: true,
       ...(hoverDelayMs === undefined ? {} : { hoverDelayMs }),

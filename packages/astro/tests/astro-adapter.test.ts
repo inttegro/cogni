@@ -21,10 +21,7 @@ function appendLink(overrides: Record<string, string> = {}): HTMLAnchorElement {
   link.href = "/orders";
   link.textContent = "Orders";
   for (const [name, value] of Object.entries({
-    ...createAstroLinkAttributes({
-      probability: 0.92,
-      horizonMs: 30_000,
-    }),
+    ...createAstroLinkAttributes({}),
     ...overrides,
   })) {
     link.setAttribute(name, value);
@@ -164,7 +161,7 @@ describe("Astro route helpers", () => {
       createAstroRouteCandidate(
         "/orders#latest",
         "hover",
-        { probability: 0.9, horizonMs: 10_000 },
+        {},
         "https://example.com/home",
       ),
     ).toMatchObject({
@@ -172,14 +169,14 @@ describe("Astro route helpers", () => {
       destination: "https://example.com/orders",
       policy: "astro-route",
       trigger: "hover",
+      probability: 0.8,
+      horizonMs: 30_000,
     });
-    expect(
-      createAstroLinkAttributes({ probability: 0.9, horizonMs: 10_000 }),
-    ).toMatchObject({
+    expect(createAstroLinkAttributes({})).toMatchObject({
       "data-astro-prefetch": "false",
       "data-cogni-astro": "",
-      "data-cogni-probability": "0.9",
-      "data-cogni-horizon-ms": "10000",
+      "data-cogni-probability": "0.8",
+      "data-cogni-horizon-ms": "30000",
     });
   });
 });

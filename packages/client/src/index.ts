@@ -39,11 +39,20 @@ import type {
   CandidateRankingResult as CoreCandidateRankingResult,
 } from "./ranking/types";
 
+export {
+  createPredictionCandidate,
+  DEFAULT_HIGH_COST_PREDICTION_PROBABILITY,
+  DEFAULT_PREDICTION_HORIZON_MS,
+  DEFAULT_PREDICTION_POLICY,
+  DEFAULT_PREDICTION_PROBABILITY,
+  DEFAULT_PREDICTION_TRIGGER,
+} from "./core/defaults";
 export { PredictionCoordinator } from "./core/coordinator";
 export { IntentPrefetchController } from "./core/intent";
 export { NavigationMetrics } from "./core/navigation-metrics";
 export { PredictionScheduler } from "./core/scheduler";
 export type { IntentPrefetchControllerOptions } from "./core/intent";
+export type { PredictionCandidateInput } from "./core/defaults";
 export type {
   NavigationMetric,
   NavigationMetricsOptions,

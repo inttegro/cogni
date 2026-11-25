@@ -85,8 +85,8 @@ export const PredictiveLink = forwardRef<HTMLAnchorElement, PredictiveLinkProps>
     const intent = useRouteIntent({
       href,
       prefetchRoute,
-      probability,
-      horizonMs,
+      ...(probability === undefined ? {} : { probability }),
+      ...(horizonMs === undefined ? {} : { horizonMs }),
       enabled:
         (enabled ?? true) &&
         sameOrigin &&

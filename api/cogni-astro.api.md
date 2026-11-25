@@ -88,7 +88,7 @@ export interface AstroRouteCandidateOptions {
     // (undocumented)
     readonly estimatedBytes?: number;
     // (undocumented)
-    readonly horizonMs: number;
+    readonly horizonMs?: number;
     // (undocumented)
     readonly key?: string;
     // (undocumented)
@@ -96,7 +96,7 @@ export interface AstroRouteCandidateOptions {
     // (undocumented)
     readonly priority?: number;
     // (undocumented)
-    readonly probability: number;
+    readonly probability?: number;
 }
 
 // @public (undocumented)

@@ -17,7 +17,7 @@ The current package name is `@inttegro/cogni-astro`. There is no `@inttegro/cogn
 
 ## Add predictive links
 
-Mount one provider in the base layout and mark routes backed by a calibrated policy:
+Mount one provider in the base layout and mark routes whose work can be reused:
 
 ```astro
 ---
@@ -27,17 +27,16 @@ import PredictiveLink from "@inttegro/cogni-astro/PredictiveLink.astro";
 
 <CogniProvider opaqueUserKey={session.opaqueUserKey}>
   <nav>
-    <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
-      Orders
-    </PredictiveLink>
+    <PredictiveLink href="/orders">Orders</PredictiveLink>
   </nav>
 </CogniProvider>
 ```
 
 `CogniProvider` renders its slot and installs one singleton runtime through
-`@inttegro/cogni-astro/client`. `PredictiveLink` renders an ordinary anchor. `href`, `probability`,
-and `horizonMs` are required; anchor attributes and candidate fields such as policy, cost, priority,
-estimated bytes, hover delay, and maximum defer are optional.
+`@inttegro/cogni-astro/client`. `PredictiveLink` renders an ordinary anchor. Only `href` is required;
+Cogni supplies its conservative probability and 30 second reuse horizon, then learns from reuse and
+waste. Candidate fields such as policy, cost, priority, estimated bytes, hover delay, and maximum
+defer remain optional overrides.
 
 The runtime delegates events at the document boundary. Sustained hover schedules after 120 ms by
 default; leaving cancels pending work. Focus, touch, and unmodified primary pointer-down intent start
@@ -76,7 +75,8 @@ also disposes a runtime-owned scheduler and prevents restart. A scheduler suppli
 `scheduler` remains host-owned; `scheduler` and `createScheduler` are mutually exclusive.
 
 `createAstroRouteCandidate()` creates normalized candidates with default policy `astro-route`,
-destination equal to the absolute route, and key `astro-route:${route}`.
+destination equal to the absolute route, key `astro-route:${route}`, and Cogni's shared probability
+and horizon defaults.
 `createAstroLinkAttributes()` creates the data attributes consumed by the delegated runtime and
 disables Astro's parallel link prefetch for that anchor.
 

@@ -54,8 +54,6 @@ function PredictiveAnchor({
   const intent = useRouteIntent({
     href,
     prefetchRoute,
-    probability: 0.9,
-    horizonMs: 30_000,
     policy: "demo-navigation",
   });
 

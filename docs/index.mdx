@@ -113,9 +113,7 @@ import { NextCogniProvider, PredictiveLink } from "@inttegro/cogni-next";
 export function Navigation() {
   return (
     <NextCogniProvider opaqueUserKey={session.opaqueUserKey}>
-      <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
-        Orders
-      </PredictiveLink>
+      <PredictiveLink href="/orders">Orders</PredictiveLink>
     </NextCogniProvider>
   );
 }
@@ -172,12 +170,14 @@ The client runtime is framework-neutral, and the backend protocol can be impleme
 
 ## Adopt what the evidence supports
 
-Start with one route that is both likely and expensive enough to matter. Give it a stable cache key,
-a realistic reuse horizon, and a calibrated probability. Then inspect the outcomes.
+Start with one route or cache-backed resource that is expensive enough to matter. Give it a stable
+work identity and a loader that populates the representation foreground code already consumes.
+Cogni supplies a conservative initial probability, reuse horizon, admission, and scheduling policy;
+the browser runtime learns from actual reuse and waste. Then inspect the outcomes.
 
 Expand when Cogni shows that committed actions repeatedly reuse the work and avoid meaningful wait.
-Tighten the gate, delay the work, or remove the policy when it does not. This keeps predictive loading
-an optimization you can trust instead of a growing collection of hopeful requests.
+Override the defaults, delay the work, or remove the policy when the evidence calls for it. This keeps
+predictive loading an optimization you can trust instead of a growing collection of hopeful requests.
 
 <Columns cols={2}>
   <Card

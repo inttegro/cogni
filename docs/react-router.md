@@ -20,9 +20,7 @@ import { PredictiveLink } from "@inttegro/cogni-react-router";
 export function Navigation() {
   return (
     <CogniProvider opaqueUserKey={session.opaqueUserKey}>
-      <PredictiveLink to="/orders" probability={0.92} horizonMs={30_000}>
-        Orders
-      </PredictiveLink>
+      <PredictiveLink to="/orders">Orders</PredictiveLink>
     </CogniProvider>
   );
 }
@@ -46,8 +44,6 @@ the cache operation your application already uses:
 ```tsx
 <PredictiveLink
   to="/orders"
-  probability={0.92}
-  horizonMs={30_000}
   prefetchRoute={(href, { signal }) => routeCache.preload(href, { signal })}
 >
   Orders
@@ -62,8 +58,9 @@ the navigation call returns because that mode does not expose a completion promi
 ## Candidate policy
 
 Use `predictionKey`, `policy`, `cost`, `priority`, and `estimatedBytes` when the default route
-identity is not enough. `probability` and `horizonMs` remain required because a router cannot infer
-business intent or how long a prediction stays useful.
+identity is not enough. Cogni starts with its conservative probability and 30 second reuse horizon,
+then learns from actual reuse and waste. Override `probability` or `horizonMs` when the application
+has stronger evidence.
 
 See [React](/react) for provider ownership and [Candidates and reuse](/candidates-and-reuse) for
 quality accounting.

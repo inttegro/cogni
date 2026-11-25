@@ -28,8 +28,8 @@ const {
 } = Astro.props;
 
 const predictionAttributes = createAstroLinkAttributes({
-  probability,
-  horizonMs,
+  ...(probability === undefined ? {} : { probability }),
+  ...(horizonMs === undefined ? {} : { horizonMs }),
   ...(predictionKey === undefined ? {} : { key: predictionKey }),
   ...(policy === undefined ? {} : { policy }),
   ...(destination === undefined ? {} : { destination }),

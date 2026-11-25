@@ -12,7 +12,7 @@ npm install @inttegro/cogni-client @inttegro/cogni-astro
 ## Use the Astro components
 
 Mount one provider in the base layout and use predictive links where the
-application has a calibrated intent policy:
+application can reuse route work:
 
 ```astro
 ---
@@ -21,11 +21,13 @@ import PredictiveLink from "@inttegro/cogni-astro/PredictiveLink.astro";
 ---
 
 <CogniProvider opaqueUserKey={session.opaqueUserKey}>
-  <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
-    Orders
-  </PredictiveLink>
+  <PredictiveLink href="/orders">Orders</PredictiveLink>
 </CogniProvider>
 ```
+
+The link uses Cogni's conservative initial probability and reuse horizon. The
+browser runtime learns from actual reuse and waste; applications with stronger
+evidence can override either value.
 
 `PredictiveLink` waits for sustained hover intent and escalates focus, touch,
 and pointer-down intent. With Astro's `ClientRouter`, the runtime reports reuse

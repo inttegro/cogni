@@ -40,12 +40,8 @@ function Shell() {
         <p className="eyebrow">TanStack Router</p>
         <h1>Let the router own reusable route data</h1>
         <nav aria-label="Demo destinations">
-          <PredictiveLink to="/" probability={0.9} horizonMs={30_000}>
-            Home
-          </PredictiveLink>
-          <PredictiveLink to="/orders" probability={0.92} horizonMs={30_000}>
-            Orders
-          </PredictiveLink>
+          <PredictiveLink to="/">Home</PredictiveLink>
+          <PredictiveLink to="/orders">Orders</PredictiveLink>
         </nav>
         <section>
           <Outlet />

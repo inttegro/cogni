@@ -5,6 +5,7 @@
 ```ts
 
 import { PredictionCandidate } from '@inttegro/cogni-client';
+import { PredictionCandidateInput } from '@inttegro/cogni-client';
 import { PredictionCost } from '@inttegro/cogni-client';
 import { PredictionLoader } from '@inttegro/cogni-client';
 import { PredictionRuntime } from '@inttegro/cogni-client';
@@ -68,6 +69,15 @@ export interface IntentPrefetchActions<Value> {
 }
 
 // @public (undocumented)
+export interface LocalCogniPredictionActions {
+    // (undocumented)
+    cancel(): void;
+    markReused(): Promise<boolean>;
+    // (undocumented)
+    readonly scheduled: ScheduledPrediction | null;
+}
+
+// @public (undocumented)
 export function resolveAnchorHref(source: Element, currentHref: string): string | null;
 
 // @public (undocumented)
@@ -79,7 +89,7 @@ export interface RouteCandidateOptions {
     // (undocumented)
     readonly estimatedBytes?: number;
     // (undocumented)
-    readonly horizonMs: number;
+    readonly horizonMs?: number;
     // (undocumented)
     readonly key?: string;
     // (undocumented)
@@ -87,7 +97,7 @@ export interface RouteCandidateOptions {
     // (undocumented)
     readonly priority?: number;
     // (undocumented)
-    readonly probability: number;
+    readonly probability?: number;
 }
 
 // @public (undocumented)
@@ -111,6 +121,17 @@ export type RoutePrefetch = (href: string, context: RoutePrefetchContext) => Pre
 export interface RoutePrefetchContext {
     // (undocumented)
     readonly signal: AbortSignal;
+}
+
+// @public
+export function useCogniPrediction(input: UseCogniPredictionOptions): LocalCogniPredictionActions;
+
+// @public (undocumented)
+export interface UseCogniPredictionOptions extends PredictionCandidateInput {
+    // (undocumented)
+    readonly enabled?: boolean;
+    readonly load: PredictionLoader;
+    readonly schedule?: PredictionScheduleOptions;
 }
 
 // @public (undocumented)

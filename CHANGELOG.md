@@ -10,6 +10,8 @@ minor releases may contain breaking API changes. Migration notes will call those
 - Default adaptive calibration for opaque user-device subjects in browser-owned runtimes, with time
   decay, conservative confidence, bounded adjustments, resilient IndexedDB storage, automatic
   lifecycle learning, DevTools explanations, and no raw navigation history.
+- A provider-first React runtime with integration-supplied candidates and no central prediction
+  registry, plus optional probability and reuse horizon overrides across router adapters.
 
 ## [0.1.0] - 2026-11-24
 

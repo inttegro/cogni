@@ -4,8 +4,9 @@ description: Add calibrated App Router prediction without bypassing Cogni's shar
 ---
 
 `@inttegro/cogni-next` connects Cogni to the Next.js App Router. It provides an intent-aware link,
-route prediction hooks, and the React adapter under Next-specific exports. The application still
-owns route policy and calibrated probability.
+route prediction hooks, and the React adapter under Next-specific exports. Cogni supplies the
+ordinary policy defaults; the application still owns safe route work and may provide stronger
+evidence.
 
 <Note>
   This guide follows the `0.1` API. Its peer ranges are Next.js `>=15.4.0 <17` and React
@@ -29,18 +30,17 @@ export function Navigation() {
   return (
     <NextCogniProvider opaqueUserKey={session.opaqueUserKey}>
       <nav>
-        <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
-          Orders
-        </PredictiveLink>
+        <PredictiveLink href="/orders">Orders</PredictiveLink>
       </nav>
     </NextCogniProvider>
   );
 }
 ```
 
-`probability` and `horizonMs` are required because the adapter cannot infer application intent or a
-valid reuse window. The key defaults to `next-route:${href}`, so links to the same string deduplicate
-through the shared scheduler.
+The key defaults to `next-route:${href}`, so links to the same string deduplicate through the shared
+scheduler. Cogni starts with its conservative probability and 30 second reuse horizon; the browser
+runtime calibrates that prior from actual reuse and waste. Override either value when the application
+has stronger evidence.
 
 `PredictiveLink` waits 120 ms for sustained hover by default. Focus, touch, primary pointer-down,
 and ordinary click intent start immediately; pointer leave and blur cancel pending work. Next's
@@ -71,8 +71,6 @@ and uses `router.prefetch()` by default.
 ```tsx
 const routeIntent = useNextDelegatedRouteIntent({
   selector: "a[href], [data-resource-href]",
-  probability: 0.92,
-  horizonMs: 30_000,
   resolveHref: authorizeDashboardRoute,
   prefetchRoute: prefetchFullRoute,
 });
@@ -80,14 +78,14 @@ const routeIntent = useNextDelegatedRouteIntent({
 
 The hook returns `markReused(href)` and `cancel(href?)`. Call `markReused` only after App Router
 navigation commits and consumes the predicted route cache. Discovery removes the per-link wrapper
-requirement; it does not remove the host's responsibility for route authorization, calibration,
-cache identity, or reuse evidence.
+requirement; it does not remove the host's responsibility for route authorization, cache identity,
+or reuse evidence. Adaptive calibration runs automatically in the provider-owned scheduler.
 
 ## Policy-selected routes
 
 Use `useNextRoutePrediction()` when application policy selects a likely route without a link event.
-It accepts the same `href`, `probability`, `horizonMs`, and candidate fields plus schedule options.
-Set `enabled: false` to stop scheduling.
+It accepts `href`, optional policy overrides, and schedule options. Set `enabled: false` to stop
+scheduling.
 
 For a non-link action, call `markRoutePredictionReused(scheduled)` only after the action commits to
 that route and consumes the prefetched representation. The helper starts pending work, waits for a
@@ -104,6 +102,7 @@ The package exports `NextCogniProvider`, `PredictiveLink`, `createNextRouteCandi
 `markRoutePredictionReused`, `useNextRoutePrediction`, `useNextRouteIntent`,
 `useNextDelegatedRouteIntent`, their public types, and the React adapter hooks. The candidate helper
 defaults `policy` to `next-route`, `destination` to `href`, and `key` to `next-route:${href}`.
+Probability and horizon use Cogni's shared defaults unless overridden.
 
 See [React](/react) for provider ownership and
 [Browser runtime and navigation metrics](/browser-and-navigation) for browser admission.

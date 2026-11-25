@@ -3,6 +3,7 @@ import {
   NavigationMetrics,
   PredictionCoordinator,
   PredictionScheduler,
+  createPredictionCandidate,
   type CandidateRanker,
   type PredictionCandidate,
   type PredictionHandle,
@@ -47,6 +48,7 @@ import {
 import {
   CogniProvider,
   resolveAnchorHref,
+  useCogniPrediction,
   useCogniScheduler,
   useDelegatedRouteIntent,
   useIntentPrefetch,
@@ -54,6 +56,8 @@ import {
   useScheduledPrediction,
   type CogniProviderProps,
   type DelegatedRouteIntentActions,
+  type LocalCogniPredictionActions,
+  type UseCogniPredictionOptions,
 } from "@inttegro/cogni-react";
 import {
   PredictiveLink as ReactRouterPredictiveLink,
@@ -98,12 +102,15 @@ declare const reactRouterPredictiveLinkProps: ReactRouterPredictiveLinkProps;
 declare const tanStackPredictiveLinkProps: TanStackPredictiveLinkProps;
 declare const astroLinkOptions: AstroLinkPredictionOptions;
 declare const calibrationStore: AdaptiveCalibrationStore;
+declare const localCogniActions: LocalCogniPredictionActions;
+declare const cogniPredictionOptions: UseCogniPredictionOptions;
 
 void [candidate, handle, quality, ranker, runtime, batch];
 void new PredictionCoordinator();
 void new PredictionScheduler();
 void new NavigationMetrics();
 void new IntentPrefetchController({ run: () => undefined });
+void createPredictionCandidate({ key: "query:recent-orders" });
 void createBrowserPredictionSchedulerRuntime;
 void observeBrowserPredictionEnvironment;
 void new AdaptivePredictionCalibrator({ store: calibrationStore });
@@ -120,6 +127,7 @@ void devtoolsProps;
 void devtoolsSnapshot;
 void CogniProvider;
 void resolveAnchorHref;
+void useCogniPrediction;
 void useCogniScheduler;
 void useDelegatedRouteIntent;
 void useIntentPrefetch;
@@ -143,6 +151,8 @@ void AstroPredictionRuntime;
 void createAstroPredictionRuntime;
 void createAstroRouteCandidate;
 void createAstroLinkAttributes(astroLinkOptions);
+void localCogniActions;
+void cogniPredictionOptions;
 void createCogniBackendClient({
   routes: { capabilities: "/c", predictions: "/p", outcomes: "/o" },
 });

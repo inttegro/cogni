@@ -52,6 +52,22 @@ handle.markReused();
 Cogni does not retain the response. The host cache remains the source consumed by
 the application.
 
+Applications that do not already own a calibrated policy can start with Cogni's
+defaults instead of assembling every candidate field:
+
+```ts
+import { createPredictionCandidate } from "@inttegro/cogni-client";
+
+const candidate = createPredictionCandidate({ key: "query:recent-orders" });
+```
+
+This uses a conservative `0.8` initial prior, a `30` second reuse horizon,
+standard cost, and generic context labels. Browser learning adjusts the prior
+from actual reuse and waste. The host still supplies the stable work identity
+and cache-aware loader because Cogni cannot infer authorization, freshness, or
+whether foreground code consumes the result. Advanced integrations may override
+every candidate field or construct `PredictionCandidate` directly.
+
 The coordinator accepts an optional runtime with `now()` and `schedule()` so
 applications and tests can control deadlines without relying on global timers.
 
@@ -110,9 +126,10 @@ The default model requires five effective observations, decays evidence with a
 rather than raw route history.
 
 The host still chooses safe candidates, creates an opaque authenticated user
-key, and owns retention and consent. The calibrator cannot invent destinations
-or bypass coordinator gates. Call `clearSubject()` when an account is deleted
-or the user resets personalization.
+key, and owns retention and consent. It may supply the base probability or use
+Cogni's conservative prior. The calibrator cannot invent destinations or bypass
+coordinator gates. Call `clearSubject()` when an account is deleted or the user
+resets personalization.
 
 ## Activity-aware scheduling
 

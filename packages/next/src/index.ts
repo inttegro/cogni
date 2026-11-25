@@ -3,6 +3,7 @@
 export {
   CogniProvider as NextCogniProvider,
   resolveAnchorHref,
+  useCogniPrediction,
   useCogniScheduler,
   useIntentPrefetch,
   useScheduledPrediction,
@@ -22,6 +23,8 @@ export type {
   DelegatedRouteIntentActions,
   DelegatedRouteIntentContext,
   IntentPrefetchActions,
+  LocalCogniPredictionActions,
+  UseCogniPredictionOptions,
   UseIntentPrefetchOptions,
 } from "@inttegro/cogni-react";
 export type { PredictiveLinkProps } from "./predictive-link";

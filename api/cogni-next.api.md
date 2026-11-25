@@ -11,6 +11,7 @@ import { DelegatedRouteIntentActions } from '@inttegro/cogni-react';
 import { DelegatedRouteIntentContext } from '@inttegro/cogni-react';
 import { IntentPrefetchActions } from '@inttegro/cogni-react';
 import Link from 'next/link';
+import { LocalCogniPredictionActions } from '@inttegro/cogni-react';
 import { CogniProvider as NextCogniProvider } from '@inttegro/cogni-react';
 import { CogniProviderProps as NextCogniProviderProps } from '@inttegro/cogni-react';
 import { PredictionCandidate } from '@inttegro/cogni-client';
@@ -20,6 +21,8 @@ import { PredictionWorkResult } from '@inttegro/cogni-client';
 import * as react from 'react';
 import { resolveAnchorHref } from '@inttegro/cogni-react';
 import { ScheduledPrediction } from '@inttegro/cogni-client';
+import { useCogniPrediction } from '@inttegro/cogni-react';
+import { UseCogniPredictionOptions } from '@inttegro/cogni-react';
 import { useCogniScheduler } from '@inttegro/cogni-react';
 import { UseDelegatedRouteIntentOptions } from '@inttegro/cogni-react';
 import { useIntentPrefetch } from '@inttegro/cogni-react';
@@ -39,6 +42,8 @@ export { DelegatedRouteIntentContext }
 
 export { IntentPrefetchActions }
 
+export { LocalCogniPredictionActions }
+
 // @public
 export function markRoutePredictionReused(scheduled: ScheduledPrediction | null): Promise<boolean>;
 
@@ -55,7 +60,7 @@ export interface NextRouteCandidateOptions {
     // (undocumented)
     readonly estimatedBytes?: number;
     // (undocumented)
-    readonly horizonMs: number;
+    readonly horizonMs?: number;
     // (undocumented)
     readonly key?: string;
     // (undocumented)
@@ -63,7 +68,7 @@ export interface NextRouteCandidateOptions {
     // (undocumented)
     readonly priority?: number;
     // (undocumented)
-    readonly probability: number;
+    readonly probability?: number;
 }
 
 // @public (undocumented)
@@ -107,6 +112,10 @@ export interface PredictiveLinkProps extends Omit<LinkProps, "href" | "prefetch"
 }
 
 export { resolveAnchorHref }
+
+export { useCogniPrediction }
+
+export { UseCogniPredictionOptions }
 
 export { useCogniScheduler }
 

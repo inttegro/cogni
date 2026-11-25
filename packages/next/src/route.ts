@@ -3,6 +3,7 @@ import type {
   PredictionCost,
   PredictionWorkResult,
 } from "@inttegro/cogni-client";
+import { createPredictionCandidate } from "@inttegro/cogni-client";
 
 export interface NextRoutePrefetchContext {
   readonly signal: AbortSignal;
@@ -22,8 +23,8 @@ export interface NextRouteCandidateOptions {
   readonly key?: string;
   readonly policy?: string;
   readonly destination?: string;
-  readonly probability: number;
-  readonly horizonMs: number;
+  readonly probability?: number;
+  readonly horizonMs?: number;
   readonly cost?: PredictionCost;
   readonly priority?: number;
   readonly estimatedBytes?: number;
@@ -46,17 +47,17 @@ export function createNextRouteCandidate(
   trigger: string,
   options: NextRouteCandidateOptions,
 ): PredictionCandidate {
-  return {
+  return createPredictionCandidate({
     key: options.key ?? `next-route:${href}`,
     policy: options.policy ?? "next-route",
     trigger,
     destination: options.destination ?? href,
-    probability: options.probability,
-    horizonMs: options.horizonMs,
+    ...(options.probability === undefined ? {} : { probability: options.probability }),
+    ...(options.horizonMs === undefined ? {} : { horizonMs: options.horizonMs }),
     ...(options.cost === undefined ? {} : { cost: options.cost }),
     ...(options.priority === undefined ? {} : { priority: options.priority }),
     ...(options.estimatedBytes === undefined
       ? {}
       : { estimatedBytes: options.estimatedBytes }),
-  };
+  });
 }

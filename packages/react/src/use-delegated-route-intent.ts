@@ -163,8 +163,10 @@ export function useDelegatedRouteIntent(
       if (candidateOverride === false || candidateOverride === null) return null;
 
       const candidateOptions: RouteCandidateOptions = {
-        probability: current.probability,
-        horizonMs: current.horizonMs,
+        ...(current.probability === undefined
+          ? {}
+          : { probability: current.probability }),
+        ...(current.horizonMs === undefined ? {} : { horizonMs: current.horizonMs }),
         ...(current.policy === undefined ? {} : { policy: current.policy }),
         ...(current.cost === undefined ? {} : { cost: current.cost }),
         ...(current.priority === undefined ? {} : { priority: current.priority }),

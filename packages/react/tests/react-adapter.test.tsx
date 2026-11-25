@@ -13,6 +13,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   CogniProvider,
   type DelegatedRouteIntentActions,
+  useCogniPrediction,
   useCogniScheduler,
   useDelegatedRouteIntent,
   useIntentPrefetch,
@@ -147,6 +148,70 @@ describe("CogniProvider", () => {
 });
 
 describe("React hooks", () => {
+  it("applies Cogni's defaults to explicitly registered local work", async () => {
+    const scheduler = new PredictionScheduler();
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        {children}
+      </CogniProvider>
+    );
+
+    const hook = renderHook(
+      () =>
+        useCogniPrediction({
+          key: "query:recent-orders",
+          load: async () => undefined,
+          schedule: { idle: false },
+        }),
+      { wrapper },
+    );
+
+    const handle = await hook.result.current.scheduled?.started;
+    expect(handle?.candidate).toMatchObject({
+      key: "query:recent-orders",
+      destination: "query:recent-orders",
+      policy: "cogni-default",
+      trigger: "context",
+      probability: 0.8,
+      horizonMs: 30_000,
+    });
+  });
+
+  it("lets advanced users schedule local work with explicit overrides", async () => {
+    const scheduler = new PredictionScheduler();
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
+        {children}
+      </CogniProvider>
+    );
+
+    const hook = renderHook(
+      () =>
+        useCogniPrediction({
+          key: "media:hero",
+          destination: "hero-media",
+          policy: "landing-media",
+          trigger: "viewport",
+          probability: 0.96,
+          horizonMs: 5_000,
+          cost: "high",
+          load: async () => undefined,
+          schedule: { idle: false, allowDuringForeground: true },
+        }),
+      { wrapper },
+    );
+
+    const handle = await hook.result.current.scheduled?.started;
+    expect(handle?.candidate).toMatchObject({
+      destination: "hero-media",
+      policy: "landing-media",
+      trigger: "viewport",
+      probability: 0.96,
+      horizonMs: 5_000,
+      cost: "high",
+    });
+  });
+
   it("schedules and cancels a prediction with component lifecycle", () => {
     vi.useFakeTimers();
     const scheduler = new PredictionScheduler();

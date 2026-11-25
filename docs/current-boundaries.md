@@ -34,7 +34,8 @@ Router adapters add intent-aware links over their public route-preload contracts
 adapter adds route prediction through the public App Router contract. The Astro
 adapter adds a delegated document runtime, `.astro` components, public `astro:prefetch` loading, and
 ClientRouter reuse attribution. Hosts still own the safe candidate set, the opaque authenticated
-account key, route authorization, caches, telemetry, and invalidation.
+account key, route authorization, caches, telemetry, and invalidation. Cogni supplies conservative
+candidate and scheduling defaults when a host does not yet have evidence for custom values.
 
 The coordinator's quality history remains bounded and memory-only. Browser-owned runtimes create the
 adaptive calibrator automatically from the host's opaque authenticated account key. Its reference
@@ -53,7 +54,7 @@ signals.
 The Chrome AI adapter is optional progressive enhancement. It uses only an already-available model,
 supports English text input and output, ranks a bounded host allowlist, and returns `null` on
 unavailability or failure. It does not assign calibrated probabilities, start predictions, or make
-the static host policy optional.
+the host-approved candidate set optional.
 
 ## Node server
 

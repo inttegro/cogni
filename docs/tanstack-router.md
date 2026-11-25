@@ -21,9 +21,7 @@ import { PredictiveLink } from "@inttegro/cogni-tanstack-router";
 export function Navigation() {
   return (
     <CogniProvider opaqueUserKey={session.opaqueUserKey}>
-      <PredictiveLink to="/orders" probability={0.92} horizonMs={30_000}>
-        Orders
-      </PredictiveLink>
+      <PredictiveLink to="/orders">Orders</PredictiveLink>
     </CogniProvider>
   );
 }
@@ -46,7 +44,9 @@ Avoid enabling a second default preload strategy for these links. `PredictiveLin
 `preload={false}` internally so hover does not bypass Cogni's budget.
 
 Use `predictionKey`, `policy`, `cost`, `priority`, and `estimatedBytes` when the default route
-identity needs more context. `probability` and `horizonMs` are required.
+identity needs more context. Cogni starts with its conservative probability and 30 second reuse
+horizon, then learns from actual reuse and waste. Override either value when the application has
+stronger evidence.
 
 See [React](/react) for provider ownership and [Scheduling and intent](/scheduling-and-intent) for
 the admission sequence.

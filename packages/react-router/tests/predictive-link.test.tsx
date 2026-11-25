@@ -37,12 +37,7 @@ describe("React Router PredictiveLink", () => {
     render(
       <CogniProvider scheduler={scheduler} observeBrowserEnvironment={false}>
         <MemoryRouter initialEntries={["/"]}>
-          <PredictiveLink
-            to="/orders"
-            probability={0.94}
-            horizonMs={10_000}
-            hoverDelayMs={75}
-          >
+          <PredictiveLink to="/orders" hoverDelayMs={75}>
             Orders
           </PredictiveLink>
         </MemoryRouter>

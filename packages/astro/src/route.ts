@@ -1,4 +1,5 @@
 import type { PredictionCandidate, PredictionCost } from "@inttegro/cogni-client";
+import { createPredictionCandidate } from "@inttegro/cogni-client";
 
 export type AstroIntentTrigger = "hover" | "focus" | "pointer" | "touch";
 
@@ -6,8 +7,8 @@ export interface AstroRouteCandidateOptions {
   readonly key?: string;
   readonly policy?: string;
   readonly destination?: string;
-  readonly probability: number;
-  readonly horizonMs: number;
+  readonly probability?: number;
+  readonly horizonMs?: number;
   readonly cost?: PredictionCost;
   readonly priority?: number;
   readonly estimatedBytes?: number;
@@ -41,31 +42,37 @@ export function createAstroRouteCandidate(
   baseHref?: string,
 ): PredictionCandidate {
   const route = normalizeAstroRoute(href, baseHref);
-  return {
+  return createPredictionCandidate({
     key: options.key ?? `astro-route:${route}`,
     policy: options.policy ?? "astro-route",
     trigger,
     destination: options.destination ?? route,
-    probability: options.probability,
-    horizonMs: options.horizonMs,
+    ...(options.probability === undefined ? {} : { probability: options.probability }),
+    ...(options.horizonMs === undefined ? {} : { horizonMs: options.horizonMs }),
     ...(options.cost === undefined ? {} : { cost: options.cost }),
     ...(options.priority === undefined ? {} : { priority: options.priority }),
     ...(options.estimatedBytes === undefined
       ? {}
       : { estimatedBytes: options.estimatedBytes }),
-  };
+  });
 }
 
 /** Data attributes consumed by the delegated Astro runtime. */
 export function createAstroLinkAttributes(
   options: AstroLinkPredictionOptions,
 ): AstroLinkAttributes {
+  const candidate = createPredictionCandidate({
+    key: "astro-link",
+    ...(options.probability === undefined ? {} : { probability: options.probability }),
+    ...(options.horizonMs === undefined ? {} : { horizonMs: options.horizonMs }),
+    ...(options.cost === undefined ? {} : { cost: options.cost }),
+  });
   return {
     // Prevent Astro's built-in prefetcher from duplicating Cogni's admitted work.
     "data-astro-prefetch": "false",
     "data-cogni-astro": options.enabled === false ? "false" : "",
-    "data-cogni-probability": String(options.probability),
-    "data-cogni-horizon-ms": String(options.horizonMs),
+    "data-cogni-probability": String(candidate.probability),
+    "data-cogni-horizon-ms": String(candidate.horizonMs),
     ...(options.key === undefined ? {} : { "data-cogni-key": options.key }),
     ...(options.policy === undefined ? {} : { "data-cogni-policy": options.policy }),
     ...(options.destination === undefined

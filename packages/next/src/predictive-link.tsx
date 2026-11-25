@@ -62,8 +62,8 @@ export const PredictiveLink = forwardRef<HTMLAnchorElement, PredictiveLinkProps>
   ) {
     const intent = useNextRouteIntent({
       href,
-      probability,
-      horizonMs,
+      ...(probability === undefined ? {} : { probability }),
+      ...(horizonMs === undefined ? {} : { horizonMs }),
       ...(enabled === undefined ? {} : { enabled }),
       ...(hoverDelayMs === undefined ? {} : { hoverDelayMs }),
       ...(maxDeferMs === undefined ? {} : { maxDeferMs }),

@@ -8,9 +8,7 @@ import { NextCogniProvider, PredictiveLink } from "@inttegro/cogni-next";
 export function Navigation() {
   return (
     <NextCogniProvider opaqueUserKey={session.opaqueUserKey}>
-      <PredictiveLink href="/orders" probability={0.9} horizonMs={30_000}>
-        Orders
-      </PredictiveLink>
+      <PredictiveLink href="/orders">Orders</PredictiveLink>
     </NextCogniProvider>
   );
 }
@@ -44,10 +42,11 @@ links and links added after mount without requiring `PredictiveLink` at every
 call site. Hosts may extend the selector and resolver for link-like rows, and
 must call `markReused(href)` only after App Router navigation commits.
 
-For non-link policy predictions, use `useNextRoutePrediction`. Probabilities and
-horizons remain required because an adapter cannot calibrate application intent.
-The package also re-exports the React scheduler hooks, so a Next.js application
-does not need a second adapter import.
+For non-link work, use the re-exported `useCogniPrediction` beside the cache or
+component that owns reuse. Cogni supplies a conservative initial probability
+and reuse horizon; applications with stronger evidence can override either
+value. `useNextRoutePrediction` remains available for custom route lifecycles.
+A Next.js application does not need a second adapter import.
 
 Cogni follows semantic versioning. During the `0.x` series, minor releases may
 change public APIs and will include migration notes in the changelog.

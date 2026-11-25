@@ -7,6 +7,7 @@ export {
   useDelegatedRouteIntent,
 } from "./use-delegated-route-intent";
 export { useIntentPrefetch } from "./use-intent-prefetch";
+export { useCogniPrediction } from "./use-cogni";
 export { useRouteIntent } from "./use-route-intent";
 export { useScheduledPrediction } from "./use-scheduled-prediction";
 export type { CogniProviderProps } from "./provider";
@@ -27,4 +28,8 @@ export type {
   IntentPrefetchActions,
   UseIntentPrefetchOptions,
 } from "./use-intent-prefetch";
+export type {
+  LocalCogniPredictionActions,
+  UseCogniPredictionOptions,
+} from "./use-cogni";
 export type { RouteIntentActions, UseRouteIntentOptions } from "./use-route-intent";

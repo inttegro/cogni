@@ -55,8 +55,6 @@ function DemoLink({
   return (
     <PredictiveLink
       to={to}
-      probability={0.9}
-      horizonMs={30_000}
       prefetchRoute={async (href) => {
         const load = routeModules[href as keyof typeof routeModules];
         if (!load) return { materialWork: false };

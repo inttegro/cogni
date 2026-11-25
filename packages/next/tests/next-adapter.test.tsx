@@ -83,12 +83,9 @@ function provider(scheduler: PredictionScheduler) {
 describe("PredictiveLink", () => {
   it("waits for sustained hover before prefetching", () => {
     const scheduler = new PredictionScheduler();
-    render(
-      <PredictiveLink href="/orders" probability={0.92} horizonMs={30_000}>
-        Orders
-      </PredictiveLink>,
-      { wrapper: provider(scheduler) },
-    );
+    render(<PredictiveLink href="/orders">Orders</PredictiveLink>, {
+      wrapper: provider(scheduler),
+    });
 
     fireEvent.pointerEnter(screen.getByRole("link", { name: "Orders" }));
     act(() => vi.advanceTimersByTime(119));

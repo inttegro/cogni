@@ -24,6 +24,26 @@ export type CandidateRankingInput<Context> = CandidateRankingInput_2<Context>;
 // @public (undocumented)
 export type CandidateRankingResult = CandidateRankingResult_2;
 
+// Warning: (ae-forgotten-export) The symbol "PredictionCandidate_2" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function createPredictionCandidate(input: PredictionCandidateInput): PredictionCandidate_2;
+
+// @public
+export const DEFAULT_HIGH_COST_PREDICTION_PROBABILITY = 0.9;
+
+// @public
+export const DEFAULT_PREDICTION_HORIZON_MS = 30000;
+
+// @public
+export const DEFAULT_PREDICTION_POLICY = "cogni-default";
+
+// @public
+export const DEFAULT_PREDICTION_PROBABILITY = 0.8;
+
+// @public
+export const DEFAULT_PREDICTION_TRIGGER = "context";
+
 // @public
 export class IntentPrefetchController<Value> {
     constructor(options: IntentPrefetchControllerOptions<Value>);
@@ -120,10 +140,32 @@ export type PredictionCalibrationController = PredictionCalibrationController_2;
 // @public (undocumented)
 export type PredictionCancellationReason = PredictionCancellationReason_2;
 
-// Warning: (ae-forgotten-export) The symbol "PredictionCandidate_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type PredictionCandidate = PredictionCandidate_2;
+
+// @public
+export interface PredictionCandidateInput {
+    // Warning: (ae-forgotten-export) The symbol "PredictionCost_2" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    readonly cost?: PredictionCost_2;
+    // (undocumented)
+    readonly destination?: string;
+    // (undocumented)
+    readonly estimatedBytes?: number;
+    // (undocumented)
+    readonly horizonMs?: number;
+    // (undocumented)
+    readonly key: string;
+    // (undocumented)
+    readonly policy?: string;
+    // (undocumented)
+    readonly priority?: number;
+    // (undocumented)
+    readonly probability?: number;
+    // (undocumented)
+    readonly trigger?: string;
+}
 
 // @public (undocumented)
 export class PredictionCoordinator {
@@ -154,8 +196,6 @@ export class PredictionCoordinator {
 // @public (undocumented)
 export type PredictionCoordinatorOptions = PredictionCoordinatorOptions_2;
 
-// Warning: (ae-forgotten-export) The symbol "PredictionCost_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type PredictionCost = PredictionCost_2;
 
