@@ -28,6 +28,17 @@ import {
   type PredictionBatchRequest,
 } from "@inttegro/cogni-client/protocol";
 import {
+  AdaptivePredictionCalibrator,
+  InMemoryAdaptiveCalibrationStore,
+  type AdaptiveCalibrationStore,
+} from "@inttegro/cogni-client/learning";
+import {
+  composeUserDeviceSubjectKey,
+  createBrowserPredictionCalibration,
+  getOrCreateCogniDeviceKey,
+  IndexedDbAdaptiveCalibrationStore,
+} from "@inttegro/cogni-client/learning/browser";
+import {
   PredictionResourceRegistry,
   createCogniResourceServer,
   type BackendCapabilities,
@@ -86,6 +97,7 @@ declare const predictiveLinkProps: PredictiveLinkProps;
 declare const reactRouterPredictiveLinkProps: ReactRouterPredictiveLinkProps;
 declare const tanStackPredictiveLinkProps: TanStackPredictiveLinkProps;
 declare const astroLinkOptions: AstroLinkPredictionOptions;
+declare const calibrationStore: AdaptiveCalibrationStore;
 
 void [candidate, handle, quality, ranker, runtime, batch];
 void new PredictionCoordinator();
@@ -94,6 +106,12 @@ void new NavigationMetrics();
 void new IntentPrefetchController({ run: () => undefined });
 void createBrowserPredictionSchedulerRuntime;
 void observeBrowserPredictionEnvironment;
+void new AdaptivePredictionCalibrator({ store: calibrationStore });
+void new InMemoryAdaptiveCalibrationStore();
+void IndexedDbAdaptiveCalibrationStore;
+void composeUserDeviceSubjectKey;
+void createBrowserPredictionCalibration;
+void getOrCreateCogniDeviceKey;
 void CogniDevtoolsRecorder;
 void createCogniDevtools(new PredictionScheduler());
 void CogniDevtools;

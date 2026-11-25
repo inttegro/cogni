@@ -1,6 +1,8 @@
 import type {
   PredictionCancellationReason as CorePredictionCancellationReason,
   PredictionCandidate as CorePredictionCandidate,
+  PredictionCalibration as CorePredictionCalibration,
+  PredictionCalibrationController as CorePredictionCalibrationController,
   PredictionCoordinatorOptions as CorePredictionCoordinatorOptions,
   PredictionCost as CorePredictionCost,
   PredictionEvent as CorePredictionEvent,
@@ -49,6 +51,8 @@ export type {
 
 export type PredictionCancellationReason = CorePredictionCancellationReason;
 export type PredictionCandidate = CorePredictionCandidate;
+export type PredictionCalibration = CorePredictionCalibration;
+export type PredictionCalibrationController = CorePredictionCalibrationController;
 export type PredictionCoordinatorOptions = CorePredictionCoordinatorOptions;
 export type PredictionCost = CorePredictionCost;
 export type PredictionEvent = CorePredictionEvent;

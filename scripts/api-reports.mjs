@@ -9,6 +9,8 @@ const configs = [
   "packages/client/api-extractor.browser.json",
   "packages/client/api-extractor.chrome-ai.json",
   "packages/client/api-extractor.protocol.json",
+  "packages/client/api-extractor.learning.json",
+  "packages/client/api-extractor.learning-browser.json",
   "packages/server/api-extractor.json",
   "packages/react/api-extractor.json",
   "packages/devtools/api-extractor.json",

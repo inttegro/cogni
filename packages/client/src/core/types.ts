@@ -1,5 +1,21 @@
 export type PredictionCost = "low" | "standard" | "high";
 
+/** Inspectable metadata describing how a candidate probability was calibrated. */
+export interface PredictionCalibration {
+  /** Stable identifier for the calibration strategy. */
+  model: string;
+  /** Host probability before learned evidence was applied. */
+  baseProbability: number;
+  /** Posterior probability estimated from learned evidence and the host prior. */
+  personalizedProbability: number;
+  /** Time-decayed observations used by the model. */
+  evidence: number;
+  /** Strength of the learned evidence, from 0 through 1. */
+  confidence: number;
+  /** Signed difference between the final and base probabilities. */
+  adjustment: number;
+}
+
 export interface PredictionCandidate {
   /** Stable identity for deduplication and later reuse attribution. */
   key: string;
@@ -11,6 +27,8 @@ export interface PredictionCandidate {
   destination: string;
   /** Calibrated probability of reuse, from 0 through 1. */
   probability: number;
+  /** Optional calibration explanation. It must never contain subject identity. */
+  calibration?: Readonly<PredictionCalibration>;
   /** Maximum time from acceptance to reuse. */
   horizonMs: number;
   /** Relative cost used to select the minimum confidence gate. */
@@ -240,10 +258,20 @@ export interface ScheduledPrediction {
 export interface PredictionSchedulerOptions {
   coordinator?: import("./coordinator").PredictionCoordinator;
   coordinatorOptions?: PredictionCoordinatorOptions;
+  /** Candidate calibration and outcome learning applied by the scheduler. */
+  calibration?: PredictionCalibrationController;
   runtime?: PredictionSchedulerRuntime;
   environmentAllowed?: boolean;
   foregroundActivity?: number;
   onEvent?: PredictionSchedulerEventListener;
+}
+
+/** Runtime boundary for automatic probability calibration and outcome learning. */
+export interface PredictionCalibrationController {
+  calibrate(
+    candidate: Readonly<PredictionCandidate>,
+  ): Promise<Readonly<PredictionCandidate>>;
+  observe(result: Readonly<PredictionTerminalResult>): void | Promise<void>;
 }
 
 export interface PredictionCoordinatorOptions {

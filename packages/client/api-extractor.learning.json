@@ -1,0 +1,7 @@
+{
+  "extends": "../../api-extractor.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/learning.d.ts",
+  "apiReport": {
+    "reportFileName": "cogni-client-learning.api.md"
+  }
+}

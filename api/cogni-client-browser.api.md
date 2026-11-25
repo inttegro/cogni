@@ -19,6 +19,18 @@ export interface BrowserConnection {
 export type BrowserPredictionBlockReason = "browser_unavailable" | "document_hidden" | "save_data" | "slow_connection";
 
 // @public (undocumented)
+export interface BrowserPredictionCalibrationOptions {
+    indexedDB?: IDBFactory;
+    // (undocumented)
+    location?: Pick<Location, "origin" | "pathname" | "search">;
+    opaqueUserKey: string;
+    // (undocumented)
+    randomUUID?: () => string;
+    // (undocumented)
+    storage?: Pick<Storage, "getItem" | "setItem">;
+}
+
+// @public (undocumented)
 export type BrowserPredictionDecision = {
     readonly allowed: true;
 } | {
@@ -51,6 +63,11 @@ export interface BrowserSchedulerHost {
     // (undocumented)
     readonly setTimeout: typeof globalThis.setTimeout;
 }
+
+// Warning: (ae-forgotten-export) The symbol "PredictionCalibrationController" needs to be exported by the entry point browser.d.ts
+//
+// @public
+export function createBrowserPredictionCalibration(options: BrowserPredictionCalibrationOptions): PredictionCalibrationController;
 
 // Warning: (ae-forgotten-export) The symbol "PredictionSchedulerRuntime" needs to be exported by the entry point browser.d.ts
 //

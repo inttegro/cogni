@@ -105,6 +105,16 @@ export interface NavigationMetricsOptions {
 // @public (undocumented)
 export type NormalizedPredictionScheduleOptions = NormalizedPredictionScheduleOptions_2;
 
+// Warning: (ae-forgotten-export) The symbol "PredictionCalibration_2" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type PredictionCalibration = PredictionCalibration_2;
+
+// Warning: (ae-forgotten-export) The symbol "PredictionCalibrationController_2" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type PredictionCalibrationController = PredictionCalibrationController_2;
+
 // Warning: (ae-forgotten-export) The symbol "PredictionCancellationReason_2" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)

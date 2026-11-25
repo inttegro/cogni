@@ -1,6 +1,7 @@
 import { PredictionCoordinator } from "./coordinator";
 import type {
   PredictionCandidate,
+  PredictionCalibrationController,
   PredictionHandle,
   PredictionLoader,
   PredictionScheduleOptions,
@@ -30,7 +31,7 @@ const SYSTEM_RUNTIME: PredictionSchedulerRuntime = {
 };
 
 interface ScheduledRecord {
-  readonly candidate: Readonly<PredictionCandidate>;
+  candidate: Readonly<PredictionCandidate>;
   readonly loader: PredictionLoader;
   readonly options: RequiredScheduleOptions;
   readonly sequence: number;
@@ -39,6 +40,7 @@ interface ScheduledRecord {
   readonly started: Promise<PredictionHandle | null>;
   readonly resolveStarted: (handle: PredictionHandle | null) => void;
   status: ScheduledPredictionStatus;
+  starting: boolean;
   urgent: boolean;
   prediction: PredictionHandle | undefined;
 }
@@ -63,6 +65,7 @@ export class PredictionScheduler {
   readonly #coordinator: PredictionCoordinator;
   readonly #ownsCoordinator: boolean;
   readonly #runtime: PredictionSchedulerRuntime;
+  readonly #calibration: PredictionCalibrationController | undefined;
   readonly #onEvent: PredictionSchedulerEventListener | undefined;
   readonly #listeners = new Set<PredictionSchedulerEventListener>();
   readonly #pending = new Map<string, ScheduledRecord>();
@@ -83,6 +86,7 @@ export class PredictionScheduler {
         runtime: this.#runtime,
       });
     this.#ownsCoordinator = options.coordinator === undefined;
+    this.#calibration = options.calibration;
     this.#onEvent = options.onEvent;
     this.#environmentAllowed = options.environmentAllowed ?? true;
     this.#foregroundActivity = nonNegativeInteger(
@@ -139,6 +143,7 @@ export class PredictionScheduler {
       started,
       resolveStarted,
       status: "pending",
+      starting: false,
       urgent: false,
       prediction: undefined,
     };
@@ -223,7 +228,9 @@ export class PredictionScheduler {
 
   #handle(record: ScheduledRecord): ScheduledPrediction {
     return {
-      candidate: record.candidate,
+      get candidate() {
+        return record.candidate;
+      },
       get status() {
         return record.status;
       },
@@ -258,7 +265,13 @@ export class PredictionScheduler {
     let nextWakeAt = Number.POSITIVE_INFINITY;
 
     for (const record of records) {
-      if (record.status !== "pending" || this.#idleRecord === record) continue;
+      if (
+        record.status !== "pending" ||
+        record.starting ||
+        this.#idleRecord === record
+      ) {
+        continue;
+      }
 
       if (!record.urgent && now < record.eligibleAt) {
         nextWakeAt = Math.min(nextWakeAt, record.eligibleAt);
@@ -314,8 +327,34 @@ export class PredictionScheduler {
   }
 
   #start(record: ScheduledRecord, mode: PredictionSchedulerStartMode): void {
-    if (record.status !== "pending") return;
+    if (record.status !== "pending" || record.starting) return;
     this.#cancelIdleFor(record);
+    if (this.#calibration === undefined) {
+      this.#finishStart(record, mode, record.candidate);
+      return;
+    }
+
+    record.starting = true;
+    void this.#calibration
+      .calibrate(record.candidate)
+      .then((candidate) => {
+        const calibrated =
+          candidate.key === record.candidate.key
+            ? Object.freeze({ ...candidate })
+            : record.candidate;
+        this.#finishStart(record, mode, calibrated);
+      })
+      .catch(() => this.#finishStart(record, mode, record.candidate));
+  }
+
+  #finishStart(
+    record: ScheduledRecord,
+    mode: PredictionSchedulerStartMode,
+    candidate: Readonly<PredictionCandidate>,
+  ): void {
+    record.starting = false;
+    if (record.status !== "pending") return;
+    record.candidate = candidate;
     this.#pending.delete(record.candidate.key);
     record.status = "started";
     this.#emit({
@@ -327,6 +366,11 @@ export class PredictionScheduler {
     const prediction = this.#coordinator.predict(record.candidate, record.loader);
     record.prediction = prediction;
     record.resolveStarted(prediction);
+    if (this.#calibration !== undefined) {
+      void prediction.completion
+        .then((result) => this.#calibration?.observe(result))
+        .catch(() => undefined);
+    }
   }
 
   #cancelPending(
@@ -334,6 +378,7 @@ export class PredictionScheduler {
     reason: PredictionSchedulerCancellationReason,
   ): void {
     if (record.status !== "pending") return;
+    record.starting = false;
     this.#cancelIdleFor(record);
     this.#pending.delete(record.candidate.key);
     record.status = "cancelled";

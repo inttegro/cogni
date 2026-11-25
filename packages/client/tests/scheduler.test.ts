@@ -23,6 +23,41 @@ function candidate(
 }
 
 describe("PredictionScheduler", () => {
+  it("calibrates and learns automatically around the normal lifecycle", async () => {
+    const observe = vi.fn();
+    const scheduler = new PredictionScheduler({
+      calibration: {
+        calibrate: vi.fn(async (input) => ({ ...input, probability: 0.95 })),
+        observe,
+      },
+    });
+    const scheduled = scheduler.schedule(
+      candidate("learned", { probability: 0.2 }),
+      async () => ({ bytes: 128 }),
+      { idle: false },
+    );
+
+    const prediction = await scheduled.started;
+    expect(prediction?.accepted).toBe(true);
+    prediction?.markReused();
+    await expect(prediction?.completion).resolves.toMatchObject({ outcome: "reused" });
+    await vi.waitFor(() => expect(observe).toHaveBeenCalledOnce());
+  });
+
+  it("falls back to the host probability when calibration fails", async () => {
+    const scheduler = new PredictionScheduler({
+      calibration: {
+        calibrate: vi.fn(async () => Promise.reject(new Error("storage cleared"))),
+        observe: vi.fn(),
+      },
+    });
+    const scheduled = scheduler.schedule(candidate("fallback"), async () => undefined, {
+      idle: false,
+    });
+
+    await expect(scheduled.started).resolves.toMatchObject({ accepted: true });
+  });
+
   it("waits for the configured delay and an idle opportunity", async () => {
     const runtime = new ManualSchedulerRuntime();
     const loader = vi.fn(async () => undefined);
