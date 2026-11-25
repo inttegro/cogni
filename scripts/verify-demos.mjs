@@ -56,7 +56,9 @@ try {
       ["install", "--no-audit", "--no-fund", "--package-lock=false"],
       destination,
     );
-    run("npm", ["run", "build"], destination);
+    run("npm", ["run", "build"], destination, false, {
+      NODE_ENV: "production",
+    });
   }
 
   succeeded = true;
@@ -85,7 +87,7 @@ function isGeneratedPath(relativePath) {
   return ["node_modules", "dist", ".next", ".astro"].includes(first);
 }
 
-function run(command, args, cwd, capture = false) {
+function run(command, args, cwd, capture = false, environment = {}) {
   const result = spawnSync(command, args, {
     cwd,
     encoding: "utf8",
@@ -93,6 +95,7 @@ function run(command, args, cwd, capture = false) {
       ...process.env,
       ASTRO_TELEMETRY_DISABLED: "1",
       NEXT_TELEMETRY_DISABLED: "1",
+      ...environment,
     },
     stdio: capture ? ["ignore", "pipe", "inherit"] : "inherit",
   });
