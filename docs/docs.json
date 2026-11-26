@@ -64,6 +64,7 @@
           "cogni/react-router",
           "cogni/tanstack-router",
           "cogni/next",
+          "cogni/vinext",
           "cogni/astro"
         ]
       },

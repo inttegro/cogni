@@ -20,12 +20,14 @@ a central prediction list.
 | React Router       | `@inttegro/cogni-react-router`    | `PredictiveLink`  |
 | TanStack Router    | `@inttegro/cogni-tanstack-router` | `PredictiveLink`  |
 | Next.js App Router | `@inttegro/cogni-next`            | `PredictiveLink`  |
+| Vinext App Router  | `@inttegro/cogni-vinext`          | `PredictiveLink`  |
 
-All three use Cogni's default probability and reuse horizon, while allowing either value to be
+All four use Cogni's default probability and reuse horizon, while allowing either value to be
 overridden when the host has stronger evidence. They preserve the router's link semantics, start
 route work through Cogni's shared budget, and attribute reuse at the router's navigation boundary.
 See [React Router](/cogni/react-router),
-[TanStack Router](/cogni/tanstack-router), or [Next.js](/cogni/next) for the matching setup.
+[TanStack Router](/cogni/tanstack-router), [Next.js](/cogni/next), or
+[Vinext](/cogni/vinext) for the matching setup.
 
 ## Mount the provider
 

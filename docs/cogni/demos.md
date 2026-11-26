@@ -12,6 +12,7 @@ that uses the same public exports an npm consumer receives.
 | [React Router](https://github.com/inttegro/cogni/tree/master/demos/react-router)       | Lazy route modules are loaded through `PredictiveLink`.   |
 | [TanStack Router](https://github.com/inttegro/cogni/tree/master/demos/tanstack-router) | Predictions settle through `router.preloadRoute()`.       |
 | [Next.js](https://github.com/inttegro/cogni/tree/master/demos/next)                    | App Router prediction uses the published adapter surface. |
+| [Vinext](https://github.com/inttegro/cogni/tree/master/demos/vinext)                   | The Next-compatible adapter builds without `next`.        |
 | [Astro](https://github.com/inttegro/cogni/tree/master/demos/astro)                     | Delegated intent survives client-side route swaps.        |
 | [Node server](https://github.com/inttegro/cogni/tree/master/demos/server)              | Registered resources stay behind host-selected routes.    |
 
