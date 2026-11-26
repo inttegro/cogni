@@ -8,6 +8,12 @@
     "light": "#14B8A6",
     "dark": "#0F766E"
   },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/inttegro/cogni"
+    }
+  },
   "seo": {
     "metatags": {
       "canonical": "https://os.inttegro.dev"
