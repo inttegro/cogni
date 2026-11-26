@@ -9,6 +9,7 @@ export const releasePackages = [
     workspace: "packages/tanstack-router",
   },
   { name: "@inttegro/cogni-next", workspace: "packages/next" },
+  { name: "@inttegro/cogni-vinext", workspace: "packages/vinext" },
   { name: "@inttegro/cogni-astro", workspace: "packages/astro" },
 ];
 
@@ -17,6 +18,7 @@ export const demoDirectories = [
   "react-router",
   "tanstack-router",
   "next",
+  "vinext",
   "astro",
   "server",
 ];

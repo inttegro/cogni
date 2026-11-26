@@ -1,0 +1,29 @@
+{
+  "name": "cogni-demo-vinext",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev"
+  },
+  "dependencies": {
+    "@inttegro/cogni-client": "0.2.0",
+    "@inttegro/cogni-next": "0.2.0",
+    "@inttegro/cogni-react": "0.2.0",
+    "@inttegro/cogni-vinext": "0.2.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-server-dom-webpack": "19.3.1",
+    "vinext": "1.4.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "6.3.0",
+    "@vitejs/plugin-rsc": "0.5.39",
+    "typescript": "^5.9.3",
+    "vite": "8.4.0"
+  }
+}

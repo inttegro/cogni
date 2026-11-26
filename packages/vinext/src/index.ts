@@ -1,0 +1,36 @@
+"use client";
+
+export {
+  NextCogniProvider as VinextCogniProvider,
+  PredictiveLink,
+  createNextRouteCandidate as createVinextRouteCandidate,
+  markRoutePredictionReused,
+  resolveAnchorHref,
+  useCogniPrediction,
+  useCogniScheduler,
+  useIntentPrefetch,
+  useNextDelegatedRouteIntent as useVinextDelegatedRouteIntent,
+  useNextRouteIntent as useVinextRouteIntent,
+  useNextRoutePrediction as useVinextRoutePrediction,
+  useScheduledPrediction,
+} from "@inttegro/cogni-next";
+export type {
+  DelegatedRouteCandidateResolver,
+  DelegatedRouteHrefResolver,
+  DelegatedRouteIntentActions,
+  DelegatedRouteIntentContext,
+  IntentPrefetchActions,
+  LocalCogniPredictionActions,
+  NextCogniProviderProps as VinextCogniProviderProps,
+  NextRouteCandidateOptions as VinextRouteCandidateOptions,
+  NextRouteIntentActions as VinextRouteIntentActions,
+  NextRouteIntentTrigger as VinextRouteIntentTrigger,
+  NextRoutePrefetch as VinextRoutePrefetch,
+  NextRoutePrefetchContext as VinextRoutePrefetchContext,
+  PredictiveLinkProps,
+  UseCogniPredictionOptions,
+  UseIntentPrefetchOptions,
+  UseNextDelegatedRouteIntentOptions as UseVinextDelegatedRouteIntentOptions,
+  UseNextRouteIntentOptions as UseVinextRouteIntentOptions,
+  UseNextRoutePredictionOptions as UseVinextRoutePredictionOptions,
+} from "@inttegro/cogni-next";

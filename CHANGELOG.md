@@ -5,6 +5,12 @@ minor releases may contain breaking API changes. Migration notes will call those
 
 ## Unreleased
 
+### Added
+
+- First-class Vinext support through `@inttegro/cogni-vinext`, backed by the same public
+  `next/link` and `next/navigation` contract as the Next.js adapter and verified by a standalone
+  Vinext application that does not install `next`.
+
 ## [0.2.0] - 2026-11-26
 
 ### Added

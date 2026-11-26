@@ -18,6 +18,7 @@ const configs = [
   "packages/react-router/api-extractor.json",
   "packages/tanstack-router/api-extractor.json",
   "packages/next/api-extractor.json",
+  "packages/vinext/api-extractor.json",
   "packages/astro/api-extractor.json",
   "packages/astro/api-extractor.client.json",
 ];

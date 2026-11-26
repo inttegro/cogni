@@ -78,6 +78,14 @@ import {
   type PredictiveLinkProps,
 } from "@inttegro/cogni-next";
 import {
+  PredictiveLink as VinextPredictiveLink,
+  VinextCogniProvider,
+  useVinextDelegatedRouteIntent,
+  useVinextRouteIntent,
+  useVinextRoutePrediction,
+  type PredictiveLinkProps as VinextPredictiveLinkProps,
+} from "@inttegro/cogni-vinext";
+import {
   AstroPredictionRuntime,
   createAstroLinkAttributes,
   createAstroPredictionRuntime,
@@ -98,6 +106,7 @@ declare const resource: PredictionResourceDefinition<undefined>;
 declare const reactProviderProps: CogniProviderProps;
 declare const delegatedRouteIntentActions: DelegatedRouteIntentActions;
 declare const predictiveLinkProps: PredictiveLinkProps;
+declare const vinextPredictiveLinkProps: VinextPredictiveLinkProps;
 declare const reactRouterPredictiveLinkProps: ReactRouterPredictiveLinkProps;
 declare const tanStackPredictiveLinkProps: TanStackPredictiveLinkProps;
 declare const astroLinkOptions: AstroLinkPredictionOptions;
@@ -137,6 +146,11 @@ void ReactRouterPredictiveLink;
 void TanStackPredictiveLink;
 void NextCogniProvider;
 void PredictiveLink;
+void VinextCogniProvider;
+void VinextPredictiveLink;
+void useVinextDelegatedRouteIntent;
+void useVinextRouteIntent;
+void useVinextRoutePrediction;
 void createNextRouteCandidate;
 void markRoutePredictionReused;
 void useNextDelegatedRouteIntent;
@@ -145,6 +159,7 @@ void useNextRoutePrediction;
 void reactProviderProps;
 void delegatedRouteIntentActions;
 void predictiveLinkProps;
+void vinextPredictiveLinkProps;
 void reactRouterPredictiveLinkProps;
 void tanStackPredictiveLinkProps;
 void AstroPredictionRuntime;

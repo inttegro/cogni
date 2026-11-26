@@ -59,5 +59,10 @@
   "peerDependencies": {
     "next": ">=15.4.0 <17",
     "react": ">=18.2.0 <20"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   }
 }

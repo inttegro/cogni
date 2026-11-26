@@ -2,6 +2,10 @@
 
 Next.js App Router adapters for Cogni predictive loading.
 
+For a Vinext application, install [`@inttegro/cogni-vinext`](../vinext/) instead. It exposes this
+same public integration with Vinext-native peer metadata, so Vinext users do not need to install
+Next.js.
+
 ```sh
 npm install @inttegro/cogni-next
 ```

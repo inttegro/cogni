@@ -10,7 +10,7 @@
     "extensions/*"
   ],
   "scripts": {
-    "build": "npm run build -w @inttegro/cogni-client && npm run build -w @inttegro/cogni-react && npm run build -w @inttegro/cogni-devtools && npm run build -w @inttegro/cogni-react-router && npm run build -w @inttegro/cogni-tanstack-router && npm run build -w @inttegro/cogni-next && npm run build -w @inttegro/cogni-astro && npm run build -w @inttegro/cogni-server && npm run build -w @inttegro/cogni-browser-devtools",
+    "build": "npm run build -w @inttegro/cogni-client && npm run build -w @inttegro/cogni-react && npm run build -w @inttegro/cogni-devtools && npm run build -w @inttegro/cogni-react-router && npm run build -w @inttegro/cogni-tanstack-router && npm run build -w @inttegro/cogni-next && npm run build -w @inttegro/cogni-vinext && npm run build -w @inttegro/cogni-astro && npm run build -w @inttegro/cogni-server && npm run build -w @inttegro/cogni-browser-devtools",
     "check": "npm run format:check && npm run typecheck && npm test && npm run build && npm run api:check && npm run verify:package && npm run verify:release",
     "format": "prettier --write . --ignore-path .prettierignore",
     "format:check": "prettier --check . --ignore-path .prettierignore",
