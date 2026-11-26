@@ -48,12 +48,17 @@ These are external administrative actions. They are intentionally not automated 
    ```
 
 The tag starts `.github/workflows/release.yml`. The workflow reruns all checks, builds the demos from
-fresh tarballs, and publishes packages in dependency order with npm provenance. A rerun skips package
-versions that were already published, allowing recovery from a partial registry failure.
+fresh tarballs, publishes packages in dependency order with npm provenance, and creates one GitHub
+release for the repository tag. The GitHub release combines generated commit notes with links to
+every npm package in that version. A rerun skips package versions that were already published,
+allowing recovery from a partial registry failure, and leaves an existing GitHub release unchanged.
+
+Cogni uses a fixed-version monorepo: all public packages share a version and one signed tag. GitHub
+therefore shows one release per Cogni version rather than one release per npm package.
 
 ## Verify publication
 
-After the workflow succeeds, verify each package version and provenance on npm, install the packages
-in a new directory, and build at least one demo without workspace links. Then create the GitHub
-release from the changelog. A successful workflow is publication evidence; it is not evidence that a
-host application deployed the release or reused predicted work in production.
+After the workflow succeeds, verify each package version and provenance on npm, inspect the generated
+GitHub release, install the packages in a new directory, and build at least one demo without workspace
+links. A successful workflow is publication evidence; it is not evidence that a host application
+deployed the release or reused predicted work in production.

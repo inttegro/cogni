@@ -1,0 +1,2 @@
+*.yaml whitespace=-indent-with-non-tab
+*.yml whitespace=-indent-with-non-tab
