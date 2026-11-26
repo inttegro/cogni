@@ -5,6 +5,8 @@ minor releases may contain breaking API changes. Migration notes will call those
 
 ## Unreleased
 
+## [0.2.0] - 2026-11-26
+
 ### Added
 
 - Default adaptive calibration for opaque user-device subjects in browser-owned runtimes, with time
@@ -12,6 +14,15 @@ minor releases may contain breaking API changes. Migration notes will call those
   lifecycle learning, DevTools explanations, and no raw navigation history.
 - A provider-first React runtime with integration-supplied candidates and no central prediction
   registry, plus optional probability and reuse horizon overrides across router adapters.
+- Embedded and browser DevTools for inspecting admission, scheduling, execution, reuse, waste, and
+  adaptive calibration while developing an application.
+
+### Changed
+
+- Framework adapters now lead with one provider and a router-native `PredictiveLink`; Cogni supplies
+  conservative probability, horizon, scheduling, browser-admission, and learning defaults.
+- Package READMEs now put the shortest supported adoption path before low-level coordinator and
+  custom-loader APIs.
 
 ## [0.1.0] - 2026-11-24
 
@@ -34,3 +45,4 @@ minor releases may contain breaking API changes. Migration notes will call those
 - Predictive work is read-only. Mutations and authorization remain entirely host-owned.
 
 [0.1.0]: https://github.com/inttegro/cogni/releases/tag/v0.1.0
+[0.2.0]: https://github.com/inttegro/cogni/releases/tag/v0.2.0

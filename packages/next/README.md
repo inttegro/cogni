@@ -2,6 +2,13 @@
 
 Next.js App Router adapters for Cogni predictive loading.
 
+```sh
+npm install @inttegro/cogni-next
+```
+
+Mount one provider and use `PredictiveLink` anywhere you would normally use
+Next's `Link`:
+
 ```tsx
 import { NextCogniProvider, PredictiveLink } from "@inttegro/cogni-next";
 
@@ -18,6 +25,8 @@ export function Navigation() {
 click intent, deduplicates the route, and records reuse only after Next accepts
 an unmodified same-context navigation. Next's automatic viewport prefetch is disabled on the
 link by default so the same route is not fetched outside Cogni's budget.
+
+## Custom prefetchers
 
 The default loader uses the public `router.prefetch()` API. Applications that
 need version-specific full-route behavior can inject `prefetchRoute` without

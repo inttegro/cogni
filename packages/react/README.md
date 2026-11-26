@@ -5,7 +5,7 @@ Cogni can schedule any reusable work: cached data, code, media, computed results
 routes. It does not require URL paths.
 
 ```sh
-npm install @inttegro/cogni-react
+npm install @inttegro/cogni-react @inttegro/cogni-react-router
 ```
 
 ## Start with Cogni's defaults
@@ -59,6 +59,9 @@ The matching adapters are:
 - React Router: `@inttegro/cogni-react-router`
 - TanStack Router: `@inttegro/cogni-tanstack-router`
 - Next.js: `@inttegro/cogni-next`
+
+Plain React has no routing or cache lifecycle of its own, so route prediction
+belongs in the adapter for the router actually used by the application.
 
 Applications with many ordinary links can instead call
 `useDelegatedRouteIntent` once at the shell. It discovers eligible links added

@@ -1,6 +1,6 @@
 {
   "name": "@inttegro/cogni-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Node.js server runtime for the Cogni backend protocol",
   "type": "module",
   "packageManager": "npm@11.14.0",

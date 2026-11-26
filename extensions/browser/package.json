@@ -1,6 +1,6 @@
 {
   "name": "@inttegro/cogni-browser-devtools",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Chromium and Firefox DevTools extension for Cogni",
   "type": "module",
@@ -13,7 +13,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@inttegro/cogni-devtools": "0.1.0"
+    "@inttegro/cogni-devtools": "0.2.0"
   },
   "devDependencies": {
     "@types/chrome": "0.3.7",

@@ -3,6 +3,32 @@
 Cogni is an open-source predictive loading system for applications that should
 feel immediate without doing unbounded speculative work.
 
+## Start with your framework
+
+Most applications need one provider and Cogni's replacement for their router's
+link component. The adapter supplies conservative defaults, watches real user
+intent, uses the router's own cache, and learns from reuse and waste.
+
+```tsx
+import { NextCogniProvider, PredictiveLink } from "@inttegro/cogni-next";
+
+<NextCogniProvider opaqueUserKey={session.opaqueUserKey}>
+  <PredictiveLink href="/orders">Orders</PredictiveLink>
+</NextCogniProvider>;
+```
+
+Choose the adapter for your application:
+
+- Next.js: [`@inttegro/cogni-next`](./packages/next/)
+- Astro: [`@inttegro/cogni-astro`](./packages/astro/)
+- React Router: [`@inttegro/cogni-react-router`](./packages/react-router/)
+- TanStack Router: [`@inttegro/cogni-tanstack-router`](./packages/tanstack-router/)
+- Custom React work: [`@inttegro/cogni-react`](./packages/react/)
+
+Use [`@inttegro/cogni-client`](./packages/client/) directly only when you are
+building a custom integration or scheduling reusable work outside a supported
+framework.
+
 This repository is organized as an npm workspace with eight independently
 publishable runtimes:
 
@@ -60,8 +86,8 @@ not independently publishable packages. Cogni uses the independent package
 names `@inttegro/cogni-client`, `@inttegro/cogni-server`,
 `@inttegro/cogni-react`, `@inttegro/cogni-react-router`,
 `@inttegro/cogni-tanstack-router`, `@inttegro/cogni-next`, and
-`@inttegro/cogni-astro`, and `@inttegro/cogni-devtools` so applications can install and ship only the runtime
-and adapter they use.
+`@inttegro/cogni-astro`, and `@inttegro/cogni-devtools` so applications can
+install and ship only the runtime and adapter they use.
 
 ## Development
 
@@ -73,7 +99,7 @@ npm run check
 Run `npm run verify:demos` to pack every package and build all standalone demos
 from clean installs. Run `npm run release:check` for the complete release gate.
 
-The package manifests describe the `0.1.0` release line. Registry publication
+The package manifests describe the `0.2.0` release line. Registry publication
 and provenance must still be verified independently after the tagged release
 workflow succeeds.
 See [CHARTER.md](./CHARTER.md) for the project boundaries and release standard.

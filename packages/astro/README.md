@@ -6,7 +6,7 @@ and measurement runtime.
 ## Install
 
 ```sh
-npm install @inttegro/cogni-client @inttegro/cogni-astro
+npm install @inttegro/cogni-astro
 ```
 
 ## Use the Astro components

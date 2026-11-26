@@ -10,12 +10,35 @@ Cogni protocol in Go, Rust, Ruby, Node.js, or any other language. A backend
 implementation remains inside the host application's authentication, resource,
 and cache boundaries.
 
-## Versioning
+## Start with a framework adapter
 
-Cogni follows semantic versioning. During the `0.x` series, minor releases may
-change public APIs and will include migration notes in the changelog.
+Most applications should not construct candidates or coordinators directly.
+Install the adapter for the application's router and replace its ordinary link
+with `PredictiveLink`:
 
-## Core coordinator
+```tsx
+import { NextCogniProvider, PredictiveLink } from "@inttegro/cogni-next";
+
+<NextCogniProvider opaqueUserKey={session.opaqueUserKey}>
+  <PredictiveLink href="/orders">Orders</PredictiveLink>
+</NextCogniProvider>;
+```
+
+Equivalent adapters are available for Astro, React Router, and TanStack Router.
+They provide the prediction defaults, browser admission, adaptive learning,
+router-specific preloading, cancellation, and reuse attribution. There is no
+central route or prediction registry to maintain.
+
+- [`@inttegro/cogni-next`](https://www.npmjs.com/package/@inttegro/cogni-next)
+- [`@inttegro/cogni-astro`](https://www.npmjs.com/package/@inttegro/cogni-astro)
+- [`@inttegro/cogni-react-router`](https://www.npmjs.com/package/@inttegro/cogni-react-router)
+- [`@inttegro/cogni-tanstack-router`](https://www.npmjs.com/package/@inttegro/cogni-tanstack-router)
+- [`@inttegro/cogni-react`](https://www.npmjs.com/package/@inttegro/cogni-react)
+
+Use this package directly when building a new framework adapter or scheduling
+custom reusable work whose cache and consumption boundary are application-specific.
+
+## Low-level coordinator
 
 ```ts
 import { PredictionCoordinator } from "@inttegro/cogni-client";
@@ -259,3 +282,8 @@ transferred bytes. Work that fails, expires, or is cancelled after it begins
 lowers the measured reuse rate.
 
 See [CHARTER.md](../../CHARTER.md) for the operating boundaries and release standard.
+
+## Versioning
+
+Cogni follows semantic versioning. During the `0.x` series, minor releases may
+change public APIs and will include migration notes in the changelog.

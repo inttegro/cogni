@@ -4,8 +4,48 @@
 It provides route-independent handlers for capability negotiation, prediction
 execution, and reuse-outcome reporting.
 
+```sh
+npm install @inttegro/cogni-server
+```
+
+Most Node hosts should start with the resource server. It keeps prediction
+requests inside an explicit read-only allowlist and provides confidence gates,
+concurrency bounds, deadlines, failure isolation, and completion-order streaming.
+
+## Registered resources
+
+```ts
+import {
+  PredictionResourceRegistry,
+  createCogniResourceServer,
+} from "@inttegro/cogni-server";
+
+const resources = new PredictionResourceRegistry<AppContext>();
+resources.register("products.page", {
+  validate: parseProductsPageParameters,
+  resolve: ({ context, parameters, signal }) =>
+    context.products.page(parameters, { signal }).then((payload) => ({ payload })),
+});
+
+const cogni = createCogniResourceServer({
+  registry: resources,
+  capabilities,
+  outcomes: ({ context, batch }) => context.predictions.record(batch),
+});
+```
+
+Parameter validation runs before `prediction.accepted`, so invalid input can be
+rejected without claiming that work started. Resolvers receive the host's
+authenticated context and an abort signal. One failed or expired resource does
+not fail other candidates in the batch.
+
 The host application continues to own endpoint paths, authentication,
-authorization, tenancy, and construction of the request context:
+authorization, tenancy, and construction of the request context.
+
+## Low-level protocol handlers
+
+Use the lower-level runtime when the application needs to execute candidates
+through its own resource layer:
 
 ```ts
 import { createCogniServer } from "@inttegro/cogni-server";
@@ -37,35 +77,3 @@ incremental NDJSON stream according to the frontend's `Accept` header.
 The canonical, language-neutral contract is in
 [`protocol/README.md`](../../protocol/README.md). This package is one
 implementation of that contract, not the definition of it.
-
-## Registered resource executor
-
-Most Node hosts can use the higher-level resource server. It keeps frontend
-requests inside an explicit read-only resource allowlist and provides confidence
-gates, concurrency bounds, per-candidate deadlines, failure isolation, and
-completion-order streaming:
-
-```ts
-import {
-  PredictionResourceRegistry,
-  createCogniResourceServer,
-} from "@inttegro/cogni-server";
-
-const resources = new PredictionResourceRegistry<AppContext>();
-resources.register("products.page", {
-  validate: parseProductsPageParameters,
-  resolve: ({ context, parameters, signal }) =>
-    context.products.page(parameters, { signal }).then((payload) => ({ payload })),
-});
-
-const cogni = createCogniResourceServer({
-  registry: resources,
-  capabilities,
-  outcomes: ({ context, batch }) => context.predictions.record(batch),
-});
-```
-
-Parameter validation runs before `prediction.accepted`, so invalid input can be
-rejected without claiming that work started. Resolvers receive the host's
-authenticated context and an abort signal. One failed or expired resource does
-not fail other candidates in the batch.

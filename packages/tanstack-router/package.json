@@ -1,6 +1,6 @@
 {
   "name": "@inttegro/cogni-tanstack-router",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "TanStack Router adapters for Cogni predictive loading",
   "type": "module",
   "packageManager": "npm@11.14.0",
@@ -52,7 +52,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@inttegro/cogni-react": "0.1.0"
+    "@inttegro/cogni-react": "0.2.0"
   },
   "peerDependencies": {
     "@tanstack/react-router": ">=1.120.0 <2",
